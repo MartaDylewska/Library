@@ -4,10 +4,11 @@ import java.util.List;
 
 public interface IAuthor {
 
-    Author addAuthor(String firstName, String lastName);
+    void addAuthor(String firstName, String lastName);
     List<Author> getAuthors();
     Author getAuthor(int id);
     Author getAuthor(String name);
+    String getAuthorId(String firstName, String lastName);
     void removeAuthor(int id);
     void removeAuthor(String name);
     void editAuthor(int id, String firstName, String lastName);

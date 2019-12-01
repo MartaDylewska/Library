@@ -1,5 +1,6 @@
 package book;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ class Author implements IAuthor{
     private int idAuthor;
     private static int _idAuthor = 0;
     private List<Author> authors = new ArrayList<>();
+    private Connection connect = AddBookPanel.connect();
 
     Author(){}
 
@@ -44,20 +46,40 @@ class Author implements IAuthor{
     }
 
     @Override
-    public Author addAuthor(String firstName, String lastName) {
-        Author author = new Author(firstName, lastName);
-        boolean present = false;
+    public void addAuthor(String firstName, String lastName) {
 
-        for (Author author1 : authors){
-            if(firstName.equals(author1.getFirstName()) && lastName.equals(author1.getLastName()))
-                present = true;
+        String authorId = getAuthorId(firstName, lastName);
+
+        String SQL = "insert into author(first_name, last_name) values ('";
+        PreparedStatement preparedStatement = null;
+
+        try (Connection conn = connect) {
+            if(authorId.equals("Coś nie tak")) {
+                preparedStatement = conn.prepareStatement(SQL + firstName + "', '" + lastName + "');");
+                preparedStatement.executeUpdate();
+                System.out.println("Author added to database.");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public String getAuthorId(String firstName, String lastName) {
+
+        String authorId = "Coś nie tak";
+        String SQL = "select first_name, last_name from author where first_name = '" + firstName + "' and last_name = '" + lastName + "';";
+
+        try(Connection conn = connect) {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(SQL);
+            while (rs.next())
+                authorId = rs.getString("author_id");
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
         }
 
-        if(!present){
-            authors.add(author);
-        }
-
-        return author;
+        return authorId;
     }
 
     @Override

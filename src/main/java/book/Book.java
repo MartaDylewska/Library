@@ -1,24 +1,30 @@
 package book;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 class Book implements IBook{
 
     private IAuthor author;
-    private String title, genre, publisher;
+    private String title, genre, publisher, language;
     private long ISBN;
     private static int _idBook = 0;
     private int idBook;
     private List<Book> books = new ArrayList<>();
+    private Connection connect = AddBookPanel.connect();
 
     Book(){}
 
-    private Book(Author author, String title, String genre, String publisher) {
+    private Book(Author author, String title, String genre, String publisher, String language) {
         this.author = author;
         this.title = title;
         this.genre = genre;
         this.publisher = publisher;
+        this.language = language;
         setIdBook();
         setISBN();
     }
@@ -91,10 +97,20 @@ class Book implements IBook{
     }
 
     @Override
-    public Book addBook(Author author, String title, String genre, String publisher) {
-        Book book = new Book(author, title, genre, publisher);
-        books.add(book);
-        return book;
+    public void addBook(String title, String genre, String publisher, String language, String firstName, String lastName) {
+
+        String SQL = "insert into book(title, author_id, publisher, lang, genre) values ('";
+        PreparedStatement preparedStatement;
+
+        try(Connection conn = connect) {
+            preparedStatement = conn.prepareStatement(SQL + title + "'," + author.getAuthorId(firstName, lastName) + ",'" + publisher+ "', '" +
+                    language + "', '" + genre + "');");
+            preparedStatement.executeUpdate();
+            System.out.println("Book added to database.");
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
     @Override

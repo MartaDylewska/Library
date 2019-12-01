@@ -27,7 +27,6 @@ class AddBookPanel extends JPanel {
 
         createComps();
         addComp();
-        connect();
         action();
 
     }
@@ -75,7 +74,7 @@ class AddBookPanel extends JPanel {
         show.setBounds(250,50,200,30);
 
         result = new JLabel();
-        result.setBounds(20,380,460,200);
+        result.setBounds(20,380,460,100);
     }
 
     private void addComp(){
@@ -99,20 +98,19 @@ class AddBookPanel extends JPanel {
     private void action(){
 
         confirm.addActionListener(e -> {
-//            book = new Book(book.addBook(author.addAuthor(firstName.getText(), lastName.getText()), title.getText(),
-//                    genre.getText(), publisher.getText()));
-            addBookToDB();
+            author.addAuthor(firstName.getText(), lastName.getText());
+            book.addBook(title.getText(), genre.getText(), publisher.getText(), language.getText(), firstName.getText(), lastName.getText());
         });
 
         show.addActionListener(e -> {
-            showBook();
+            result.setText(book.toString());
 //            result.setText("<html>" + author.getAuthors() + "\n" +
 //                    book.getAllBooks().toString() + "</html>");
         });
     }
 
 
-    private Connection connect(){
+    static Connection connect(){
 
         try {
             Class.forName("org.postgresql.Driver");
@@ -130,36 +128,5 @@ class AddBookPanel extends JPanel {
         }
 
         return conn;
-    }
-
-    private void addBookToDB() {
-        String SQL = "insert into book(title, author_id, publisher, lang, genre, ISBN) values ('";
-
-        try(Connection conn = connect()) {
-            Statement stmt = conn.prepareStatement(SQL + title.getText() + "', 1,'" + publisher.getText() + "', '" +
-                    language.getText() + "', '" + genre.getText() + "','" + book.getISBN() + "');");
-            System.out.println("Book added to database.");
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private void showBook() {
-        String SQL = "select * from book where title='Harry';";
-
-        try(Connection conn = connect()) {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(SQL);
-            display(rs);
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private void display(ResultSet rs) throws SQLException {
-        result.setText("");
-        while (rs.next()){
-            result.setText(result.getText() + ' ' + rs.getString("title"));
-        }
     }
 }
