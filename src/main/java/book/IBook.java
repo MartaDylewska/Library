@@ -12,5 +12,4 @@ public interface IBook {
     List<Book> getBooks(Author author);
     List<Book> getBooks(String search);
     List<Book> getAllBooks();
-    long getISBN();
 }

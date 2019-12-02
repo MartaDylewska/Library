@@ -1,15 +1,8 @@
 package book;
 
 import javax.swing.*;
-import java.sql.*;
 
 class AddBookPanel extends JPanel {
-
-    private static final String dbHost = "packy.db.elephantsql.com";
-    private static final String dbPort = "5432";
-    private static final String dbUser = "dxdqdjgq";
-    private static final String dbPass = "k4T24isJOkQ8D4Kndq3yr8am_GjQd3RJ";
-    private static final String dbName = "dxdqdjgq";
 
     private JLabel titleLabel, publisherLabel, genreLabel, languageLabel;
     private JTextField title, publisher, genre, language;
@@ -18,8 +11,8 @@ class AddBookPanel extends JPanel {
     private JButton confirm, show;
     private JLabel result;
 
-    private IAuthor author = new Author();
-    private IBook book = new Book();
+    private IAuthor author = new AuthorService();
+    private IBook book = new BookService();
 
     AddBookPanel(){
 
@@ -98,35 +91,35 @@ class AddBookPanel extends JPanel {
     private void action(){
 
         confirm.addActionListener(e -> {
-            author.addAuthor(firstName.getText(), lastName.getText());
-            book.addBook(title.getText(), genre.getText(), publisher.getText(), language.getText(), firstName.getText(), lastName.getText());
+            author.removeAuthor(firstName.getText(), lastName.getText());
+//            book.addBook(title.getText(), genre.getText(), publisher.getText(), language.getText(), firstName.getText(), lastName.getText());
         });
 
         show.addActionListener(e -> {
-            result.setText(book.toString());
+            result.setText(String.valueOf(author.getAuthorId(firstName.getText(), lastName.getText())));
 //            result.setText("<html>" + author.getAuthors() + "\n" +
 //                    book.getAllBooks().toString() + "</html>");
         });
     }
 
 
-    static Connection connect(){
-
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            System.err.println("PostgreSQL DataSource unable to load PostgreSQL JDBC Driver");
-        }
-
-        Connection conn = null;
-        try{
-            String url = "jdbc:postgresql://"+dbHost+":"+dbPort+"/"+dbName;
-            conn = DriverManager.getConnection(url, dbUser, dbPass);
-            System.out.println("Connected.");
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-
-        return conn;
-    }
+//    static Connection connect(){
+//
+//        try {
+//            Class.forName("org.postgresql.Driver");
+//        } catch (ClassNotFoundException e) {
+//            System.err.println("PostgreSQL DataSource unable to load PostgreSQL JDBC Driver");
+//        }
+//
+//        Connection conn = null;
+//        try{
+//            String url = "jdbc:postgresql://"+dbHost+":"+dbPort+"/"+dbName;
+//            conn = DriverManager.getConnection(url, dbUser, dbPass);
+//            System.out.println("Connected.");
+//        } catch (SQLException e){
+//            System.out.println(e.getMessage());
+//        }
+//
+//        return conn;
+//    }
 }
