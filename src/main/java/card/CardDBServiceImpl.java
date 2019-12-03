@@ -5,13 +5,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static config.DBConfig.closeDBResources;
+import static config.DBConfig.initializeDataBaseConnection;
+
 public class CardDBServiceImpl implements ICardDBService {
 
-    private static final String dbHost = "packy.db.elephantsql.com";
-    private static final String dbPort = "5432";
-    private static final String dbUser = "dxdqdjgq";
-    private static final String dbPass = "k4T24isJOkQ8D4Kndq3yr8am_GjQd3RJ";
-    private static final String dbName = "dxdqdjgq";
+
 
     public CardDBServiceImpl (){
     }
@@ -90,9 +89,34 @@ public class CardDBServiceImpl implements ICardDBService {
         finally {
             closeDBResources(connection,preparedStatement);
         }
-
-
     }
+
+    @Override
+    public Card readLastCardFromDB() {
+        Connection connection = initializeDataBaseConnection();
+        PreparedStatement preparedStatement = null;
+
+        try {
+            String queryReadCard = "Select * From card order by idcard desc limit 1;";
+            Card card = new Card();
+            preparedStatement = connection.prepareStatement(queryReadCard);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()){
+                card.setIdCard(resultSet.getInt("idcard"));
+                card.setIssueDate(resultSet.getDate(2).toLocalDate());
+            }
+            return card;
+        }
+        catch (SQLException e){
+            System.err.println("Error during invoke SQL query: \n" + e.getMessage());
+            throw  new RuntimeException("Error during invoke SQL query");
+        }
+        finally {
+            closeDBResources(connection,preparedStatement);
+        }
+    }
+
 
     @Override
     public List<Card> getAllCardsFromDB()  {
@@ -115,32 +139,10 @@ public class CardDBServiceImpl implements ICardDBService {
             throw  new RuntimeException("Error during invoke SQL query");
         }
         finally {
-                closeDBResources(connection,preparedStatement);
+                config.DBConfig.closeDBResources(connection,preparedStatement);
         }
         return cardList;
     }
 
-    private Connection initializeDataBaseConnection(){
-        try{
-            return DriverManager.getConnection("jdbc:postgresql://"+dbHost+":"+dbPort+"/"+dbName,dbUser,dbPass);
-        }
-        catch (SQLException e){
-            System.err.println("Server can't initialize database connection: \n" + e);
-            throw  new RuntimeException("Server can't initialize database connection");
-        }
-    }
 
-    private void closeDBResources(Connection connection, Statement statement){
-        try {
-            if(statement != null)
-                statement.close();
-
-            if(connection != null)
-                connection.close();
-        }
-        catch (SQLException e){
-            System.err.println("Error while closing database resources: \n" + e);
-            throw new RuntimeException("Error while closing database resources");
-        }
-    }
 }

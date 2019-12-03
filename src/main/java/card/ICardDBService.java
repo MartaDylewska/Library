@@ -9,6 +9,7 @@ public interface ICardDBService {
     void addCardInDB() ;
     void deleteCardFromDB(int idCard);
     Card readCardFromDB(int idCard);
+    Card readLastCardFromDB();
     List<Card> getAllCardsFromDB();
 
 }
