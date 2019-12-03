@@ -8,11 +8,11 @@ class AddBookPanel extends JPanel {
     private JTextField title, publisher, genre, language;
     private JLabel firstNameLabel, lastNameLabel;
     private JTextField firstName, lastName;
-    private JButton confirm, show;
+    private JButton confirm, show, remove, edit;
     private JLabel result;
 
-    private IAuthor author = new AuthorService();
-    private IBook book = new BookService();
+    private IAuthor authorService = new AuthorService();
+    private IBook bookService = new BookService();
 
     AddBookPanel() {
 
@@ -67,6 +67,12 @@ class AddBookPanel extends JPanel {
         show = new JButton("Pokaż");
         show.setBounds(250, 50, 200, 30);
 
+        remove = new JButton("Usuń");
+        remove.setBounds(250,80,200,30);
+
+        edit = new JButton("Edytuj");
+        edit.setBounds(250,110,200,30);
+
         result = new JLabel();
         result.setBounds(20, 380, 460, 100);
     }
@@ -86,41 +92,32 @@ class AddBookPanel extends JPanel {
         add(lastName);
         add(confirm);
         add(show);
+        add(remove);
+        add(edit);
         add(result);
     }
 
     private void action() {
 
         confirm.addActionListener(e -> {
-            author.removeAuthor(firstName.getText(), lastName.getText());
-//            book.addBook(title.getText(), genre.getText(), publisher.getText(), language.getText(), firstName.getText(), lastName.getText());
+            authorService.addAuthor(firstName.getText(), lastName.getText());
+            bookService.addBook(title.getText(), genre.getText(), publisher.getText(), language.getText(), firstName.getText(), lastName.getText());
+            result.setText(bookService.getMessage());
         });
 
         show.addActionListener(e -> {
-            result.setText(String.valueOf(author.getAuthorId(firstName.getText(), lastName.getText())));
-//            result.setText("<html>" + author.getAuthors() + "\n" +
-//                    book.getAllBooks().toString() + "</html>");
+            result.setText("<html>" + bookService.getAllBooks().toString() + "</html>");
         });
+
+        remove.addActionListener(e -> {
+            bookService.removeBook(firstName.getText(), lastName.getText());
+            result.setText(bookService.getMessage());
+        });
+
+        edit.addActionListener(e -> {
+            authorService.editAuthor(1, firstName.getText(), lastName.getText());
+            result.setText(bookService.getMessage());
+        });
+
     }
-
-
-//    static Connection connect(){
-//
-//        try {
-//            Class.forName("org.postgresql.Driver");
-//        } catch (ClassNotFoundException e) {
-//            System.err.println("PostgreSQL DataSource unable to load PostgreSQL JDBC Driver");
-//        }
-//
-//        Connection conn = null;
-//        try{
-//            String url = "jdbc:postgresql://"+dbHost+":"+dbPort+"/"+dbName;
-//            conn = DriverManager.getConnection(url, dbUser, dbPass);
-//            System.out.println("Connected.");
-//        } catch (SQLException e){
-//            System.out.println(e.getMessage());
-//        }
-//
-//        return conn;
-//    }
 }

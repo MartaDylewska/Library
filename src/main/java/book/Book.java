@@ -2,9 +2,16 @@ package book;
 
 class Book{
 
-    private Author author;
     private String title, genre, publisher, language;
     private long ISBN;
+    private Author author;
+    private Storage storage;
+    private boolean isAvailable;
+
+    Book(){
+        setISBN();
+        setAvailable(true);
+    }
 
     Book(Author author, String title, String genre, String publisher, String language) {
         this.author = author;
@@ -19,7 +26,7 @@ class Book{
         return author;
     }
 
-    private void setAuthor(Author author) {
+    void setAuthor(Author author) {
         this.author = author;
     }
 
@@ -27,7 +34,7 @@ class Book{
         return title;
     }
 
-    private void setTitle(String title) {
+    void setTitle(String title) {
         this.title = title;
     }
 
@@ -35,7 +42,7 @@ class Book{
         return genre;
     }
 
-    private void setGenre(String genre) {
+    void setGenre(String genre) {
         this.genre = genre;
     }
 
@@ -43,7 +50,7 @@ class Book{
         return publisher;
     }
 
-    private void setPublisher(String publisher) {
+    void setPublisher(String publisher) {
         this.publisher = publisher;
     }
 
@@ -55,12 +62,28 @@ class Book{
         this.ISBN = System.currentTimeMillis();
     }
 
-    public String getLanguage() {
+    private String getLanguage() {
         return language;
     }
 
-    public void setLanguage(String language) {
+    void setLanguage(String language) {
         this.language = language;
+    }
+
+    Storage getStorage() {
+        return storage;
+    }
+
+    void setStorage(Storage storage) {
+        this.storage = storage;
+    }
+
+    boolean isAvailable() {
+        return isAvailable;
+    }
+
+    void setAvailable(boolean available) {
+        isAvailable = available;
     }
 
     @Override

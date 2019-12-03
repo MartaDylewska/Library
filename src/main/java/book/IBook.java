@@ -7,9 +7,11 @@ public interface IBook {
     Book getBook(int id);
     void addBook(String title, String genre, String publisher, String language, String firstName, String lastName);
     void removeBook(int id);
-    void editBook(int id, Author author);
-    void editBook(int id, String change);
-    List<Book> getBooks(Author author);
+    void removeBook(String firstName, String lastName);
+    void editBook(int id, String firstName, String lastName);
+    void editBook(String key, String value, int id);
+    List<Book> getBooks(String firstName, String lastName);
     List<Book> getBooks(String search);
     List<Book> getAllBooks();
+    String getMessage();
 }

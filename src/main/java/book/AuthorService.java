@@ -7,7 +7,7 @@ import java.util.List;
 public class AuthorService implements IAuthor {
 
     private Connecting connect = new Connecting();
-    private String SQL;
+    private String SQL, message;
 
     @Override
     public void addAuthor(String firstName, String lastName) {
@@ -25,7 +25,7 @@ public class AuthorService implements IAuthor {
                 preparedStatement.setString(2, lastName);
 
                 preparedStatement.executeUpdate();
-                System.out.println("Author added to database.");
+                message = "Author added to database.";
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -67,7 +67,7 @@ public class AuthorService implements IAuthor {
             preparedStatement.setString(2, lastName);
 
             preparedStatement.executeUpdate();
-            System.out.println("Author removed from database.");
+            message = "Author removed from database.";
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -92,5 +92,52 @@ public class AuthorService implements IAuthor {
         }
 
         return authors;
+    }
+
+    @Override
+    public Author getAuthor(int id) {
+
+        Author author = null;
+        String SQL = "select * from author where author_id = ?;";
+
+        try (Connection conn = connect.connectDB()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(SQL);
+
+            preparedStatement.setString(1, String.valueOf(id));
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()){
+                author = new Author(rs.getString(1), rs.getString(2));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return author;
+    }
+
+    @Override
+    public void editAuthor(int id, String firstName, String lastName) {
+
+        SQL = "update author set first_name = ?, set last_name = ? where author_id = ?";
+        PreparedStatement preparedStatement;
+
+        try (Connection conn = connect.connectDB()) {
+            preparedStatement = conn.prepareStatement(SQL);
+
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setString(3, String.valueOf(id));
+
+            preparedStatement.executeUpdate();
+            message = "Author changed to " + firstName + " " + lastName;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public String getMessage(){
+        return message;
     }
 }

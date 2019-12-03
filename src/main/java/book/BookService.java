@@ -1,109 +1,250 @@
 package book;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BookService implements IBook {
 
-    private IBook ibook;
-    private List<Book> books = new ArrayList<>();
-    private IAuthor iauthor;
+    private IAuthor iauthor = new AuthorService();
     private Connecting connect = new Connecting();
+    private String SQL, message;
 
     @Override
     public Book getBook(int id) {
+
         Book book = null;
-//        boolean present = false;
-//
-//        for(Book book1 : books){
-//            if(book1.getIdBook() == id){
-//                book = book1;
-//                present = true;
-//            }
-//        }
-//
-//        if(!present)
-//            System.out.println("Nie ma takiej książki.");
-//
+        Author author;
+
+        SQL = "select * from book inner join author on author.author_id = book.book_id where book_id = ? ;";
+
+        try (Connection conn = connect.connectDB()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(SQL);
+
+            preparedStatement.setInt(1, id);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()){
+                book = new Book();
+                author = new Author(rs.getString("first_name"), rs.getString("last_name"));
+                book.setTitle(rs.getString("title"));
+                book.setAuthor(author);
+                book.setPublisher(rs.getString("publisher"));
+                book.setLanguage(rs.getString("lang"));
+                book.setGenre(rs.getString("genre"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
         return book;
     }
 
     @Override
     public void addBook(String title, String genre, String publisher, String language, String firstName, String lastName) {
 
-        Author author = new Author(firstName, lastName);
-        Book book = new Book(author, title, genre, publisher, language);
+        int authorId = iauthor.getAuthorId(firstName, lastName);
 
-        String SQL = "insert into book(title, author_id, publisher, lang, genre) values ('";
+        SQL = "insert into book(title, author_id, publisher, lang, genre, availability) values (?,?, ?, ?, ?, ?);";
         PreparedStatement preparedStatement;
 
         try (Connection conn = connect.connectDB()) {
-            preparedStatement = conn.prepareStatement(SQL + title + "'," + iauthor.getAuthorId(firstName, lastName) + ",'" + publisher + "', '" +
-                    language + "', '" + genre + "');");
+
+            preparedStatement = conn.prepareStatement(SQL);
+
+            preparedStatement.setString(1, title);
+            preparedStatement.setInt(2, authorId);
+            preparedStatement.setString(3, publisher);
+            preparedStatement.setString(4, language);
+            preparedStatement.setString(5, genre);
+            preparedStatement.setBoolean(6,true);
+
             preparedStatement.executeUpdate();
-            System.out.println("Book added to database.");
+            message = "Book added to database.";
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
     }
 
     @Override
     public void removeBook(int id) {
-        Book book = getBook(id);
-        books.remove(book);
 
+        SQL = "delete from book where book_id = ?;";
+        PreparedStatement preparedStatement;
+
+        try (Connection conn = connect.connectDB()) {
+            preparedStatement = conn.prepareStatement(SQL);
+
+            preparedStatement.setInt(1, id);
+
+            preparedStatement.executeUpdate();
+            message = "Book removed from database.";
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
-    public void editBook(int id, Author author) {
-//        Book book = getBook(id);
-//        book.setAuthor(author);
+    public void removeBook(String firstName, String lastName) {
+
+        int authorId = iauthor.getAuthorId(firstName, lastName);
+
+        SQL = "delete from book where author_id = ?;";
+        PreparedStatement preparedStatement;
+
+        try (Connection conn = connect.connectDB()) {
+            preparedStatement = conn.prepareStatement(SQL);
+
+            preparedStatement.setInt(1, authorId);
+
+            preparedStatement.executeUpdate();
+            message = "Books of " + firstName + " " + lastName + " removed from database.";
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
-    public void editBook(int id, String change) {
-//        Book book = getBook(id);
-//        book.setTitle(change);
+    public void editBook(String key, String value,int id) {
+
+        SQL = "update book set ? = ? where book_id = ?";
+        PreparedStatement preparedStatement;
+
+        try (Connection conn = connect.connectDB()) {
+            preparedStatement = conn.prepareStatement(SQL);
+
+            preparedStatement.setString(1, key);
+            preparedStatement.setString(2, value);
+            preparedStatement.setInt(3, id);
+
+            preparedStatement.executeUpdate();
+            System.out.println("Book's " + key + " changed to " + value);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
-    public List<Book> getBooks(Author author) {
+    public void editBook(int id, String firstName, String lastName) {
+
+        int authorId = iauthor.getAuthorId(firstName, lastName);
+
+        if(authorId == 0){
+            iauthor.addAuthor(firstName, lastName);
+            authorId = iauthor.getAuthorId(firstName, lastName);
+        }
+
+        SQL = "update book set author_id = ? where book_id = ?";
+        PreparedStatement preparedStatement;
+
+        try (Connection conn = connect.connectDB()) {
+            preparedStatement = conn.prepareStatement(SQL);
+
+            preparedStatement.setInt(1, authorId);
+            preparedStatement.setInt(2, id);
+
+            preparedStatement.executeUpdate();
+            message = "Book's author changed to " + firstName + " " + lastName;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Book> getBooks(String firstName, String lastName) {
         List<Book> booksOfAuthor = new ArrayList<>();
-//
-//        for(Book book : books){
-//            if(book.getAuthor().equals(author)){
-//                booksOfAuthor.add(book);
-//            }
-//        }
-//
-//        if(booksOfAuthor.size() == 0)
-//            System.out.println("Nie ma książek autora: " + author);
 
+        int authorId = iauthor.getAuthorId(firstName, lastName);
+
+        SQL = "select * from book where author_id = ? ;";
+        PreparedStatement preparedStatement;
+
+        try (Connection conn = connect.connectDB()) {
+            preparedStatement = conn.prepareStatement(SQL);
+
+            preparedStatement.setInt(1, authorId);
+            preparedStatement.executeUpdate();
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Book book = new Book();
+                book.setTitle(rs.getString("title"));
+                book.setAuthor(iauthor.getAuthor(rs.getInt("author_id")));
+                book.setPublisher(rs.getString("publisher"));
+                book.setLanguage(rs.getString("lang"));
+                book.setGenre(rs.getString("genre"));
+                booksOfAuthor.add(book);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
         return booksOfAuthor;
     }
 
     @Override
     public List<Book> getBooks(String search) {
+
         List<Book> booksOfSearch = new ArrayList<>();
 
-//        for(Book book : books){
-//            if(search.equals(book.getTitle()) || search.equals(book.getGenre()) || search.equals(book.getPublisher())){
-//                booksOfSearch.add(book);
-//            }
-//        }
-//
-//        if(booksOfSearch.size() == 0)
-//            System.out.println("Nie ma książek o danym szukaniu.");
+        SQL = "select * from book where title = ? or publisher = ? or lang = ? or genre = ? ;";
+        PreparedStatement preparedStatement;
+
+        try (Connection conn = connect.connectDB()) {
+            preparedStatement = conn.prepareStatement(SQL);
+
+            preparedStatement.setString(1, search);
+            preparedStatement.setString(2, search);
+            preparedStatement.setString(3, search);
+            preparedStatement.setString(4, search);
+
+            preparedStatement.executeUpdate();
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Book book = new Book();
+                book.setTitle(rs.getString("title"));
+                book.setAuthor(iauthor.getAuthor(rs.getInt("author_id")));
+                book.setPublisher(rs.getString("publisher"));
+                book.setLanguage(rs.getString("lang"));
+                book.setGenre(rs.getString("genre"));
+                booksOfSearch.add(book);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
 
         return booksOfSearch;
     }
 
     @Override
     public List<Book> getAllBooks() {
+
+        List<Book> books = new ArrayList<>();
+
+        SQL = "select * from book;";
+
+        try (Connection conn = connect.connectDB()) {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(SQL);
+
+            while (rs.next()) {
+                Book book = new Book();
+                book.setTitle(rs.getString("title"));
+                book.setAuthor(iauthor.getAuthor(rs.getInt("author_id")));
+                book.setPublisher(rs.getString("publisher"));
+                book.setLanguage(rs.getString("lang"));
+                book.setGenre(rs.getString("genre"));
+                books.add(book);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
         return books;
+    }
+
+    @Override
+    public String getMessage(){
+        return message;
     }
 }

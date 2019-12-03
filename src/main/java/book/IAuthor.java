@@ -8,5 +8,7 @@ public interface IAuthor {
     List<Author> getAuthors();
     int getAuthorId(String firstName, String lastName);
     void removeAuthor(String firstName, String lastName);
-//    void editAuthor(int id, String firstName, String lastName);
+    void editAuthor(int id, String firstName, String lastName);
+    Author getAuthor(int id);
+    String getMessage();
 }
