@@ -14,7 +14,7 @@ class AddBookPanel extends JPanel {
     private IAuthor author = new AuthorService();
     private IBook book = new BookService();
 
-    AddBookPanel(){
+    AddBookPanel() {
 
         setLayout(null);
 
@@ -23,54 +23,55 @@ class AddBookPanel extends JPanel {
         action();
 
     }
-    private void createComps(){
+
+    private void createComps() {
         titleLabel = new JLabel("Tytuł:");
-        titleLabel.setBounds(20,20,200,30);
+        titleLabel.setBounds(20, 20, 200, 30);
 
         title = new JTextField();
-        title.setBounds(20,50,200,30);
+        title.setBounds(20, 50, 200, 30);
 
         publisherLabel = new JLabel("Wydawca:");
-        publisherLabel.setBounds(20,80,200,30);
+        publisherLabel.setBounds(20, 80, 200, 30);
 
         publisher = new JTextField();
-        publisher.setBounds(20,110,200,30);
+        publisher.setBounds(20, 110, 200, 30);
 
         genreLabel = new JLabel("Gatunek:");
-        genreLabel.setBounds(20,140,200,30);
+        genreLabel.setBounds(20, 140, 200, 30);
 
         genre = new JTextField();
-        genre.setBounds(20,170,200,30);
+        genre.setBounds(20, 170, 200, 30);
 
         languageLabel = new JLabel("język");
-        languageLabel.setBounds(20,200,200,30);
+        languageLabel.setBounds(20, 200, 200, 30);
 
         language = new JTextField();
-        language.setBounds(20,230,200,30);
+        language.setBounds(20, 230, 200, 30);
 
         firstNameLabel = new JLabel("Imię:");
-        firstNameLabel.setBounds(20,260,200,30);
+        firstNameLabel.setBounds(20, 260, 200, 30);
 
         firstName = new JTextField();
-        firstName.setBounds(20,290,200,30);
+        firstName.setBounds(20, 290, 200, 30);
 
         lastNameLabel = new JLabel("Nazwisko: ");
-        lastNameLabel.setBounds(20,320,200,30);
+        lastNameLabel.setBounds(20, 320, 200, 30);
 
         lastName = new JTextField();
-        lastName.setBounds(20,350,200,30);
+        lastName.setBounds(20, 350, 200, 30);
 
         confirm = new JButton("Dodaj");
-        confirm.setBounds(250,20,200,30);
+        confirm.setBounds(250, 20, 200, 30);
 
         show = new JButton("Pokaż");
-        show.setBounds(250,50,200,30);
+        show.setBounds(250, 50, 200, 30);
 
         result = new JLabel();
-        result.setBounds(20,380,460,100);
+        result.setBounds(20, 380, 460, 100);
     }
 
-    private void addComp(){
+    private void addComp() {
         add(titleLabel);
         add(title);
         add(publisherLabel);
@@ -88,7 +89,7 @@ class AddBookPanel extends JPanel {
         add(result);
     }
 
-    private void action(){
+    private void action() {
 
         confirm.addActionListener(e -> {
             author.removeAuthor(firstName.getText(), lastName.getText());

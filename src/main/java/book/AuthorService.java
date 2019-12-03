@@ -18,7 +18,7 @@ public class AuthorService implements IAuthor {
         PreparedStatement preparedStatement;
 
         try (Connection conn = connect.connectDB()) {
-            if(authorId==0) {
+            if (authorId == 0) {
                 preparedStatement = conn.prepareStatement(SQL);
 
                 preparedStatement.setString(1, firstName);
@@ -38,7 +38,7 @@ public class AuthorService implements IAuthor {
         int authorId = 0;
         String SQL = "select author_id from author where first_name = ? and last_name = ?;";
 
-        try(Connection conn = connect.connectDB()) {
+        try (Connection conn = connect.connectDB()) {
             PreparedStatement preparedStatement = conn.prepareStatement(SQL);
 
             preparedStatement.setString(1, firstName);
@@ -47,7 +47,7 @@ public class AuthorService implements IAuthor {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next())
                 authorId = rs.getInt(1);
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
@@ -60,7 +60,7 @@ public class AuthorService implements IAuthor {
         SQL = "delete from author where first_name = ? and last_name = ?;";
         PreparedStatement preparedStatement;
 
-        try(Connection conn = connect.connectDB()) {
+        try (Connection conn = connect.connectDB()) {
             preparedStatement = conn.prepareStatement(SQL);
 
             preparedStatement.setString(1, firstName);
@@ -68,7 +68,7 @@ public class AuthorService implements IAuthor {
 
             preparedStatement.executeUpdate();
             System.out.println("Author removed from database.");
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -80,14 +80,14 @@ public class AuthorService implements IAuthor {
 
         SQL = "select * from author;";
 
-        try(Connection conn = connect.connectDB()){
+        try (Connection conn = connect.connectDB()) {
             Statement statement = conn.createStatement();
             ResultSet resultSet = statement.executeQuery(SQL);
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 Author author = new Author(resultSet.getString("first_name"), resultSet.getString("last_name"));
                 authors.add(author);
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 

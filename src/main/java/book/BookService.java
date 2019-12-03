@@ -35,17 +35,17 @@ public class BookService implements IBook {
     public void addBook(String title, String genre, String publisher, String language, String firstName, String lastName) {
 
         Author author = new Author(firstName, lastName);
-        Book book = new Book(author, title, genre,publisher,language);
+        Book book = new Book(author, title, genre, publisher, language);
 
         String SQL = "insert into book(title, author_id, publisher, lang, genre) values ('";
         PreparedStatement preparedStatement;
 
-        try(Connection conn = connect.connectDB()) {
-            preparedStatement = conn.prepareStatement(SQL + title + "'," + iauthor.getAuthorId(firstName, lastName) + ",'" + publisher+ "', '" +
+        try (Connection conn = connect.connectDB()) {
+            preparedStatement = conn.prepareStatement(SQL + title + "'," + iauthor.getAuthorId(firstName, lastName) + ",'" + publisher + "', '" +
                     language + "', '" + genre + "');");
             preparedStatement.executeUpdate();
             System.out.println("Book added to database.");
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
@@ -101,6 +101,7 @@ public class BookService implements IBook {
 
         return booksOfSearch;
     }
+
     @Override
     public List<Book> getAllBooks() {
         return books;
