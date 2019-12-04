@@ -10,26 +10,29 @@ public class User {
     private String email;
     private String password;
     private int cardNumber;
-    private String address;
+    private String streetBuilding;
+    private String postalCode;
 
     public User(){};
 
-    public User(int idUser, String firstName, String lastName, String email, String password, String address, int cardNumber) {
+    public User(int idUser, String firstName, String lastName, String email, String password, String streetBuilding,String postalCode, int cardNumber) {
         this.idUser = idUser;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.cardNumber = cardNumber;
-        this.address = address;
+        this.streetBuilding=streetBuilding;
+        this.postalCode = postalCode;
     }
 
-    public User(String firstName, String lastName, String email, String password, String address){
+    public User(String firstName, String lastName, String email, String password, String streetBuilding, String postalCode){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.address = address;
+        this.streetBuilding=streetBuilding;
+        this.postalCode = postalCode;
     }
 
     public int getIdUser() {
@@ -80,12 +83,20 @@ public class User {
         this.cardNumber = cardNumber;
     }
 
-    public String getAddress() {
-        return address;
+    public String getStreetBuilding() {
+        return streetBuilding;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStreetBuilding(String streetBuilding) {
+        this.streetBuilding = streetBuilding;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
     @Override
@@ -99,12 +110,13 @@ public class User {
                 Objects.equals(getLastName(), user.getLastName()) &&
                 Objects.equals(getEmail(), user.getEmail()) &&
                 Objects.equals(getPassword(), user.getPassword()) &&
-                Objects.equals(getAddress(), user.getAddress());
+                Objects.equals(getStreetBuilding(), user.getStreetBuilding()) &&
+                Objects.equals(getPostalCode(), user.getPostalCode());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getIdUser(), getFirstName(), getLastName(), getEmail(), getPassword(), getCardNumber(), getAddress());
+        return Objects.hash(getIdUser(), getFirstName(), getLastName(), getEmail(), getPassword(), getCardNumber(), getStreetBuilding(), getPostalCode());
     }
 
     @Override
@@ -116,7 +128,8 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", cardNumber=" + cardNumber +
-                ", address='" + address + '\'' +
+                ", streetBuilding='" + streetBuilding + '\'' +
+                ", postalCode='" + postalCode + '\'' +
                 '}';
     }
 }

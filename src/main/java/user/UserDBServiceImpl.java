@@ -6,7 +6,9 @@ import card.ICardDBService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static config.DBConfig.closeDBResources;
@@ -24,14 +26,15 @@ public class UserDBServiceImpl implements IUserDBService {
         Connection connection = initializeDataBaseConnection();
         PreparedStatement preparedStatement = null;
         try {
-            String queryInsertUser = "INSERT INTO public.\"user\" (firstname, lastname, cardid,email,pass,address) " + "VALUES (?,?,?,?,?,?) ";
+            String queryInsertUser = "INSERT INTO public.\"user\" (firstname, lastname, cardid,email,pass,streetbuilding,postalcode) " + "VALUES (?,?,?,?,?,?,?) ";
             preparedStatement = connection.prepareStatement(queryInsertUser);
             preparedStatement.setString(1,user.getFirstName());
             preparedStatement.setString(2,user.getLastName());
             preparedStatement.setInt(3,cardForNewUser.getIdCard());
             preparedStatement.setString(4, user.getEmail());
             preparedStatement.setString(5,user.getPassword());
-            preparedStatement.setString(6,user.getAddress());
+            preparedStatement.setString(6,user.getStreetBuilding());
+            preparedStatement.setString(7,user.getPostalCode());
             preparedStatement.executeUpdate();
             System.out.println("New user was added to database");
 
@@ -46,18 +49,90 @@ public class UserDBServiceImpl implements IUserDBService {
     }
 
     @Override
-    public void deleteUserFromDB(int idUser) {
+    public void deleteUserFromDB(int idCard) {
+        Connection connection = initializeDataBaseConnection();
+        PreparedStatement preparedStatement = null;
+        try {
+            String queryDeleteUser = "DELETE FROM public.\"user\" WHERE cardid = ? ";
+            preparedStatement = connection.prepareStatement(queryDeleteUser);
+            preparedStatement.setInt(1,idCard);
+            preparedStatement.execute();
+            System.out.println("User was deleted");
+        }
+        catch (SQLException e){
+            System.err.println("Error during invoke SQL query: \n" + e.getMessage());
+            throw  new RuntimeException("Error during invoke SQL query");
+        }
+        finally {
+            closeDBResources(connection,preparedStatement);
+        }
 
     }
 
     @Override
-    public User readUserFromDB(int idUser) {
-        return null;
+    public User readUserFromDB(int idCard) {
+        Connection connection = initializeDataBaseConnection();
+        PreparedStatement preparedStatement = null;
+        try {
+            String queryReadUser = "SELECT * FROM public.\"user\" WHERE (cardid) = (?) ";
+            preparedStatement = connection.prepareStatement(queryReadUser);
+            preparedStatement.setInt(1,idCard);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            User user = new User();
+            while (resultSet.next()){
+                user.setFirstName(resultSet.getString("firstname"));
+                user.setLastName(resultSet.getString("lastname"));
+                user.setEmail(resultSet.getString("email"));
+                user.setCardNumber(resultSet.getInt("cardid"));
+                user.setPassword(resultSet.getString("pass"));
+                user.setIdUser(resultSet.getInt("iduser"));
+                user.setPostalCode(resultSet.getString("postalcode"));
+                user.setStreetBuilding(resultSet.getString("streetbuilding"));
+            }
+            return user;
+
+        }
+        catch (SQLException e){
+            System.err.println("Error during invoke SQL query: \n" + e.getMessage());
+            throw  new RuntimeException("Error during invoke SQL query");
+        }
+        finally {
+            closeDBResources(connection,preparedStatement);
+        }
     }
 
     @Override
     public List<User> getAllUsersFromDB() {
-        return null;
+        Connection connection = initializeDataBaseConnection();
+        PreparedStatement preparedStatement = null;
+        List<User> userList = new ArrayList<>();
+        try {
+            String queryReadUsers = "SELECT * FROM public.\"user\"";
+            preparedStatement = connection.prepareStatement(queryReadUsers);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()){
+                User user = new User();
+                user.setFirstName(resultSet.getString("firstname"));
+                user.setLastName(resultSet.getString("lastname"));
+                user.setEmail(resultSet.getString("email"));
+                user.setCardNumber(resultSet.getInt("cardid"));
+                user.setPassword(resultSet.getString("pass"));
+                user.setIdUser(resultSet.getInt("iduser"));
+                user.setPostalCode(resultSet.getString("postalcode"));
+                user.setStreetBuilding(resultSet.getString("streetbuilding"));
+
+                userList.add(user);
+            }
+            return userList;
+        }
+        catch (SQLException e){
+            System.err.println("Error during invoke SQL query: \n" + e.getMessage());
+            throw  new RuntimeException("Error during invoke SQL query");
+        }
+        finally {
+            closeDBResources(connection,preparedStatement);
+        }
     }
 
     @Override
