@@ -7,11 +7,12 @@ public class MFrame extends JFrame {
     UserShowPanel userShowPanel;
     UserOperationsPanel userOperationsPanel;
     UserUpdatePanel userUpdatePanel;
+    UserDeletePanel userDeletePanel;
+    UsersShowAllPanel usersShowAllPanel;
+    UserAddPanel userAddPanel;
 
    public MFrame(){
         setSize(700, 600);
-        //UserPanel userPanel = new UserPanel();
-        //add(userPanel);
 
        userOperationsPanel = new UserOperationsPanel();
        add(userOperationsPanel);
@@ -46,6 +47,50 @@ public class MFrame extends JFrame {
                 repaint();
                 revalidate();
             });
+       });
+
+       userOperationsPanel.getDeleteBtn().addActionListener(e -> {
+           userDeletePanel = new UserDeletePanel();
+           add(userDeletePanel);
+           remove(userOperationsPanel);
+           repaint();
+           revalidate();
+
+           userDeletePanel.getReturnBtn().addActionListener(e1 -> {
+               add(userOperationsPanel);
+               remove(userDeletePanel);
+               repaint();
+               revalidate();
+           });
+       });
+
+       userOperationsPanel.getShowAllBtn().addActionListener(e -> {
+           usersShowAllPanel = new UsersShowAllPanel();
+           add(usersShowAllPanel);
+           remove(userOperationsPanel);
+           repaint();
+           revalidate();
+
+           usersShowAllPanel.getReturnBtn().addActionListener(e1 -> {
+               add(userOperationsPanel);
+               remove(usersShowAllPanel);
+               repaint();
+               revalidate();
+           });
+       });
+       userOperationsPanel.getAddBtn().addActionListener(e -> {
+           userAddPanel = new UserAddPanel();
+           add(userAddPanel);
+           remove(userOperationsPanel);
+           repaint();
+           revalidate();
+
+           userAddPanel.getReturnBtn().addActionListener(e1 -> {
+               add(userOperationsPanel);
+               remove(userAddPanel);
+               repaint();
+               revalidate();
+           });
        });
     }
 }

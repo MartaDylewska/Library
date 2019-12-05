@@ -1,8 +1,5 @@
 package user;
 
-import card.Card;
-import card.CardDBServiceImpl;
-import card.ICardDBService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,12 +14,6 @@ import static config.DBConfig.initializeDataBaseConnection;
 public class UserDBServiceImpl implements IUserDBService {
     @Override
     public void addUserInDB(User user) {
-        //aby stworzyć użytkownika, trzeba stworzyć nową kartę
-        ICardDBService cardDBService = new CardDBServiceImpl();
-        cardDBService.addCardInDB();
-
-        Card cardForNewUser = cardDBService.readLastCardFromDB();
-
         Connection connection = initializeDataBaseConnection();
         PreparedStatement preparedStatement = null;
         try {
@@ -30,7 +21,7 @@ public class UserDBServiceImpl implements IUserDBService {
             preparedStatement = connection.prepareStatement(queryInsertUser);
             preparedStatement.setString(1,user.getFirstName());
             preparedStatement.setString(2,user.getLastName());
-            preparedStatement.setInt(3,cardForNewUser.getIdCard());
+            preparedStatement.setInt(3,user.getCardNumber());
             preparedStatement.setString(4, user.getEmail());
             preparedStatement.setString(5,user.getPassword());
             preparedStatement.setString(6,user.getStreetBuilding());

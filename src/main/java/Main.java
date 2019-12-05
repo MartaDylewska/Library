@@ -5,6 +5,8 @@ import city.City;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import gui.MFrame;
+import images.IPosterDBService;
+import images.PosterDBServiceImpl;
 import user.IUserDBService;
 import user.User;
 import user.UserDBServiceImpl;
@@ -22,7 +24,9 @@ public class Main {
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             window.setVisible(true);
         });
-
+    //------------TESTOWANIE OBRAZKÓW-----------------
+        //IPosterDBService posterDB = new PosterDBServiceImpl();
+        //posterDB.addImage("C:\\Users\\e495405\\Desktop\\Baza danych zdjęcia\\poster2.png");
       /*  //--------OBSŁUGA ZAPYTAŃ ZWIĄZANYCH Z KARTAMI------------------------------------
 
         ICardDBService cardDB = new CardDBServiceImpl();

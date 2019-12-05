@@ -16,11 +16,11 @@ import javax.swing.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UserShowPanel extends JPanel {
+public class UserDeletePanel extends JPanel {
 
     private JLabel firstNameLbl, lastNamelbl, emailLbl, passLbl, cardIdLbl, postalCodeLbl, cityNameLbl, streetAndBuildingLbl;
     private JTextField firstNameTxt, lastNameTxt, emailTxt, passTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
-    private JButton searchUserBtn, returnBtn;
+    private JButton searchUserBtn, deleteUserBtn, returnBtn;
     private int fieldLength = 200;
     private JLabel imageLbl;
 
@@ -28,7 +28,7 @@ public class UserShowPanel extends JPanel {
     private ICardDBService cardDBService = new CardDBServiceImpl();
     private ICityDBService cityDBService = new CityDBServiceImpl();
 
-    UserShowPanel(){
+    UserDeletePanel() {
         setLayout(null);
         createAllLabels();
         addAllLabels();
@@ -39,19 +39,42 @@ public class UserShowPanel extends JPanel {
         createReturnBtn();
         add(returnBtn);
         setComponentsEditability(false);
-       // createImgLabel();
-      //  add(imageLbl);
+        createDeleteBtn();
+        add(deleteUserBtn);
+        actionDeleteUserBtn();
+        // createImgLabel();
+        //  add(imageLbl);
     }
 
-    private void actionSearchUserBtn(){
+    private void actionDeleteUserBtn() {
+
+        deleteUserBtn.addActionListener(e -> {
+            int cardId = Integer.parseInt(cardIdTxt.getText());
+            userDBService.deleteUserFromDB(cardId);
+            firstNameTxt.setText("");
+            lastNameTxt.setText("");
+            emailTxt.setText("");
+            postalCodeTxt.setText("");
+            cityNameTxt.setText("");
+            streetAndBuildingTxt.setText("");
+            cardIdTxt.setText("");
+            setCompVisibility(false);
+            JOptionPane.showMessageDialog(this, "Użytkownik usunięty z systemu");
+        });
+    }
+
+    private void actionSearchUserBtn() {
         searchUserBtn.addActionListener(e -> {
+
+            //setComponentsEditability(false);
             if (Validation.checkIfInteger(cardIdTxt.getText())) {
-                //setComponentsEditability(false);
+
                 int cardId = Integer.parseInt(cardIdTxt.getText());
                 System.out.println(cardId);
                 User user = userDBService.readUserFromDB(cardId);
                 System.out.println(user);
                 if (user.getIdUser() != 0) {
+                    deleteUserBtn.setVisible(true);
                     setCompVisibility(true);
                     firstNameTxt.setText(user.getFirstName());
                     lastNameTxt.setText(user.getLastName());
@@ -63,26 +86,33 @@ public class UserShowPanel extends JPanel {
                     cardIdTxt.setText("");
                     JOptionPane.showMessageDialog(this, "Brak karty o tym numerze w systemie");
                 }
-            } else{
+            } else {
                 JOptionPane.showMessageDialog(this, "Wpisz poprawny numer karty");
                 cardIdTxt.setText("");
             }
         });
     }
 
-    private void createSearchBtn(){
+    private void createDeleteBtn() {
+        deleteUserBtn = new JButton();
+        deleteUserBtn.setText("Usuń użytkownika");
+        deleteUserBtn.setVisible(false);
+        deleteUserBtn.setBounds(400, 150, 200, 50);
+    }
+
+    private void createSearchBtn() {
         searchUserBtn = new JButton();
         searchUserBtn.setText("Wyszukaj");
-        searchUserBtn.setBounds(400,20,200,50);
+        searchUserBtn.setBounds(400, 20, 200, 50);
     }
 
-    private void createReturnBtn(){
+    private void createReturnBtn() {
         returnBtn = new JButton();
         returnBtn.setText("Powrót");
-        returnBtn.setBounds(400,300,200,50);
+        returnBtn.setBounds(400, 300, 200, 50);
     }
 
-    private void addAllLabels(){
+    private void addAllLabels() {
         add(cardIdLbl);
         add(cardIdTxt);
         add(firstNameLbl);
@@ -99,7 +129,7 @@ public class UserShowPanel extends JPanel {
         add(streetAndBuildingTxt);
     }
 
-    private void createAllLabels(){
+    private void createAllLabels() {
         createCardidLbl();
         createCardIdTxt();
         createFirstnameLbl();
@@ -116,93 +146,94 @@ public class UserShowPanel extends JPanel {
         createStreetAndBuildingTxt();
     }
 
-    private void createImgLabel(){
+    private void createImgLabel() {
         imageLbl = new JLabel();
         IPosterDBService posterDBService = new PosterDBServiceImpl();
         Poster poster = posterDBService.readImage("poster2.png");
         ImageIcon icon = new ImageIcon(poster.getImgBytes());
         imageLbl.setIcon(icon);
-        imageLbl.setBounds(200,150,200,200);
+        imageLbl.setBounds(200, 150, 200, 200);
     }
 
-    private void createStreetAndBuildingLbl(){
+    private void createStreetAndBuildingLbl() {
         streetAndBuildingLbl = new JLabel();
         streetAndBuildingLbl.setText("Ulica/nr");
-        streetAndBuildingLbl.setBounds(20,260,100,30);
+        streetAndBuildingLbl.setBounds(20, 260, 100, 30);
     }
 
-    private void createStreetAndBuildingTxt(){
+    private void createStreetAndBuildingTxt() {
         streetAndBuildingTxt = new JTextField();
-        streetAndBuildingTxt.setBounds(150,260,fieldLength,30);
+        streetAndBuildingTxt.setBounds(150, 260, fieldLength, 30);
     }
 
-    private void createCityNameLbl(){
+    private void createCityNameLbl() {
         cityNameLbl = new JLabel();
         cityNameLbl.setText("Miasto");
-        cityNameLbl.setBounds(20,220,100,30);
+        cityNameLbl.setBounds(20, 220, 100, 30);
     }
 
-    private void createCityNameTxt(){
+    private void createCityNameTxt() {
         cityNameTxt = new JTextField();
-        cityNameTxt.setBounds(150,220,fieldLength,30);
+        cityNameTxt.setBounds(150, 220, fieldLength, 30);
         cityNameTxt.setEditable(false);
     }
 
-    private void createPostalCodeLbl(){
+    private void createPostalCodeLbl() {
         postalCodeLbl = new JLabel();
         postalCodeLbl.setText("Kod pocztowy");
-        postalCodeLbl.setBounds(20,180,100,30);
+        postalCodeLbl.setBounds(20, 180, 100, 30);
     }
 
-    private void createPostalCodeTxt(){
+    private void createPostalCodeTxt() {
         postalCodeTxt = new JTextField();
-        postalCodeTxt.setBounds(150,180,fieldLength,30);
+        postalCodeTxt.setBounds(150, 180, fieldLength, 30);
     }
-    private void createEmailLbl(){
+
+    private void createEmailLbl() {
         emailLbl = new JLabel();
         emailLbl.setText("Email");
-        emailLbl.setBounds(20,140,100,30);
+        emailLbl.setBounds(20, 140, 100, 30);
     }
 
-    private void createEmailTxt(){
+    private void createEmailTxt() {
         emailTxt = new JTextField();
-        emailTxt.setBounds(150,140,fieldLength,30);
+        emailTxt.setBounds(150, 140, fieldLength, 30);
     }
 
-    private void createLastnameLbl(){
+    private void createLastnameLbl() {
         lastNamelbl = new JLabel();
         lastNamelbl.setText("Nazwisko");
-        lastNamelbl.setBounds(20,100,100,30);
+        lastNamelbl.setBounds(20, 100, 100, 30);
     }
 
-    private void createLastNameTxt(){
+    private void createLastNameTxt() {
         lastNameTxt = new JTextField();
-        lastNameTxt.setBounds(150,100,fieldLength,30);
+        lastNameTxt.setBounds(150, 100, fieldLength, 30);
     }
 
-    private void createFirstnameLbl(){
+    private void createFirstnameLbl() {
         firstNameLbl = new JLabel();
         firstNameLbl.setText("Imię");
-        firstNameLbl.setBounds(20,60,100,30);
+        firstNameLbl.setBounds(20, 60, 100, 30);
     }
 
-    private void createFirstNameTxt(){
+    private void createFirstNameTxt() {
         firstNameTxt = new JTextField();
-        firstNameTxt.setBounds(150,60,fieldLength,30);
+        firstNameTxt.setBounds(150, 60, fieldLength, 30);
     }
 
-    private void createCardidLbl(){
+    private void createCardidLbl() {
         cardIdLbl = new JLabel();
         cardIdLbl.setText("Numer karty");
-        cardIdLbl.setBounds(20,20,100,30);
+        cardIdLbl.setBounds(20, 20, 100, 30);
     }
 
-    private void createCardIdTxt(){
+    private void createCardIdTxt() {
         cardIdTxt = new JTextField();
-        cardIdTxt.setBounds(150,20,fieldLength,30);
+        cardIdTxt.setBounds(150, 20, fieldLength, 30);
     }
 
-    private void setCompVisibility(boolean visibility){
+    private void setCompVisibility(boolean visibility) {
         firstNameLbl.setVisible(visibility);
         lastNamelbl.setVisible(visibility);
         emailLbl.setVisible(visibility);
@@ -219,19 +250,19 @@ public class UserShowPanel extends JPanel {
         streetAndBuildingTxt.setVisible(visibility);
     }
 
-    private void setComponentsEditability(boolean editability){
+    private void setComponentsEditability(boolean editability) {
 
         firstNameTxt.setEditable(editability);
         lastNameTxt.setEditable(editability);
         emailTxt.setEditable(editability);
-       // passTxt.setEnabled(editability);
+        // passTxt.setEnabled(editability);
         //cardIdTxt.setEnabled(editability);
         postalCodeTxt.setEditable(editability);
         cityNameTxt.setEditable(editability);
         streetAndBuildingTxt.setEditable(editability);
     }
 
-    public JButton getReturnBtn(){
+    public JButton getReturnBtn() {
         return returnBtn;
     }
 

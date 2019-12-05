@@ -73,5 +73,6 @@ public class UserOperationsPanel extends JPanel {
         return addBtn;
     }
 
+    public JButton getShowAllBtn() { return showAllBtn;}
 
 }
