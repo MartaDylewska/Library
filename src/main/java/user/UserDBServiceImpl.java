@@ -135,8 +135,29 @@ public class UserDBServiceImpl implements IUserDBService {
         }
     }
 
+//nieprzetestowane
     @Override
-    public void updateUserInDB(int idUser, String firstName, String lastName, String email, String password, String address, int cardNumber) {
-
+    public void updateUserInDB(int idUser, String firstName, String lastName, String email, String password, String streetBuilding, String postalCode, int cardNumber) {
+        Connection connection = initializeDataBaseConnection();
+        PreparedStatement preparedStatement = null;
+        try {
+            String queryUpdateUser = "UPDATE public.\"user\" SET (firstname,lastname,email,pass,postalcode,streetbuilding) = (?,?,?,?,?,?) " + "where cardid = ?";
+            preparedStatement = connection.prepareStatement(queryUpdateUser);
+            preparedStatement.setString(1,firstName);
+            preparedStatement.setString(2,lastName);
+            preparedStatement.setString(3,email);
+            preparedStatement.setString(4,password);
+            preparedStatement.setString(5,postalCode);
+            preparedStatement.setString(6,streetBuilding);
+            preparedStatement.setInt(7,cardNumber);
+            preparedStatement.executeUpdate();
+        }
+        catch (SQLException e){
+            System.err.println("Error during invoke SQL query: \n" + e.getMessage());
+            throw  new RuntimeException("Error during invoke SQL query");
+        }
+        finally {
+            closeDBResources(connection,preparedStatement);
+        }
     }
 }

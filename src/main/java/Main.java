@@ -1,18 +1,29 @@
+
 import card.CardDBServiceImpl;
 import card.ICardDBService;
 import city.City;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
+import gui.MFrame;
 import user.IUserDBService;
 import user.User;
 import user.UserDBServiceImpl;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
 
-        //--------OBSŁUGA ZAPYTAŃ ZWIĄZANYCH Z KARTAMI------------------------------------
+        EventQueue.invokeLater(() -> {
+            MFrame window;
+            window = new MFrame();
+            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            window.setVisible(true);
+        });
+
+      /*  //--------OBSŁUGA ZAPYTAŃ ZWIĄZANYCH Z KARTAMI------------------------------------
 
         ICardDBService cardDB = new CardDBServiceImpl();
         //System.out.println("Lista wszystkich kart w bazie");
@@ -39,7 +50,7 @@ public class Main {
 
         //cityDBService.addCitiesToDB(cities);
         System.out.println(cityDBService.getCityName("24-100"));
-
+*/
 
     }
 }

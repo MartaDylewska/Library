@@ -8,6 +8,6 @@ public interface IUserDBService {
     void deleteUserFromDB(int idCard);
     User readUserFromDB(int idCard);
     List<User> getAllUsersFromDB();
-    void updateUserInDB(int idUser, String firstName, String lastName, String email, String password, String address, int cardNumber);
+    void updateUserInDB(int idUser, String firstName, String lastName, String email, String password, String streetBuilding, String postalCode, int cardNumber);
 
 }
