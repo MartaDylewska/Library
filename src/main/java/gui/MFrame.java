@@ -14,83 +14,89 @@ public class MFrame extends JFrame {
    public MFrame(){
         setSize(700, 600);
 
-       userOperationsPanel = new UserOperationsPanel();
-       add(userOperationsPanel);
+        BookPanel bookPanel = new BookPanel();
+        add(bookPanel);
 
-       userOperationsPanel.getSearchBtn().addActionListener(e -> {
+//        BookAddPanel bookAddPanel = new BookAddPanel();
+//        add(bookAddPanel);
 
-           userShowPanel = new UserShowPanel();
-           add(userShowPanel);
-           remove(userOperationsPanel);
-           repaint();
-           revalidate();
-
-           userShowPanel.getReturnBtn().addActionListener(e1 -> {
-               add(userOperationsPanel);
-               remove(userShowPanel);
-               repaint();
-               revalidate();
-           });
-
-       });
-
-       userOperationsPanel.getUpdateBtn().addActionListener(e -> {
-           userUpdatePanel = new UserUpdatePanel();
-            add(userUpdatePanel);
-            remove(userOperationsPanel);
-            repaint();
-            revalidate();
-
-            userUpdatePanel.getReturnBtn().addActionListener(e1 -> {
-                add(userOperationsPanel);
-                remove(userUpdatePanel);
-                repaint();
-                revalidate();
-            });
-       });
-
-       userOperationsPanel.getDeleteBtn().addActionListener(e -> {
-           userDeletePanel = new UserDeletePanel();
-           add(userDeletePanel);
-           remove(userOperationsPanel);
-           repaint();
-           revalidate();
-
-           userDeletePanel.getReturnBtn().addActionListener(e1 -> {
-               add(userOperationsPanel);
-               remove(userDeletePanel);
-               repaint();
-               revalidate();
-           });
-       });
-
-       userOperationsPanel.getShowAllBtn().addActionListener(e -> {
-           usersShowAllPanel = new UsersShowAllPanel();
-           add(usersShowAllPanel);
-           remove(userOperationsPanel);
-           repaint();
-           revalidate();
-
-           usersShowAllPanel.getReturnBtn().addActionListener(e1 -> {
-               add(userOperationsPanel);
-               remove(usersShowAllPanel);
-               repaint();
-               revalidate();
-           });
-       });
-       userOperationsPanel.getAddBtn().addActionListener(e -> {
-           userAddPanel = new UserAddPanel();
-           add(userAddPanel);
-           remove(userOperationsPanel);
-           repaint();
-           revalidate();
-
-           userAddPanel.getReturnBtn().addActionListener(e1 -> {
-               add(userOperationsPanel);
-               remove(userAddPanel);
-               repaint();
-               revalidate();
-           });
-       });
+//       userOperationsPanel = new UserOperationsPanel();
+//       add(userOperationsPanel);
+//
+//       userOperationsPanel.getSearchBtn().addActionListener(e -> {
+//
+//           userShowPanel = new UserShowPanel();
+//           add(userShowPanel);
+//           remove(userOperationsPanel);
+//           repaint();
+//           revalidate();
+//
+//           userShowPanel.getReturnBtn().addActionListener(e1 -> {
+//               add(userOperationsPanel);
+//               remove(userShowPanel);
+//               repaint();
+//               revalidate();
+//           });
+//
+//       });
+//
+//       userOperationsPanel.getUpdateBtn().addActionListener(e -> {
+//           userUpdatePanel = new UserUpdatePanel();
+//            add(userUpdatePanel);
+//            remove(userOperationsPanel);
+//            repaint();
+//            revalidate();
+//
+//            userUpdatePanel.getReturnBtn().addActionListener(e1 -> {
+//                add(userOperationsPanel);
+//                remove(userUpdatePanel);
+//                repaint();
+//                revalidate();
+//            });
+//       });
+//
+//       userOperationsPanel.getDeleteBtn().addActionListener(e -> {
+//           userDeletePanel = new UserDeletePanel();
+//           add(userDeletePanel);
+//           remove(userOperationsPanel);
+//           repaint();
+//           revalidate();
+//
+//           userDeletePanel.getReturnBtn().addActionListener(e1 -> {
+//               add(userOperationsPanel);
+//               remove(userDeletePanel);
+//               repaint();
+//               revalidate();
+//           });
+//       });
+//
+//       userOperationsPanel.getShowAllBtn().addActionListener(e -> {
+//           usersShowAllPanel = new UsersShowAllPanel();
+//           add(usersShowAllPanel);
+//           remove(userOperationsPanel);
+//           repaint();
+//           revalidate();
+//
+//           usersShowAllPanel.getReturnBtn().addActionListener(e1 -> {
+//               add(userOperationsPanel);
+//               remove(usersShowAllPanel);
+//               repaint();
+//               revalidate();
+//           });
+//       });
+//       userOperationsPanel.getAddBtn().addActionListener(e -> {
+//           userAddPanel = new UserAddPanel();
+//           add(userAddPanel);
+//           remove(userOperationsPanel);
+//           repaint();
+//           revalidate();
+//
+//           userAddPanel.getReturnBtn().addActionListener(e1 -> {
+//               add(userOperationsPanel);
+//               remove(userAddPanel);
+//               repaint();
+//               revalidate();
+//           });
+//       });
     }
 }
