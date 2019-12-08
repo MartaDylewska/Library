@@ -115,17 +115,19 @@ public class BookService implements IBook {
     }
 
     @Override
-    public void editBook(String key, String value,int id) {
+    public void editBook(int id, String title, String publisher, String genre, String language) {
 
-        SQL = "update book set ? = ? where book_id = ?";
+        SQL = "update book set title = ?, publisher = ?, genre = ?, lang = ? where book_id = ?";
         PreparedStatement preparedStatement;
 
         try (Connection conn = connect.connectDB()) {
             preparedStatement = conn.prepareStatement(SQL);
 
-            preparedStatement.setString(1, key);
-            preparedStatement.setString(2, value);
-            preparedStatement.setInt(3, id);
+            preparedStatement.setString(1, title);
+            preparedStatement.setString(2, publisher);
+            preparedStatement.setString(3, genre);
+            preparedStatement.setString(4, language);
+            preparedStatement.setInt(5, id);
 
             preparedStatement.executeUpdate();
             System.out.println("Książka została zedytowana.");

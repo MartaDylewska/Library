@@ -17,7 +17,7 @@ public class BookGetPanel extends JPanel {
     private JButton search, remove, edit, back;
 
     private IBook iBook = new BookService();
-    int bookIdToEdit;
+    private int bookIdToEdit;
 
 
     public BookGetPanel() {
@@ -107,20 +107,20 @@ public class BookGetPanel extends JPanel {
         });
 
         remove.addActionListener(e ->{
-            if (JOptionPane.showConfirmDialog(null, "Czy na pewno usunąć książkę?", "UWAGA!",
-                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                Book book = (Book) resultList.getSelectedValue();
-                iBook.removeBook(book.getBookId());
-
-                List<Book> bookList = iBook.getAllBooks();
-                createBookJList(bookList);
-                add(resultList);
-            }
-        });
-
-        edit.addActionListener(e ->{
             Book book = (Book) resultList.getSelectedValue();
-            bookIdToEdit = book.getBookId();
+
+            if(book== null) {
+                JOptionPane.showMessageDialog(null, "Żadna książka nie została wybrana.");
+            } else {
+
+                if (JOptionPane.showConfirmDialog(null, "Czy na pewno usunąć książkę?", "UWAGA!",
+                        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    iBook.removeBook(book.getBookId());
+                    List<Book> bookList = iBook.getAllBooks();
+                    createBookJList(bookList);
+                    add(resultList);
+                }
+            }
         });
     }
 
@@ -148,8 +148,11 @@ public class BookGetPanel extends JPanel {
 
     public int getBookIdToEdit() {
 
+        bookIdToEdit = 0;
+
         Book book = (Book) resultList.getSelectedValue();
-        bookIdToEdit = book.getBookId();
+        if(book != null)
+            bookIdToEdit = book.getBookId();
 
         return bookIdToEdit;
     }

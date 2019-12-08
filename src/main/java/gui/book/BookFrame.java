@@ -45,18 +45,22 @@ public class BookFrame extends JFrame {
             });
 
             bookGetPanel.getEdit().addActionListener(e1 ->{
-                BookEditPanel bookEditPanel = new BookEditPanel(bookGetPanel);
-                add(bookEditPanel);
-                remove(bookGetPanel);
-                repaint();
-                revalidate();
-
-                bookEditPanel.getBack().addActionListener(e2 ->{
-                    add(bookGetPanel);
-                    remove(bookEditPanel);
+                if(bookGetPanel.getBookIdToEdit() != 0){
+                    BookEditPanel bookEditPanel = new BookEditPanel(bookGetPanel);
+                    add(bookEditPanel);
+                    remove(bookGetPanel);
                     repaint();
                     revalidate();
-                });
+
+                    bookEditPanel.getBack().addActionListener(e2 ->{
+                        add(bookGetPanel);
+                        remove(bookEditPanel);
+                        repaint();
+                        revalidate();
+                    });
+                } else {
+                    JOptionPane.showMessageDialog(null, "Żadna książka nie została wybrana.");
+                }
             });
         });
 

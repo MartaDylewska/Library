@@ -3,11 +3,13 @@ package gui.book;
 import book.*;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class BookEditPanel extends JPanel {
 
     private JLabel titleLabel, publisherLabel, genreLabel, languageLabel;
-    private JTextField title, publisher, genre, language;
+    private JTextField publisher, genre, language;
+    private JTextArea title;
     private JLabel firstNameLabel, lastNameLabel;
     private JTextField firstName, lastName;
     private JLabel alleyLabel, bookstandLabel, shelfLabel;
@@ -19,7 +21,7 @@ public class BookEditPanel extends JPanel {
     private IAuthor authorService = new AuthorService();
     private IBook bookService = new BookService();
     private BookGetPanel bookGetPanel;
-    int bookIdToEdit;
+    private int bookIdToEdit;
 
     BookEditPanel(BookGetPanel bookGetPanel) {
 
@@ -40,43 +42,45 @@ public class BookEditPanel extends JPanel {
         titleLabel = new JLabel("Tytuł:");
         titleLabel.setBounds(20, 20, 100, 30);
 
-        title = new JTextField();
-        title.setBounds(150, 20, fieldLength, 30);
+        title = new JTextArea();
+        title.setBounds(150, 20, fieldLength, 60);
+        title.setBorder(BorderFactory.createLineBorder(Color.black));
+        title.setLineWrap(true);
         title.setText(book.getTitle());
 
         firstNameLabel = new JLabel("Imię autora:");
-        firstNameLabel.setBounds(20, 60, 100, 30);
+        firstNameLabel.setBounds(20, 100, 100, 30);
 
         firstName = new JTextField();
-        firstName.setBounds(150, 60, fieldLength, 30);
+        firstName.setBounds(150, 100, fieldLength, 30);
         firstName.setText(book.getAuthor().getFirstName());
 
         lastNameLabel = new JLabel("Nazwisko autora: ");
-        lastNameLabel.setBounds(20, 100, 120, 30);
+        lastNameLabel.setBounds(20, 140, 120, 30);
 
         lastName = new JTextField();
-        lastName.setBounds(150, 100, fieldLength, 30);
+        lastName.setBounds(150, 140, fieldLength, 30);
         lastName.setText(book.getAuthor().getLastName());
 
         publisherLabel = new JLabel("Wydawca:");
-        publisherLabel.setBounds(20, 140, 100, 30);
+        publisherLabel.setBounds(20, 180, 100, 30);
 
         publisher = new JTextField();
-        publisher.setBounds(150, 140, fieldLength, 30);
+        publisher.setBounds(150, 180, fieldLength, 30);
         publisher.setText(book.getPublisher());
 
         genreLabel = new JLabel("Gatunek:");
-        genreLabel.setBounds(20, 180, 100, 30);
+        genreLabel.setBounds(20, 220, 100, 30);
 
         genre = new JTextField();
-        genre.setBounds(150, 180, fieldLength, 30);
+        genre.setBounds(150, 220, fieldLength, 30);
         genre.setText(book.getGenre());
 
         languageLabel = new JLabel("Język:");
-        languageLabel.setBounds(20, 220, 100, 30);
+        languageLabel.setBounds(20, 260, 100, 30);
 
         language = new JTextField();
-        language.setBounds(150, 220, fieldLength, 30);
+        language.setBounds(150, 260, fieldLength, 30);
         language.setText(book.getLanguage());
 
 //        alleyLabel = new JLabel("Alejka:");
@@ -120,12 +124,12 @@ public class BookEditPanel extends JPanel {
         add(firstName);
         add(lastNameLabel);
         add(lastName);
-        add(alleyLabel);
-        add(alley);
-        add(bookstandLabel);
-        add(bookstand);
-        add(shelfLabel);
-        add(shelf);
+//        add(alleyLabel);
+//        add(alley);
+//        add(bookstandLabel);
+//        add(bookstand);
+//        add(shelfLabel);
+//        add(shelf);
         add(confirm);
         add(back);
         add(result);
@@ -135,11 +139,8 @@ public class BookEditPanel extends JPanel {
 
         confirm.addActionListener(e -> {
             if(check()) {
-                authorService.addAuthor(firstName.getText(), lastName.getText());
-                bookService.addBook(title.getText(), genre.getText(), publisher.getText(), language.getText(),
-                        firstName.getText(), lastName.getText(), alley.getSelectedItem().toString(),
-                        bookstand.getSelectedItem().toString(), Integer.parseInt(shelf.getSelectedItem().toString()));
-                result.setText(bookService.getMessage());
+                bookService.editBook(bookIdToEdit, firstName.getText(), lastName.getText());
+                bookService.editBook(bookIdToEdit, title.getText(), publisher.getText(), genre.getText(), language.getText());
             } else {
                 JOptionPane.showMessageDialog(null, "Uzupełnij dane.");
             }
@@ -148,18 +149,15 @@ public class BookEditPanel extends JPanel {
 
     private boolean check(){
 
-        boolean titleCheck = title.getText().length() > 0 && title.getText().length() < 32;
+        boolean titleCheck = title.getText().length() > 0 && title.getText().length() < 60;
         boolean firstNameCheck = firstName.getText().length() > 0 && firstName.getText().length() < 20;
         boolean lastNameCheck = lastName.getText().length() > 0 && lastName.getText().length() < 20;
         boolean publisherCheck = publisher.getText().length() > 0 && publisher.getText().length() < 20;
         boolean genreCheck = genre.getText().length() > 0 && genre.getText().length() < 20;
         boolean languageCheck = language.getText().length() > 0 && language.getText().length() < 20;
-        boolean alleyCheck = alley.getSelectedIndex() != 0;
-        boolean bookstandCheck = bookstand.getSelectedIndex() != 0;
-        boolean shelfCheck = shelf.getSelectedIndex() != 0;
 
         return titleCheck && firstNameCheck && lastNameCheck && publisherCheck &&
-                genreCheck && languageCheck && alleyCheck && bookstandCheck && shelfCheck;
+                genreCheck && languageCheck;
     }
 
     public JButton getBack() {
