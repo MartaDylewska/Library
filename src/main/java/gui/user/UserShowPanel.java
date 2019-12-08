@@ -1,52 +1,85 @@
-package gui;
+package gui.user;
 
 import card.CardDBServiceImpl;
 import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
+import config.Validation;
+import images.IPosterDBService;
+import images.Poster;
+import images.PosterDBServiceImpl;
 import user.IUserDBService;
 import user.User;
 import user.UserDBServiceImpl;
 
 import javax.swing.*;
 
-public class UserPanel extends JPanel {
+public class UserShowPanel extends JPanel {
+
     private JLabel firstNameLbl, lastNamelbl, emailLbl, passLbl, cardIdLbl, postalCodeLbl, cityNameLbl, streetAndBuildingLbl;
     private JTextField firstNameTxt, lastNameTxt, emailTxt, passTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
-    private JButton searchBtn, updateBtn, deleteBtn, showAllBtn, addBtn;
+    private JButton searchUserBtn, returnBtn;
     private int fieldLength = 200;
+    private JLabel imageLbl;
 
     private IUserDBService userDBService = new UserDBServiceImpl();
-    private ICardDBService cardDBService = new CardDBServiceImpl();
     private ICityDBService cityDBService = new CityDBServiceImpl();
 
-    UserPanel(){
-
+    UserShowPanel(){
         setLayout(null);
-
         createAllLabels();
         addAllLabels();
-        createAllButtons();
-        addAllButtons();
-        actionSearchBtn();
+        setCompVisibility(false);
+        createSearchBtn();
+        add(searchUserBtn);
+        actionSearchUserBtn();
+        createReturnBtn();
+        add(returnBtn);
+        setComponentsEditability(false);
+       // createImgLabel();
+      //  add(imageLbl);
     }
 
-    private void actionSearchBtn(){
-        searchBtn.addActionListener(e -> {
-            int cardId = Integer.parseInt(cardIdTxt.getText());
-            System.out.println(cardId);
-            User user = userDBService.readUserFromDB(cardId);
-            System.out.println(user);
-            firstNameTxt.setText(user.getFirstName());
-            lastNameTxt.setText(user.getLastName());
-            emailTxt.setText(user.getEmail());
-            postalCodeTxt.setText(user.getPostalCode());
-            cityNameTxt.setText(cityDBService.getCityName(user.getPostalCode()));
-            streetAndBuildingTxt.setText(user.getStreetBuilding());
+    private void actionSearchUserBtn(){
+        searchUserBtn.addActionListener(e -> {
+            if (Validation.checkIfInteger(cardIdTxt.getText())) {
+                //setComponentsEditability(false);
+                int cardId = Integer.parseInt(cardIdTxt.getText());
+                System.out.println(cardId);
+                User user = userDBService.readUserFromDB(cardId);
+                System.out.println(user);
+                if (user.getIdUser() != 0) {
+                    setCompVisibility(true);
+                    firstNameTxt.setText(user.getFirstName());
+                    lastNameTxt.setText(user.getLastName());
+                    emailTxt.setText(user.getEmail());
+                    postalCodeTxt.setText(user.getPostalCode());
+                    cityNameTxt.setText(cityDBService.getCityName(user.getPostalCode()));
+                    streetAndBuildingTxt.setText(user.getStreetBuilding());
+                } else {
+                    cardIdTxt.setText("");
+                    JOptionPane.showMessageDialog(this, "Brak karty o tym numerze w systemie");
+                    setCompVisibility(false);
+                }
+            } else{
+                JOptionPane.showMessageDialog(this, "Wpisz poprawny numer karty");
+                cardIdTxt.setText("");
+
+            }
         });
     }
 
+    private void createSearchBtn(){
+        searchUserBtn = new JButton();
+        searchUserBtn.setText("Wyszukaj");
+        searchUserBtn.setBounds(400,20,200,50);
+    }
 
+    private void createReturnBtn(){
+        returnBtn = new JButton();
+        returnBtn.setText("Powrót");
+        returnBtn.setBounds(400,300,200,50);
+    }
 
     private void addAllLabels(){
         add(cardIdLbl);
@@ -82,50 +115,13 @@ public class UserPanel extends JPanel {
         createStreetAndBuildingTxt();
     }
 
-    private void createAllButtons(){
-        createSearchBtn();
-        createUpdateBtn();
-        createDeleteBtn();
-        createShowAllBtn();
-        createAddBtn();
-    }
-
-    private void addAllButtons(){
-        add(searchBtn);
-        add(updateBtn);
-        add(deleteBtn);
-        add(showAllBtn);
-        add(addBtn);
-    }
-
-    private void createAddBtn(){
-        addBtn = new JButton();
-        addBtn.setText("Dodaj użytkownika");
-        addBtn.setBounds(400,420,200,50);
-    }
-
-    private void createSearchBtn(){
-        searchBtn = new JButton();
-        searchBtn.setText("Wyszukaj użytkownika");
-        searchBtn.setBounds(400,20,200,50);
-    }
-
-    private void createUpdateBtn(){
-        updateBtn = new JButton();
-        updateBtn.setText("Aktualizuj użytkownika");
-        updateBtn.setBounds(400,120,200,50);
-    }
-
-    private void createDeleteBtn(){
-        deleteBtn = new JButton();
-        deleteBtn.setText("Usuń użytkownika");
-        deleteBtn.setBounds(400,220,200,50);
-    }
-
-    private void createShowAllBtn(){
-        showAllBtn = new JButton();
-        showAllBtn.setText("Pokaż wszystkich");
-        showAllBtn.setBounds(400,320,200,50);
+    private void createImgLabel(){
+        imageLbl = new JLabel();
+        IPosterDBService posterDBService = new PosterDBServiceImpl();
+        Poster poster = posterDBService.readImage("poster2.png");
+        ImageIcon icon = new ImageIcon(poster.getImgBytes());
+        imageLbl.setIcon(icon);
+        imageLbl.setBounds(200,150,200,200);
     }
 
     private void createStreetAndBuildingLbl(){
@@ -205,5 +201,37 @@ public class UserPanel extends JPanel {
         cardIdTxt.setBounds(150,20,fieldLength,30);
     }
 
+    private void setCompVisibility(boolean visibility){
+        firstNameLbl.setVisible(visibility);
+        lastNamelbl.setVisible(visibility);
+        emailLbl.setVisible(visibility);
+        postalCodeLbl.setVisible(visibility);
+        cityNameLbl.setVisible(visibility);
+        streetAndBuildingLbl.setVisible(visibility);
+        firstNameTxt.setVisible(visibility);
+        lastNameTxt.setVisible(visibility);
+        emailTxt.setVisible(visibility);
+        //passTxt.setVisible(visibility);
+        //cardIdTxt.setVisible(visibility);
+        postalCodeTxt.setVisible(visibility);
+        cityNameTxt.setVisible(visibility);
+        streetAndBuildingTxt.setVisible(visibility);
+    }
+
+    private void setComponentsEditability(boolean editability){
+
+        firstNameTxt.setEditable(editability);
+        lastNameTxt.setEditable(editability);
+        emailTxt.setEditable(editability);
+       // passTxt.setEnabled(editability);
+        //cardIdTxt.setEnabled(editability);
+        postalCodeTxt.setEditable(editability);
+        cityNameTxt.setEditable(editability);
+        streetAndBuildingTxt.setEditable(editability);
+    }
+
+    public JButton getReturnBtn(){
+        return returnBtn;
+    }
 
 }

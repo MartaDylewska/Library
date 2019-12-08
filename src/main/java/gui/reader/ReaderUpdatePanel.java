@@ -1,81 +1,111 @@
-package gui;
+package gui.reader;
 
 import card.CardDBServiceImpl;
 import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
-import images.IPosterDBService;
-import images.Poster;
-import images.PosterDBServiceImpl;
+import reader.IReaderDBService;
+import reader.Reader;
+import reader.ReaderDBServiceImpl;
 import user.IUserDBService;
 import user.User;
 import user.UserDBServiceImpl;
 
 import javax.swing.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class UserDeletePanel extends JPanel {
+public class ReaderUpdatePanel extends JPanel {
 
     private JLabel firstNameLbl, lastNamelbl, emailLbl, passLbl, cardIdLbl, postalCodeLbl, cityNameLbl, streetAndBuildingLbl;
-    private JTextField firstNameTxt, lastNameTxt, emailTxt, passTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
-    private JButton searchUserBtn, deleteUserBtn, returnBtn;
+    private JTextField firstNameTxt, lastNameTxt, emailTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
+    private JPasswordField passField;
+    private JButton searchReaderBtn, updateReaderBtn, returnBtn;
     private int fieldLength = 200;
-    private JLabel imageLbl;
 
     private IUserDBService userDBService = new UserDBServiceImpl();
     private ICardDBService cardDBService = new CardDBServiceImpl();
     private ICityDBService cityDBService = new CityDBServiceImpl();
+    private IReaderDBService readerDBService = new ReaderDBServiceImpl();
 
-    UserDeletePanel() {
+    public ReaderUpdatePanel() {
         setLayout(null);
         createAllLabels();
         addAllLabels();
         setCompVisibility(false);
         createSearchBtn();
-        add(searchUserBtn);
+        add(searchReaderBtn);
         actionSearchUserBtn();
         createReturnBtn();
         add(returnBtn);
-        setComponentsEditability(false);
-        createDeleteBtn();
-        add(deleteUserBtn);
-        actionDeleteUserBtn();
-        // createImgLabel();
-        //  add(imageLbl);
+        createUpdateBtn();
+        add(updateReaderBtn);
+        setPostalCodeKL();
+        actionUpdateReaderBtn();
     }
 
-    private void actionDeleteUserBtn() {
-
-        deleteUserBtn.addActionListener(e -> {
-            int cardId = Integer.parseInt(cardIdTxt.getText());
-            userDBService.deleteUserFromDB(cardId);
-            firstNameTxt.setText("");
-            lastNameTxt.setText("");
-            emailTxt.setText("");
-            postalCodeTxt.setText("");
-            cityNameTxt.setText("");
-            streetAndBuildingTxt.setText("");
-            cardIdTxt.setText("");
-            setCompVisibility(false);
-            JOptionPane.showMessageDialog(this, "Użytkownik usunięty z systemu");
+    private void setPostalCodeKL() {
+        postalCodeTxt.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+            @Override
+            public void keyPressed(KeyEvent e) {}
+            @Override
+            public void keyReleased(KeyEvent e) {cityNameTxt.setText(cityDBService.getCityName(postalCodeTxt.getText())); }
         });
     }
 
+    private void actionUpdateReaderBtn() {
+        updateReaderBtn.addActionListener(e -> {
+            if(Validation.checkIfEmailOK(emailTxt.getText()) == false)
+                JOptionPane.showMessageDialog(this, "Niepoprawny email");
+            else if(Validation.checkIfPostalCodeOK(cityNameTxt.getText())==false)
+                JOptionPane.showMessageDialog(this, "Niepoprawny kod pocztowy");
+            else if(Validation.checkIfInteger(cardIdTxt.getText()) == false)
+                JOptionPane.showMessageDialog(this, "Niepoprawny numer karty użytkownika");
+            else if(firstNameTxt.getText().equals("") || lastNameTxt.getText().equals("")|| emailTxt.getText().equals("")||postalCodeTxt.getText().equals("")||streetAndBuildingTxt.getText().equals(""))
+                JOptionPane.showMessageDialog(this, "Proszę wypełnić wszystkie pola");
+            else {
+                int cardId = Integer.parseInt(cardIdTxt.getText());
+                User user = userDBService.readUserFromDB(cardId);
+                int userId = user.getIdUser();
+                    String userFirstName = firstNameTxt.getText();
+                    String userLastName = lastNameTxt.getText();
+                    String userEmail = emailTxt.getText();
+                    String userSteetBuilding = streetAndBuildingTxt.getText();
+                    String userPostalCode = postalCodeTxt.getText();
+                    StringBuilder pass = new StringBuilder();
+                    for (char c : passField.getPassword())
+                        pass.append(c);
+                    String userPass;
+                    if (pass.toString().equals("------"))
+                        userPass = user.getPassword();
+                    else
+                        userPass = pass.toString();
+
+                    userDBService.updateUserInDB(userId, userFirstName, userLastName, userEmail, userPass, userSteetBuilding, userPostalCode, cardId);
+                    JOptionPane.showMessageDialog(this, "Dane użytkownika zaktualizowane poprawnie");
+
+
+            }
+
+        });
+
+    }
+
     private void actionSearchUserBtn() {
-        searchUserBtn.addActionListener(e -> {
-
-            //setComponentsEditability(false);
+        searchReaderBtn.addActionListener(e -> {
             if (Validation.checkIfInteger(cardIdTxt.getText())) {
-
                 int cardId = Integer.parseInt(cardIdTxt.getText());
                 System.out.println(cardId);
                 User user = userDBService.readUserFromDB(cardId);
+                Reader reader = readerDBService.readReaderFromDB(user.getIdUser());
                 System.out.println(user);
-                if (user.getIdUser() != 0) {
-                    deleteUserBtn.setVisible(true);
+                if (user.getIdUser() != 0 && reader.getIdReader()!=0) {
+                    updateReaderBtn.setVisible(true);
                     setCompVisibility(true);
+                    cardIdTxt.setEditable(false);
                     firstNameTxt.setText(user.getFirstName());
                     lastNameTxt.setText(user.getLastName());
                     emailTxt.setText(user.getEmail());
@@ -93,23 +123,23 @@ public class UserDeletePanel extends JPanel {
         });
     }
 
-    private void createDeleteBtn() {
-        deleteUserBtn = new JButton();
-        deleteUserBtn.setText("Usuń użytkownika");
-        deleteUserBtn.setVisible(false);
-        deleteUserBtn.setBounds(400, 150, 200, 50);
-    }
-
     private void createSearchBtn() {
-        searchUserBtn = new JButton();
-        searchUserBtn.setText("Wyszukaj");
-        searchUserBtn.setBounds(400, 20, 200, 50);
+        searchReaderBtn = new JButton();
+        searchReaderBtn.setText("Wyszukaj");
+        searchReaderBtn.setBounds(400, 20, 200, 50);
     }
 
     private void createReturnBtn() {
         returnBtn = new JButton();
         returnBtn.setText("Powrót");
         returnBtn.setBounds(400, 300, 200, 50);
+    }
+
+    private void createUpdateBtn() {
+        updateReaderBtn = new JButton();
+        updateReaderBtn.setText("Aktualizuj dane");
+        updateReaderBtn.setVisible(false);
+        updateReaderBtn.setBounds(400, 150, 200, 50);
     }
 
     private void addAllLabels() {
@@ -127,6 +157,8 @@ public class UserDeletePanel extends JPanel {
         add(cityNameTxt);
         add(streetAndBuildingLbl);
         add(streetAndBuildingTxt);
+        add(passLbl);
+        add(passField);
     }
 
     private void createAllLabels() {
@@ -144,15 +176,20 @@ public class UserDeletePanel extends JPanel {
         createCityNameTxt();
         createStreetAndBuildingLbl();
         createStreetAndBuildingTxt();
+        createPassLbl();
+        createPassTxt();
     }
 
-    private void createImgLabel() {
-        imageLbl = new JLabel();
-        IPosterDBService posterDBService = new PosterDBServiceImpl();
-        Poster poster = posterDBService.readImage("poster2.png");
-        ImageIcon icon = new ImageIcon(poster.getImgBytes());
-        imageLbl.setIcon(icon);
-        imageLbl.setBounds(200, 150, 200, 200);
+    private void createPassLbl() {
+        passLbl = new JLabel();
+        passLbl.setText("Hasło");
+        passLbl.setBounds(20, 300, 100, 30);
+    }
+
+    private void createPassTxt() {
+        passField = new JPasswordField();
+        passField.setText("------");
+        passField.setBounds(150, 300, fieldLength, 30);
     }
 
     private void createStreetAndBuildingLbl() {
@@ -243,23 +280,29 @@ public class UserDeletePanel extends JPanel {
         firstNameTxt.setVisible(visibility);
         lastNameTxt.setVisible(visibility);
         emailTxt.setVisible(visibility);
-        //passTxt.setVisible(visibility);
-        //cardIdTxt.setVisible(visibility);
+        passField.setVisible(visibility);
+        passLbl.setVisible(visibility);
         postalCodeTxt.setVisible(visibility);
         cityNameTxt.setVisible(visibility);
         streetAndBuildingTxt.setVisible(visibility);
     }
 
     private void setComponentsEditability(boolean editability) {
-
-        firstNameTxt.setEditable(editability);
-        lastNameTxt.setEditable(editability);
-        emailTxt.setEditable(editability);
-        // passTxt.setEnabled(editability);
-        //cardIdTxt.setEnabled(editability);
-        postalCodeTxt.setEditable(editability);
-        cityNameTxt.setEditable(editability);
-        streetAndBuildingTxt.setEditable(editability);
+        firstNameLbl.setEnabled(editability);
+        lastNamelbl.setEnabled(editability);
+        emailLbl.setEnabled(editability);
+        postalCodeLbl.setEnabled(editability);
+        cardIdLbl.setEnabled(editability);
+        cityNameLbl.setEnabled(editability);
+        streetAndBuildingLbl.setEnabled(editability);
+        firstNameTxt.setEnabled(editability);
+        lastNameTxt.setEnabled(editability);
+        emailTxt.setEnabled(editability);
+        //passTxt.setEnabled(editability);
+        cardIdTxt.setEnabled(editability);
+        postalCodeTxt.setEnabled(editability);
+        cityNameTxt.setEnabled(editability);
+        streetAndBuildingTxt.setEnabled(editability);
     }
 
     public JButton getReturnBtn() {
