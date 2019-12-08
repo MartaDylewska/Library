@@ -14,11 +14,11 @@ public class DBConfig {
     private static final String dbName = "dxdqdjgq";
 
     public static Connection initializeDataBaseConnection(){
-        try {
+/*        try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
             System.err.println("PostgreSQL DataSource unable to load PostgreSQL JDBC Driver");
-        }
+        }*/
 
         try{
             return DriverManager.getConnection("jdbc:postgresql://"+dbHost+":"+dbPort+"/"+dbName,dbUser,dbPass);

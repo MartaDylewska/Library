@@ -1,4 +1,4 @@
-package gui;
+package gui.user;
 
 import card.Card;
 import card.CardDBServiceImpl;
@@ -57,15 +57,16 @@ public class UserAddPanel extends JPanel {
                 JOptionPane.showMessageDialog(this, "Niepoprawny email");
             else if (Validation.checkIfPostalCodeOK(cityNameTxt.getText()) == false)
                 JOptionPane.showMessageDialog(this, "Niepoprawny kod pocztowy");
-            else if (firstNameTxt.getText().equals("") || lastNameTxt.getText().equals("") || emailTxt.getText().equals("") || postalCodeTxt.getText().equals("") || streetAndBuildingTxt.getText().equals(""))
+            else if (firstNameTxt.getText().equals("") || lastNameTxt.getText().equals("") || emailTxt.getText().equals("") || postalCodeTxt.getText().equals("") || streetAndBuildingTxt.getText().equals("") || passField.getPassword().length == 0)
                 JOptionPane.showMessageDialog(this, "Proszę wypełnić wszystkie pola");
             else {
-                ICardDBService cardDBService = new CardDBServiceImpl();
+
                 cardDBService.addCardInDB();
                 Card cardForNewUser = cardDBService.readLastCardFromDB();
                 cardIdTxt.setText(String.valueOf(cardForNewUser.getIdCard()));
                 cardIdTxt.setVisible(true);
                 cardIdLbl.setVisible(true);
+
                 User user = new User();
                 user.setCardNumber(cardForNewUser.getIdCard());
                 user.setFirstName(firstNameTxt.getText());

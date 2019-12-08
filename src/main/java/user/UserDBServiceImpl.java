@@ -1,6 +1,8 @@
 package user;
 
 
+import card.Card;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -98,7 +100,7 @@ public class UserDBServiceImpl implements IUserDBService {
         PreparedStatement preparedStatement = null;
         List<User> userList = new ArrayList<>();
         try {
-            String queryReadUsers = "SELECT * FROM public.\"user\"";
+            String queryReadUsers = "SELECT * FROM public.\"user\" ORDER BY lastname ASC;" ;
             preparedStatement = connection.prepareStatement(queryReadUsers);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -126,7 +128,6 @@ public class UserDBServiceImpl implements IUserDBService {
         }
     }
 
-//nieprzetestowane
     @Override
     public void updateUserInDB(int idUser, String firstName, String lastName, String email, String password, String streetBuilding, String postalCode, int cardNumber) {
         Connection connection = initializeDataBaseConnection();
@@ -150,5 +151,33 @@ public class UserDBServiceImpl implements IUserDBService {
         finally {
             closeDBResources(connection,preparedStatement);
         }
+    }
+
+    @Override
+    public int readLastUserIdFromDB() {
+        Connection connection = initializeDataBaseConnection();
+        PreparedStatement preparedStatement = null;
+
+        try {
+            String queryReadUser = "Select * From public.\"user\" order by iduser desc limit 1;";
+            int lastUserId = 0;
+            preparedStatement = connection.prepareStatement(queryReadUser);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()){
+                lastUserId = resultSet.getInt("iduser");
+
+            }
+            return lastUserId;
+        }
+        catch (SQLException e){
+            System.err.println("Error during invoke SQL query: \n" + e.getMessage());
+            throw  new RuntimeException("Error during invoke SQL query");
+        }
+        finally {
+            closeDBResources(connection,preparedStatement);
+        }
+
+
     }
 }

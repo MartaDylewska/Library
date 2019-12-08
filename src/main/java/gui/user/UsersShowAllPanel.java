@@ -1,4 +1,4 @@
-package gui;
+package gui.user;
 
 import card.CardDBServiceImpl;
 import card.ICardDBService;

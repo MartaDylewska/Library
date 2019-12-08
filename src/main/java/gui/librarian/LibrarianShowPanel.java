@@ -1,4 +1,4 @@
-package gui;
+package gui.librarian;
 
 import card.CardDBServiceImpl;
 import card.ICardDBService;
@@ -8,72 +8,77 @@ import config.Validation;
 import images.IPosterDBService;
 import images.Poster;
 import images.PosterDBServiceImpl;
+import librarian.ILibrarianDBService;
+import librarian.Librarian;
+import librarian.LibrarianDBServiceImpl;
 import user.IUserDBService;
-import user.User;
 import user.UserDBServiceImpl;
 
 import javax.swing.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class UserShowPanel extends JPanel {
+public class LibrarianShowPanel extends JPanel {
 
     private JLabel firstNameLbl, lastNamelbl, emailLbl, passLbl, cardIdLbl, postalCodeLbl, cityNameLbl, streetAndBuildingLbl;
+    private JLabel salaryLbl, dateEmploymentLbl;
     private JTextField firstNameTxt, lastNameTxt, emailTxt, passTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
-    private JButton searchUserBtn, returnBtn;
+    private JTextField salaryTxt, dateEmploymentTxt;
+    private JButton searchLibrarianBtn, returnBtn;
     private int fieldLength = 200;
     private JLabel imageLbl;
 
     private IUserDBService userDBService = new UserDBServiceImpl();
     private ICardDBService cardDBService = new CardDBServiceImpl();
     private ICityDBService cityDBService = new CityDBServiceImpl();
+    private ILibrarianDBService librarianDBService = new LibrarianDBServiceImpl();
 
-    UserShowPanel(){
+    public LibrarianShowPanel(){
         setLayout(null);
         createAllLabels();
         addAllLabels();
         setCompVisibility(false);
         createSearchBtn();
-        add(searchUserBtn);
-        actionSearchUserBtn();
+        add(searchLibrarianBtn);
+        actionSearchLibrarianBtn();
         createReturnBtn();
         add(returnBtn);
         setComponentsEditability(false);
-       // createImgLabel();
-      //  add(imageLbl);
     }
 
-    private void actionSearchUserBtn(){
-        searchUserBtn.addActionListener(e -> {
+    private void actionSearchLibrarianBtn(){
+        searchLibrarianBtn.addActionListener(e -> {
             if (Validation.checkIfInteger(cardIdTxt.getText())) {
                 //setComponentsEditability(false);
                 int cardId = Integer.parseInt(cardIdTxt.getText());
                 System.out.println(cardId);
-                User user = userDBService.readUserFromDB(cardId);
-                System.out.println(user);
-                if (user.getIdUser() != 0) {
+                Librarian librarian = librarianDBService.readLibrarianFromDB(cardId);
+                System.out.println(librarian);
+                if (librarian.getIdLibrarian() != 0) {
                     setCompVisibility(true);
-                    firstNameTxt.setText(user.getFirstName());
-                    lastNameTxt.setText(user.getLastName());
-                    emailTxt.setText(user.getEmail());
-                    postalCodeTxt.setText(user.getPostalCode());
-                    cityNameTxt.setText(cityDBService.getCityName(user.getPostalCode()));
-                    streetAndBuildingTxt.setText(user.getStreetBuilding());
+                    firstNameTxt.setText(librarian.getFirstName());
+                    lastNameTxt.setText(librarian.getLastName());
+                    emailTxt.setText(librarian.getEmail());
+                    postalCodeTxt.setText(librarian.getPostalCode());
+                    cityNameTxt.setText(cityDBService.getCityName(librarian.getPostalCode()));
+                    streetAndBuildingTxt.setText(librarian.getStreetBuilding());
+                    salaryTxt.setText(librarian.getSalary());
+                    dateEmploymentTxt.setText(librarian.getEmploymentDate().toString());
                 } else {
                     cardIdTxt.setText("");
+                    setCompVisibility(false);
                     JOptionPane.showMessageDialog(this, "Brak karty o tym numerze w systemie");
                 }
             } else{
                 JOptionPane.showMessageDialog(this, "Wpisz poprawny numer karty");
                 cardIdTxt.setText("");
+
             }
         });
     }
 
     private void createSearchBtn(){
-        searchUserBtn = new JButton();
-        searchUserBtn.setText("Wyszukaj");
-        searchUserBtn.setBounds(400,20,200,50);
+        searchLibrarianBtn = new JButton();
+        searchLibrarianBtn.setText("Wyszukaj");
+        searchLibrarianBtn.setBounds(400,20,200,50);
     }
 
     private void createReturnBtn(){
@@ -97,6 +102,10 @@ public class UserShowPanel extends JPanel {
         add(cityNameTxt);
         add(streetAndBuildingLbl);
         add(streetAndBuildingTxt);
+        add(salaryLbl);
+        add(salaryTxt);
+        add(dateEmploymentLbl);
+        add(dateEmploymentTxt);
     }
 
     private void createAllLabels(){
@@ -114,7 +123,34 @@ public class UserShowPanel extends JPanel {
         createCityNameTxt();
         createStreetAndBuildingLbl();
         createStreetAndBuildingTxt();
+        createDateEmplLbl();
+        createDateEmplTxt();
+        createSalaryLbl();
+        createSalaryTxt();
     }
+
+    private void createDateEmplLbl(){
+        dateEmploymentLbl = new JLabel();
+        dateEmploymentLbl.setText("Data zatrudnienia");
+        dateEmploymentLbl.setBounds(20, 340, 100, 30);
+    }
+
+    private void createDateEmplTxt(){
+        dateEmploymentTxt = new JTextField();
+        dateEmploymentTxt.setBounds(150, 340, fieldLength, 30);
+    }
+
+    private void createSalaryLbl(){
+        salaryLbl = new JLabel();
+        salaryLbl.setText("Pensja");
+        salaryLbl.setBounds(20, 300, 100, 30);
+    }
+
+    private void createSalaryTxt() {
+        salaryTxt = new JTextField();
+        salaryTxt.setBounds(150, 300, fieldLength, 30);
+    }
+
 
     private void createImgLabel(){
         imageLbl = new JLabel();
@@ -209,6 +245,8 @@ public class UserShowPanel extends JPanel {
         postalCodeLbl.setVisible(visibility);
         cityNameLbl.setVisible(visibility);
         streetAndBuildingLbl.setVisible(visibility);
+        salaryLbl.setVisible(visibility);
+        dateEmploymentLbl.setVisible(visibility);
         firstNameTxt.setVisible(visibility);
         lastNameTxt.setVisible(visibility);
         emailTxt.setVisible(visibility);
@@ -217,6 +255,8 @@ public class UserShowPanel extends JPanel {
         postalCodeTxt.setVisible(visibility);
         cityNameTxt.setVisible(visibility);
         streetAndBuildingTxt.setVisible(visibility);
+        salaryTxt.setVisible(visibility);
+        dateEmploymentTxt.setVisible(visibility);
     }
 
     private void setComponentsEditability(boolean editability){
@@ -224,15 +264,16 @@ public class UserShowPanel extends JPanel {
         firstNameTxt.setEditable(editability);
         lastNameTxt.setEditable(editability);
         emailTxt.setEditable(editability);
-       // passTxt.setEnabled(editability);
+        // passTxt.setEnabled(editability);
         //cardIdTxt.setEnabled(editability);
         postalCodeTxt.setEditable(editability);
         cityNameTxt.setEditable(editability);
         streetAndBuildingTxt.setEditable(editability);
+        salaryTxt.setEditable(editability);
+        dateEmploymentTxt.setEditable(editability);
     }
 
     public JButton getReturnBtn(){
         return returnBtn;
     }
-
 }
