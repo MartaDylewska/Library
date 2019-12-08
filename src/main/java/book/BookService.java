@@ -17,7 +17,7 @@ public class BookService implements IBook {
         Book book = null;
 
         SQL = "select * from book inner join author on author.author_id = book.author_id " +
-                "inner join bookshelf on bookshelves.bookshelf_id = book.bookshelf_id where book_id = ? ;";
+                "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id where book_id = ? ;";
 
         try (Connection conn = connect.connectDB()) {
             PreparedStatement preparedStatement = conn.prepareStatement(SQL);
@@ -26,7 +26,17 @@ public class BookService implements IBook {
 
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()){
-                display(rs, book);
+                book = new Book();
+                Author author = new Author(rs.getString("first_name"), rs.getString("last_name"));
+                Bookshelf bookshelf = new Bookshelf(rs.getString("alley"), rs.getString("bookstand"), rs.getInt("shelf"));
+                book.setTitle(rs.getString("title"));
+                book.setAuthor(author);
+                book.setBookshelf(bookshelf);
+                book.setPublisher(rs.getString("publisher"));
+                book.setLanguage(rs.getString("lang"));
+                book.setGenre(rs.getString("genre"));
+                book.setISBN(rs.getLong("isbn"));
+                book.setBookId(rs.getInt("book_id"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -41,7 +51,7 @@ public class BookService implements IBook {
         int authorId = iauthor.getAuthorId(firstName, lastName);
         int bookshelfId = iBookshelf.getBookshelf(alley, bookstand, shelf);
 
-        SQL = "insert into book(title, author_id, publisher, lang, genre, availability, isbn, bookstand_id) " +
+        SQL = "insert into book(title, author_id, publisher, lang, genre, availability, isbn, bookshelf_id) " +
                 "values (?,?, ?, ?, ?, ?, ?, ?);";
         PreparedStatement preparedStatement;
 
@@ -59,7 +69,7 @@ public class BookService implements IBook {
             preparedStatement.setInt(8, bookshelfId);
 
             preparedStatement.executeUpdate();
-            message = "Book added to database.";
+            message = "Książka została dodana do bazy.";
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -78,7 +88,7 @@ public class BookService implements IBook {
             preparedStatement.setInt(1, id);
 
             preparedStatement.executeUpdate();
-            message = "Book removed from database.";
+            message = "Książka została usunięta z bazy.";
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -98,7 +108,7 @@ public class BookService implements IBook {
             preparedStatement.setInt(1, authorId);
 
             preparedStatement.executeUpdate();
-            message = "Books of " + firstName + " " + lastName + " removed from database.";
+            message = "Książki " + firstName + " " + lastName + " zostały usunięte z bazy.";
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -118,7 +128,7 @@ public class BookService implements IBook {
             preparedStatement.setInt(3, id);
 
             preparedStatement.executeUpdate();
-            System.out.println("Book's " + key + " changed to " + value);
+            System.out.println("Książka została zedytowana.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -144,7 +154,7 @@ public class BookService implements IBook {
             preparedStatement.setInt(2, id);
 
             preparedStatement.executeUpdate();
-            message = "Book's author changed to " + firstName + " " + lastName;
+            message = "Autor książki zmieniony na: " + firstName + " " + lastName;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -154,22 +164,32 @@ public class BookService implements IBook {
     public List<Book> getBooks(String firstName, String lastName) {
 
         List<Book> booksOfAuthor = new ArrayList<>();
-        Book book = null;
 
         int authorId = iauthor.getAuthorId(firstName, lastName);
 
-        SQL = "select * from book where author_id = ? ;";
+        SQL = "select * from book inner join author on author.author_id = book.author_id " +
+                "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id where author.author_id = ?;";
         PreparedStatement preparedStatement;
 
         try (Connection conn = connect.connectDB()) {
             preparedStatement = conn.prepareStatement(SQL);
 
             preparedStatement.setInt(1, authorId);
-            preparedStatement.executeUpdate();
+
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                display(rs, book);
+                Book book = new Book();
+                Author author = new Author(rs.getString("first_name"), rs.getString("last_name"));
+                Bookshelf bookshelf = new Bookshelf(rs.getString("alley"), rs.getString("bookstand"), rs.getInt("shelf"));
+                book.setTitle(rs.getString("title"));
+                book.setAuthor(author);
+                book.setBookshelf(bookshelf);
+                book.setPublisher(rs.getString("publisher"));
+                book.setLanguage(rs.getString("lang"));
+                book.setGenre(rs.getString("genre"));
+                book.setISBN(rs.getLong("isbn"));
+                book.setBookId(rs.getInt("book_id"));
                 booksOfAuthor.add(book);
             }
         } catch (SQLException e) {
@@ -182,9 +202,9 @@ public class BookService implements IBook {
     public List<Book> getBooks(String search) {
 
         List<Book> booksOfSearch = new ArrayList<>();
-        Book book = null;
 
-        SQL = "select * from book where title = ? or publisher = ? or lang = ? or genre = ? ;";
+        SQL = "select * from book inner join author on author.author_id = book.author_id " +
+                "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id where title = ? or publisher = ? or lang = ? or genre = ? ;";
         PreparedStatement preparedStatement;
 
         try (Connection conn = connect.connectDB()) {
@@ -195,11 +215,20 @@ public class BookService implements IBook {
             preparedStatement.setString(3, search);
             preparedStatement.setString(4, search);
 
-            preparedStatement.executeUpdate();
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                display(rs, book);
+                Book book = new Book();
+                Author author = new Author(rs.getString("first_name"), rs.getString("last_name"));
+                Bookshelf bookshelf = new Bookshelf(rs.getString("alley"), rs.getString("bookstand"), rs.getInt("shelf"));
+                book.setTitle(rs.getString("title"));
+                book.setAuthor(author);
+                book.setBookshelf(bookshelf);
+                book.setPublisher(rs.getString("publisher"));
+                book.setLanguage(rs.getString("lang"));
+                book.setGenre(rs.getString("genre"));
+                book.setISBN(rs.getLong("isbn"));
+                book.setBookId(rs.getInt("book_id"));
                 booksOfSearch.add(book);
             }
         } catch (SQLException e) {
@@ -213,36 +242,32 @@ public class BookService implements IBook {
     public List<Book> getAllBooks() {
 
         List<Book> books = new ArrayList<>();
-        Book book = null;
 
-        SQL = "select * from book;";
+        SQL = "select * from book inner join author on author.author_id = book.author_id " +
+                "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id;";
 
         try (Connection conn = connect.connectDB()) {
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery(SQL);
 
             while (rs.next()) {
-                display(rs, book);
+                Book book = new Book();
+                Author author = new Author(rs.getString("first_name"), rs.getString("last_name"));
+                Bookshelf bookshelf = new Bookshelf(rs.getString("alley"), rs.getString("bookstand"), rs.getInt("shelf"));
+                book.setTitle(rs.getString("title"));
+                book.setAuthor(author);
+                book.setBookshelf(bookshelf);
+                book.setPublisher(rs.getString("publisher"));
+                book.setLanguage(rs.getString("lang"));
+                book.setGenre(rs.getString("genre"));
+                book.setISBN(rs.getLong("isbn"));
+                book.setBookId(rs.getInt("book_id"));
                 books.add(book);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
         return books;
-    }
-
-    private void display(ResultSet rs, Book book) throws SQLException {
-        book = new Book();
-        Author author = new Author(rs.getString("first_name"), rs.getString("last_name"));
-        Bookshelf bookshelf = new Bookshelf(rs.getString("alley"), rs.getString("bookstand"), rs.getInt("shelf"));
-        book.setTitle(rs.getString("title"));
-        book.setAuthor(author);
-        book.setBookshelf(bookshelf);
-        book.setPublisher(rs.getString("publisher"));
-        book.setLanguage(rs.getString("lang"));
-        book.setGenre(rs.getString("genre"));
-        book.setISBN(rs.getLong("isbn"));
     }
 
     @Override

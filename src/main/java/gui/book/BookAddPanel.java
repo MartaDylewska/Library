@@ -1,4 +1,4 @@
-package gui;
+package gui.book;
 
 import book.AuthorService;
 import book.BookService;
@@ -151,6 +151,10 @@ public class BookAddPanel extends JPanel {
 
         return titleCheck && firstNameCheck && lastNameCheck && publisherCheck &&
                 genreCheck && languageCheck && alleyCheck && bookstandCheck && shelfCheck;
+    }
+
+    public JButton getBack() {
+        return back;
     }
 }
 

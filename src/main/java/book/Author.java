@@ -1,6 +1,6 @@
 package book;
 
-class Author {
+public class Author {
 
     private String firstName, lastName;
 
@@ -9,7 +9,7 @@ class Author {
         this.lastName = lastName;
     }
 
-    private String getFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
@@ -17,7 +17,7 @@ class Author {
         this.firstName = firstName;
     }
 
-    private String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 
