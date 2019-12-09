@@ -118,7 +118,7 @@ public class AuthorGetPanel extends JPanel {
 
                 if (JOptionPane.showConfirmDialog(null, "Czy na pewno usunąć autora?", "UWAGA!",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    bookService.removeBook(author.getFirstName(), author.getLastName());
+//                    bookService.removeBook(author.getFirstName(), author.getLastName());
                     authorService.removeAuthor(author.getFirstName(), author.getLastName());
                     List<Author> authorList = authorService.getAuthors();
                     createBookJList(authorList);
@@ -141,7 +141,7 @@ public class AuthorGetPanel extends JPanel {
                 change.setEnabled(true);
 
                 change.addActionListener(e1 ->{
-                    bookService.editBook(author.getId(), newFirstName.getText(), newLastName.getText());
+//                    bookService.editBook(author.getId(), newFirstName.getText(), newLastName.getText());
                     authorService.editAuthor(author.getId(), newFirstName.getText(), newLastName.getText());
                     result.setText(authorService.getMessage());
                 });

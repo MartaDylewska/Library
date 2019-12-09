@@ -1,9 +1,6 @@
 package gui.book;
 
-import book.AuthorService;
-import book.BookService;
-import book.IAuthor;
-import book.IBook;
+import book.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,6 +22,7 @@ public class BookAddPanel extends JPanel {
 
     private IAuthor authorService = new AuthorService();
     private IBook bookService = new BookService();
+    private IAuthorBook authorBookService = new AuthorBookService();
 
     BookAddPanel() {
 
@@ -163,9 +161,9 @@ public class BookAddPanel extends JPanel {
         confirm.addActionListener(e -> {
             if(check()) {
                 if(oneAuthor.isSelected()) {
-                    authorService.addAuthor(firstName.getText(), lastName.getText());
-                    bookService.addBook(title.getText(), genre.getText(), publisher.getText(), language.getText(),
-                            firstName.getText(), lastName.getText(), alley.getSelectedItem().toString(),
+//                    authorService.addAuthor(firstName.getText(), lastName.getText());
+                    authorBookService.addAuthorBook(firstName.getText(), lastName.getText(),title.getText(), genre.getText(),
+                            publisher.getText(), language.getText(), alley.getSelectedItem().toString(),
                             bookstand.getSelectedItem().toString(), Integer.parseInt(shelf.getSelectedItem().toString()));
                     result.setText(bookService.getMessage());
                 }

@@ -102,7 +102,9 @@ public class AuthorService implements IAuthor {
             Statement statement = conn.createStatement();
             ResultSet resultSet = statement.executeQuery(SQL);
             while (resultSet.next()) {
-                Author author = new Author(resultSet.getString("first_name"), resultSet.getString("last_name"));
+                Author author = new Author();
+                author.setFirstName(resultSet.getString("first_name"));
+                author.setLastName(resultSet.getString("last_name"));
                 author.setId(resultSet.getInt("author_id"));
                 authors.add(author);
             }
@@ -126,7 +128,9 @@ public class AuthorService implements IAuthor {
 
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()){
-                author = new Author(rs.getString(1), rs.getString(2));
+                author = new Author();
+                author.setFirstName(rs.getString("first_name"));
+                author.setLastName(rs.getString("last_name"));
                 author.setId(rs.getInt("author_id"));
             }
         } catch (SQLException e) {
@@ -150,7 +154,9 @@ public class AuthorService implements IAuthor {
 
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()){
-                author = new Author(rs.getString("first_name"), rs.getString("last_name"));
+                author = new Author();
+                author.setFirstName(rs.getString("first_name"));
+                author.setLastName(rs.getString("last_name"));
                 author.setId(rs.getInt("author_id"));
             }
         } catch (SQLException e) {
@@ -176,7 +182,9 @@ public class AuthorService implements IAuthor {
 
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()){
-                Author author = new Author(rs.getString("first_name"), rs.getString("last_name"));
+                Author author = new Author();
+                author.setFirstName(rs.getString("first_name"));
+                author.setLastName(rs.getString("last_name"));
                 author.setId(rs.getInt("author_id"));
                 authors.add(author);
             }

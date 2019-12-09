@@ -4,7 +4,7 @@ public class Book{
 
     private String title, genre, publisher, language;
     private long ISBN;
-    private Author author;
+//    private Author author;
     private Bookshelf bookshelf;
     private boolean isAvailable;
     private int bookId;
@@ -12,13 +12,13 @@ public class Book{
     Book(){
     }
 
-    public Author getAuthor() {
-        return author;
-    }
-
-    void setAuthor(Author author) {
-        this.author = author;
-    }
+//    public Author getAuthor() {
+//        return author;
+//    }
+//
+//    void setAuthor(Author author) {
+//        this.author = author;
+//    }
 
     public String getTitle() {
         return title;

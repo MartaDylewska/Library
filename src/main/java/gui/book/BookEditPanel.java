@@ -19,22 +19,26 @@ public class BookEditPanel extends JPanel {
     private int fieldLength = 200;
 
     private IBook bookService = new BookService();
-    private int bookIdToEdit;
+    private IAuthor authorService = new AuthorService();
+    private IAuthorBook authorBookService = new AuthorBookService();
+    private int bookIdToEdit, authorIdToEdit;
 
     BookEditPanel(BookGetPanel bookGetPanel) {
 
         this.bookIdToEdit = bookGetPanel.getBookIdToEdit();
+        this.authorIdToEdit = bookGetPanel.getAuthorIdToEdit();
         Book book = bookService.getBook(bookIdToEdit);
+        Author author = authorService.getAuthor(authorIdToEdit);
 
         setLayout(null);
 
-        createComps(book);
+        createComps(book, author);
         addComp();
-        action(book);
+        action(book, author);
 
     }
 
-    private void createComps(Book book) {
+    private void createComps(Book book, Author author) {
 
         titleLabel = new JLabel("Tytuł:");
         titleLabel.setBounds(20, 20, 100, 30);
@@ -50,14 +54,14 @@ public class BookEditPanel extends JPanel {
 
         firstName = new JTextField();
         firstName.setBounds(150, 100, fieldLength, 30);
-        firstName.setText(book.getAuthor().getFirstName());
+        firstName.setText(author.getFirstName());
 
         lastNameLabel = new JLabel("Nazwisko autora: ");
         lastNameLabel.setBounds(20, 140, 120, 30);
 
         lastName = new JTextField();
         lastName.setBounds(150, 140, fieldLength, 30);
-        lastName.setText(book.getAuthor().getLastName());
+        lastName.setText(author.getLastName());
 
         publisherLabel = new JLabel("Wydawca:");
         publisherLabel.setBounds(20, 180, 100, 30);
@@ -138,12 +142,12 @@ public class BookEditPanel extends JPanel {
         add(result);
     }
 
-    private void action(Book book) {
+    private void action(Book book, Author author) {
 
         confirm.addActionListener(e -> {
             if(check()) {
-                if(!(firstName.getText().equals(book.getAuthor().getFirstName())) || !(lastName.getText().equals(book.getAuthor().getLastName())))
-                    bookService.editBook(bookIdToEdit, firstName.getText(), lastName.getText());
+                if(!(firstName.getText().equals(author.getFirstName())) || !(lastName.getText().equals(author.getLastName())))
+                    authorService.editAuthor(authorIdToEdit, firstName.getText(), lastName.getText());
                 if(!(alley.getSelectedItem().equals(book.getBookshelf().getAlley())) || !(bookstand.getSelectedItem().equals(book.getBookshelf().getBookstand())) || !(shelf.getSelectedItem().equals(String.valueOf(book.getBookshelf().getShelf()))))
                     bookService.editBook(bookIdToEdit, alley.getSelectedItem().toString(), bookstand.getSelectedItem().toString(), Integer.parseInt(shelf.getSelectedItem().toString()));
                 if(!(title.getText().equals(book.getTitle())) || !(publisher.getText().equals(book.getPublisher())) || !(genre.getText().equals(book.getGenre())) || !(language.getText().equals(book.getLanguage())))
