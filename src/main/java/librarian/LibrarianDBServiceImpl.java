@@ -1,29 +1,20 @@
 package librarian;
 
-<<<<<<< HEAD
 import reader.Reader;
-=======
->>>>>>> books
 import user.IUserDBService;
 import user.User;
 import user.UserDBServiceImpl;
 
 import java.sql.*;
 import java.time.LocalDate;
-<<<<<<< HEAD
 import java.util.ArrayList;
-=======
->>>>>>> books
 import java.util.List;
 
 import static config.DBConfig.closeDBResources;
 import static config.DBConfig.initializeDataBaseConnection;
 
 public class LibrarianDBServiceImpl implements ILibrarianDBService {
-<<<<<<< HEAD
 
-=======
->>>>>>> books
     @Override
     public void addLibrarianInDB(Librarian librarian) {
         Connection connection = initializeDataBaseConnection();
@@ -51,7 +42,7 @@ public class LibrarianDBServiceImpl implements ILibrarianDBService {
 
     @Override
     public void deleteLibrarianFromDB(int idUser) {
-<<<<<<< HEAD
+
         Connection connection = initializeDataBaseConnection();
         PreparedStatement preparedStatement = null;
         try {
@@ -68,8 +59,6 @@ public class LibrarianDBServiceImpl implements ILibrarianDBService {
         finally {
             closeDBResources(connection,preparedStatement);
         }
-=======
->>>>>>> books
 
     }
 
@@ -112,7 +101,7 @@ public class LibrarianDBServiceImpl implements ILibrarianDBService {
 
     @Override
     public List<Librarian> getAllLibrariansFromDB() {
-<<<<<<< HEAD
+
         IUserDBService userDBService = new UserDBServiceImpl();
         //List<User> userList = userDBService.getAllUsersFromDB();
         List<Librarian> librarianList = new ArrayList<>();
@@ -149,9 +138,6 @@ public class LibrarianDBServiceImpl implements ILibrarianDBService {
         finally {
             closeDBResources(connection,preparedStatement);
         }
-=======
-        return null;
->>>>>>> books
     }
 
     @Override

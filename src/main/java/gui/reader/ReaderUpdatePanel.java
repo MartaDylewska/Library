@@ -5,10 +5,7 @@ import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
-<<<<<<< HEAD
 import librarian.Librarian;
-=======
->>>>>>> books
 import reader.IReaderDBService;
 import reader.Reader;
 import reader.ReaderDBServiceImpl;
@@ -312,10 +309,7 @@ public class ReaderUpdatePanel extends JPanel {
     public JButton getReturnBtn() {
         return returnBtn;
     }
-<<<<<<< HEAD
     public JButton getSearchReaderBtn(){return searchReaderBtn;}
     public JTextField getCardIdTxt(){return cardIdTxt;}
-=======
->>>>>>> books
 
 }

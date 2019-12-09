@@ -13,8 +13,9 @@ public class BookAddPanel extends JPanel {
     private JLabel titleLabel, publisherLabel, genreLabel, languageLabel;
     private JTextField publisher, genre, language;
     private JTextArea title;
-    private JLabel firstNameLabel, lastNameLabel;
+    private JLabel firstNameLabel, lastNameLabel, moreAuthorsLabel;
     private JTextField firstName, lastName;
+    private JTextField[] names;
     private JLabel alleyLabel, bookstandLabel, shelfLabel;
     private JComboBox alley, bookstand, shelf;
     private JButton confirm, back;
@@ -32,6 +33,7 @@ public class BookAddPanel extends JPanel {
         createComps();
         addComp();
         action();
+        setSeen(false);
 
     }
 
@@ -93,12 +95,24 @@ public class BookAddPanel extends JPanel {
         shelf = new JComboBox(new String[]{"-", "1", "2", "3", "4", "5"});
         shelf.setBounds(295,300,55,30);
 
+        moreAuthorsLabel = new JLabel("Autorzy:");
+        moreAuthorsLabel.setBounds(20,340,200,30);
+
+        names = new JTextField[10];
+        for (int i = 0; i < names.length; i++) {
+            names[i] = new JTextField();
+            if(i%2 == 0)
+                names[i].setBounds(20,380 + (30 * (i / 2)), 200,30);
+            else
+                names[i].setBounds(220,380 + (30 * (i / 2)), 200,30);
+        }
+
         oneAuthor = new JRadioButton("1 autor");
-        oneAuthor.setBounds(400,20,200,50);
+        oneAuthor.setBounds(400,20,200,30);
         oneAuthor.setSelected(true);
 
         moreAuthors = new JRadioButton("więcej autorów");
-        moreAuthors.setBounds(400,50,200,50);
+        moreAuthors.setBounds(400,50,200,30);
 
         buttonGroup = new ButtonGroup();
         buttonGroup.add(oneAuthor);
@@ -135,23 +149,40 @@ public class BookAddPanel extends JPanel {
         add(shelf);
         add(oneAuthor);
         add(moreAuthors);
+        add(moreAuthorsLabel);
         add(confirm);
         add(back);
         add(result);
+        for (JTextField name : names) {
+            add(name);
+        }
     }
 
     private void action() {
 
         confirm.addActionListener(e -> {
             if(check()) {
-                authorService.addAuthor(firstName.getText(), lastName.getText());
-                bookService.addBook(title.getText(), genre.getText(), publisher.getText(), language.getText(),
-                        firstName.getText(), lastName.getText(), alley.getSelectedItem().toString(),
-                        bookstand.getSelectedItem().toString(), Integer.parseInt(shelf.getSelectedItem().toString()));
-                result.setText(bookService.getMessage());
+                if(oneAuthor.isSelected()) {
+                    authorService.addAuthor(firstName.getText(), lastName.getText());
+                    bookService.addBook(title.getText(), genre.getText(), publisher.getText(), language.getText(),
+                            firstName.getText(), lastName.getText(), alley.getSelectedItem().toString(),
+                            bookstand.getSelectedItem().toString(), Integer.parseInt(shelf.getSelectedItem().toString()));
+                    result.setText(bookService.getMessage());
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Uzupełnij dane.");
             }
+        });
+        oneAuthor.addActionListener(e ->{
+            firstName.setEditable(true);
+            lastName.setEditable(true);
+            setSeen(false);
+        });
+
+        moreAuthors.addActionListener(e ->{
+            firstName.setEditable(false);
+            lastName.setEditable(false);
+            setSeen(true);
         });
     }
 
@@ -169,6 +200,13 @@ public class BookAddPanel extends JPanel {
 
         return titleCheck && firstNameCheck && lastNameCheck && publisherCheck &&
                 genreCheck && languageCheck && alleyCheck && bookstandCheck && shelfCheck;
+    }
+
+    private void setSeen(boolean seen){
+        moreAuthorsLabel.setVisible(seen);
+        for (JTextField name : names) {
+            name.setVisible(seen);
+        }
     }
 
     public JButton getBack() {

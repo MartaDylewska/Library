@@ -266,12 +266,9 @@ public class ReaderAddPanel  extends JPanel {
     public JButton getReturnBtn() {
         return returnBtn;
     }
-<<<<<<< HEAD
     public JTextField getCardIdTxt(){return cardIdTxt;}
     public JPasswordField getPassField(){return passField;}
-=======
 
->>>>>>> books
 
 }
 

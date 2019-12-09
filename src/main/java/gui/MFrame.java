@@ -568,10 +568,6 @@ public class MFrame extends JFrame {
        });
 */
 
-   /*     BookPanel bookPanel = new BookPanel();
-        add(bookPanel);*/
-//        BookAddPanel bookAddPanel = new BookAddPanel();
-//        add(bookAddPanel);
 
 /*       userOperationsPanel = new UserOperationsPanel();
        add(userOperationsPanel);

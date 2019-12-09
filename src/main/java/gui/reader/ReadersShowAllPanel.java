@@ -1,22 +1,10 @@
 package gui.reader;
 
-<<<<<<< HEAD
 import librarian.Librarian;
 import reader.IReaderDBService;
 import reader.Reader;
 import reader.ReaderDBServiceImpl;
-=======
-import card.CardDBServiceImpl;
-import card.ICardDBService;
-import city.CityDBServiceImpl;
-import city.ICityDBService;
-import reader.IReaderDBService;
-import reader.Reader;
-import reader.ReaderDBServiceImpl;
-import user.IUserDBService;
-import user.User;
-import user.UserDBServiceImpl;
->>>>>>> books
+
 
 import javax.swing.*;
 import java.awt.*;

@@ -8,20 +8,12 @@ import java.sql.SQLException;
 public class BookshelfService implements IBookshelf{
 
     private Connecting connect = new Connecting();
-<<<<<<< HEAD
-    private String SQL, message;
-=======
->>>>>>> books
 
     @Override
     public int getBookshelf(String alley, String bookstand, int shelf) {
 
         int bookshelfId = 0;
-<<<<<<< HEAD
-        String SQL = "select bookshelf_id from bookshelf where alley = ? and bookstand = ? and shelf = ?;";
-=======
         String SQL = "select bookshelf_id from bookshelves where alley = ? and bookstand = ? and shelf = ?;";
->>>>>>> books
 
         try (Connection conn = connect.connectDB()) {
             PreparedStatement preparedStatement = conn.prepareStatement(SQL);
