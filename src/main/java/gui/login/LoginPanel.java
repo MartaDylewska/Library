@@ -86,4 +86,12 @@ public class LoginPanel extends JPanel {
     public JButton getLibInfoBtn(){return libInfoBtn;}
     public JButton getLoginBtn(){return loginBtn;}
     public JButton getRegisterBtn(){return registerBtn;}
+    public JTextField getCardNrTxt(){return cardNrTxt;}
+    public JPasswordField getPassTxt(){return passTxt;}
+    public String getPasswordToString(JPasswordField passTxt){
+        StringBuilder sb = new StringBuilder();
+        for (Character c: passTxt.getPassword())
+            sb.append(c);
+        return sb.toString();
+    }
 }

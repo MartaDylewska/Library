@@ -1,11 +1,18 @@
 package gui;
 
 
+import config.Validation;
 import gui.admin.*;
 import gui.librarian.*;
 import gui.login.LoginPanel;
 import gui.reader.*;
 import gui.user.*;
+import reader.IReaderDBService;
+import reader.Reader;
+import reader.ReaderDBServiceImpl;
+import user.IUserDBService;
+import user.User;
+import user.UserDBServiceImpl;
 
 import javax.swing.*;
 
@@ -35,10 +42,13 @@ public class MFrame extends JFrame {
     AdminUpdatePanel adminUpdatePanel;
     AdminsShowAllPanel adminsShowAllPanel;
     LoginPanel loginPanel;
+    ReaderEntryPanel readerEntryPanel;
+    LibrarianEntryPanel librarianEntryPanel;
 
 
-   public MFrame(){
+    public MFrame() {
         setSize(700, 600);
+
 //----------------login panel----------------
         loginPanel = new LoginPanel();
         add(loginPanel);
@@ -62,6 +72,103 @@ public class MFrame extends JFrame {
                 repaint();
                 revalidate();
             });
+        });
+
+        loginPanel.getLoginBtn().addActionListener(e -> {
+            String cardIdTxt = loginPanel.getCardNrTxt().getText();
+            String passTxt = loginPanel.getPasswordToString(loginPanel.getPassTxt());
+            if (Validation.checkIfInteger(cardIdTxt)) {
+                if (Validation.checkUserExists(Integer.parseInt(cardIdTxt))) {
+                    IUserDBService userDBService = new UserDBServiceImpl();
+                    User user = userDBService.readUserFromDB(Integer.parseInt(cardIdTxt));
+                    if (Validation.checkPassOk(user, passTxt)) {
+                        if (Validation.checkIfReader(user)) {
+                            //---------------------CZYTELNIK---------------------------
+                            readerEntryPanel = new ReaderEntryPanel();
+                            readerEntryPanel.setCardNrLbl(loginPanel.getCardNrTxt().getText());
+                            readerEntryPanel.setNameLbl(user.getFirstName() + " " + user.getLastName());
+                            add(readerEntryPanel);
+                            remove(loginPanel);
+                            repaint();
+                            revalidate();
+
+                            //operacje dotyczące reader entry panel
+                            readerEntryPanel.getUpdateBtn().addActionListener(e2 -> {
+                                readerUpdatePanel = new ReaderUpdatePanel();
+                                readerUpdatePanel.getCardIdTxt().setText(readerEntryPanel.getCardNrLbl().getText());
+                                readerUpdatePanel.getSearchReaderBtn().doClick();
+                                add(readerUpdatePanel);
+                                remove(readerEntryPanel);
+                                repaint();
+                                revalidate();
+
+                                readerUpdatePanel.getReturnBtn().addActionListener(e3 -> {
+                                    add(readerEntryPanel);
+                                    remove(readerUpdatePanel);
+                                    repaint();
+                                    revalidate();
+                                });
+
+                            });
+
+                            //tutaj trzeba dodać doBooking (zrób rezerwację), oraz lendings (podejrzyj wypożyczenia)
+                            //ja dodam eventy dzisiaj
+
+                            readerEntryPanel.getReturnBtn().addActionListener(e1 -> {
+                                loginPanel.setCardNrTxt("");
+                                loginPanel.setPassTxt("");
+                                add(loginPanel);
+                                remove(readerEntryPanel);
+                                repaint();
+                                revalidate();
+                            });
+                        } else if (Validation.checkIfLibrarian(user))
+                        //---------------------BIBILOTEKARZ---------------------------
+                        {
+                            librarianEntryPanel = new LibrarianEntryPanel();
+                            librarianEntryPanel.setCardNrLbl(loginPanel.getCardNrTxt().getText());
+                            librarianEntryPanel.setNameLbl(user.getFirstName() + " " + user.getLastName());
+                            add(librarianEntryPanel);
+                            remove(loginPanel);
+                            repaint();
+                            revalidate();
+
+                            librarianEntryPanel.getDeleteReaderProfileBtn().addActionListener(e1 -> {
+                                readerDeletePanel = new ReaderDeletePanel();
+                                add(readerDeletePanel);
+                                remove(librarianEntryPanel);
+                                repaint();
+                                revalidate();
+
+                                readerDeletePanel.getReturnBtn().addActionListener(e2 -> {
+                                    add(librarianEntryPanel);
+                                    remove(readerDeletePanel);
+                                    repaint();
+                                    revalidate();
+                                });
+                            });
+
+                            librarianEntryPanel.getReturnBtn().addActionListener(e1 -> {
+                                loginPanel.setCardNrTxt("");
+                                loginPanel.setPassTxt("");
+                                add(loginPanel);
+                                remove(librarianEntryPanel);
+                                repaint();
+                                revalidate();
+                            });
+                        } else//tutaj opcja dla admina
+                        {
+                            JOptionPane.showMessageDialog(this, "To nie czytelnik");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Niepoprawnie wprowadzone hasło");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Użytkownik o tym numerze karty nie istnieje w systemie");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Niepoprawny numer karty");
+            }
         });
 
 //-------------ADMIN INTERFACE-----------------------------

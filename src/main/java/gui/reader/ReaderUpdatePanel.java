@@ -309,5 +309,7 @@ public class ReaderUpdatePanel extends JPanel {
     public JButton getReturnBtn() {
         return returnBtn;
     }
+    public JButton getSearchReaderBtn(){return searchReaderBtn;}
+    public JTextField getCardIdTxt(){return cardIdTxt;}
 
 }
