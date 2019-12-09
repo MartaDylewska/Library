@@ -25,7 +25,7 @@ public class AuthorService implements IAuthor {
                 preparedStatement.setString(2, lastName);
 
                 preparedStatement.executeUpdate();
-                message = "Author added to database.";
+                message = "Autor dodany do bazy.";
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -85,7 +85,7 @@ public class AuthorService implements IAuthor {
             preparedStatement.setInt(1, id);
 
             preparedStatement.executeUpdate();
-            message = "Author removed from database.";
+            message = "Autor usunięty z bazy.";
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -213,7 +213,7 @@ public class AuthorService implements IAuthor {
             removeAuthor(id);
         }
 
-        message = "Author changed to " + firstName + " " + lastName;
+        message = "Autor zmieniony na: " + firstName + " " + lastName;
     }
 
     @Override

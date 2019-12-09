@@ -175,4 +175,3 @@ public class BookAddPanel extends JPanel {
         return back;
     }
 }
-

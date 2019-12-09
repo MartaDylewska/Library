@@ -6,6 +6,8 @@ public class AuthorBook {
 
     private List<Author> authorList;
     private List<Book> bookList;
+    private Book book;
+    private Author author;
 
     public AuthorBook(){
 
@@ -27,8 +29,24 @@ public class AuthorBook {
         this.bookList = bookList;
     }
 
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
     @Override
     public String toString(){
-        return authorList.toString() + ", " + bookList.toString();
+        return author + ", " + book;
     }
 }
