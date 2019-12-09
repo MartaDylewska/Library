@@ -17,7 +17,7 @@ public class BookService implements IBook {
         Book book = null;
 
         SQL = "select * from book inner join author on author.author_id = book.author_id " +
-                "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id where book_id = ? ;";
+                "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id where book.book_id = ? ;";
 
         try (Connection conn = connect.connectDB()) {
             PreparedStatement preparedStatement = conn.prepareStatement(SQL);
@@ -79,7 +79,7 @@ public class BookService implements IBook {
     @Override
     public void removeBook(int id) {
 
-        SQL = "delete from book where book_id = ?;";
+        SQL = "delete from book where book.book_id = ?;";
         PreparedStatement preparedStatement;
 
         try (Connection conn = connect.connectDB()) {
@@ -117,7 +117,7 @@ public class BookService implements IBook {
     @Override
     public void editBook(int id, String title, String publisher, String genre, String language) {
 
-        SQL = "update book set title = ?, publisher = ?, genre = ?, lang = ? where book_id = ?";
+        SQL = "update book set title = ?, publisher = ?, genre = ?, lang = ? where book.book_id = ?";
         PreparedStatement preparedStatement;
 
         try (Connection conn = connect.connectDB()) {
@@ -130,7 +130,7 @@ public class BookService implements IBook {
             preparedStatement.setInt(5, id);
 
             preparedStatement.executeUpdate();
-            System.out.println("Książka została zedytowana.");
+            message = "Książka została zedytowana.";
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -146,7 +146,7 @@ public class BookService implements IBook {
             authorId = iauthor.getAuthorId(firstName, lastName);
         }
 
-        SQL = "update book set author_id = ? where book_id = ?";
+        SQL = "update book set author_id = ? where author_id = ?";
         PreparedStatement preparedStatement;
 
         try (Connection conn = connect.connectDB()) {
@@ -157,6 +157,46 @@ public class BookService implements IBook {
 
             preparedStatement.executeUpdate();
             message = "Autor książki zmieniony na: " + firstName + " " + lastName;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public void editBook(int oldAuthorId, int newAuthorId) {
+
+        SQL = "update book set author_id = ? where author_id = ?";
+        PreparedStatement preparedStatement;
+
+        try (Connection conn = connect.connectDB()) {
+            preparedStatement = conn.prepareStatement(SQL);
+
+            preparedStatement.setInt(1, newAuthorId);
+            preparedStatement.setInt(2, oldAuthorId);
+
+            preparedStatement.executeUpdate();
+            message = "Autor książki został zmieniony";
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public void editBook(int id, String alley, String bookstand, int shelf) {
+
+        int bookshelfId = iBookshelf.getBookshelf(alley, bookstand,shelf);
+
+        SQL = "update book set bookshelf_id = ? where book.book_id = ?";
+        PreparedStatement preparedStatement;
+
+        try (Connection conn = connect.connectDB()) {
+            preparedStatement = conn.prepareStatement(SQL);
+
+            preparedStatement.setInt(1, bookshelfId);
+            preparedStatement.setInt(2, id);
+
+            preparedStatement.executeUpdate();
+            message = "Lokalizacja książki zmieniona na: alejka:" + alley + ", regał: " + bookstand + ", półka: " + shelf + ".";
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

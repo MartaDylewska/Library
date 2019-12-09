@@ -32,9 +32,8 @@ public class BookGetPanel extends JPanel {
     private void createBookJList(List<Book> bookList){
 
         DefaultListModel listModel = new DefaultListModel();
-        for (int i = 0; i < bookList.size(); i++)
-        {
-            listModel.addElement(bookList.get(i));
+        for (Book aBookList : bookList) {
+            listModel.addElement(aBookList);
         }
         resultList.setModel(listModel);
         resultList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -60,26 +59,26 @@ public class BookGetPanel extends JPanel {
         resultListLabel.setBounds(20,100,200,30);
 
         resultList = new JList();
-        resultList.setBounds(20,140,330,300);
+        resultList.setBounds(20,140,580,320);
         resultList.setBorder(BorderFactory.createLineBorder(Color.black));
 
         result = new JLabel();
-        result.setBounds(20,140,330,300);
+        result.setBounds(20,140,580,320);
         result.setBorder(BorderFactory.createLineBorder(Color.black));
         result.setBackground(Color.white);
         result.setOpaque(true);
 
         search = new JButton("szukaj");
-        search.setBounds(400,20,200,50);
+        search.setBounds(400,20,200,30);
 
         remove = new JButton("usuń");
-        remove.setBounds(400,70,200,50);
+        remove.setBounds(400,60,200,30);
 
         edit = new JButton("edytuj");
-        edit.setBounds(400,120,200,50);
+        edit.setBounds(400,100,200,30);
 
         back = new JButton("cofnij");
-        back.setBounds(400,170,200,50);
+        back.setBounds(400,470,200,30);
     }
 
     private void actions(){

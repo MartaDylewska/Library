@@ -7,6 +7,7 @@ public class BookFrame extends JFrame {
     private BookPanel bookPanel;
     private BookAddPanel bookAddPanel;
     private BookGetPanel bookGetPanel;
+    private AuthorGetPanel authorGetPanel;
 
     public BookFrame(){
 
@@ -64,19 +65,19 @@ public class BookFrame extends JFrame {
             });
         });
 
-//        bookPanel.getEditBook().addActionListener(e ->{
-//            bookGetPanel = new BookGetPanel();
-//            add(bookGetPanel);
-//            remove(bookPanel);
-//            repaint();
-//            revalidate();
-//
-//            bookGetPanel.getBack().addActionListener(e1 ->{
-//                add(bookPanel);
-//                remove(bookGetPanel);
-//                repaint();
-//                revalidate();
-//            });
-//        });
+        bookPanel.getFindAuthor().addActionListener(e ->{
+            authorGetPanel = new AuthorGetPanel();
+            add(authorGetPanel);
+            remove(bookPanel);
+            repaint();
+            revalidate();
+
+            authorGetPanel.getBack().addActionListener(e1 ->{
+                add(bookPanel);
+                remove(authorGetPanel);
+                repaint();
+                revalidate();
+            });
+        });
     }
 }

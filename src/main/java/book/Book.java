@@ -60,7 +60,7 @@ public class Book{
         this.language = language;
     }
 
-    Bookshelf getBookshelf() {
+    public Bookshelf getBookshelf() {
         return bookshelf;
     }
 
@@ -86,6 +86,6 @@ public class Book{
 
     @Override
     public String toString(){
-        return title + ", " + author + ", " + publisher + "," + bookshelf;
+        return title + ", " + publisher + ", " + bookshelf;
     }
 }

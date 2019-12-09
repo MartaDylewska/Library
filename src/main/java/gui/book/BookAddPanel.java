@@ -19,7 +19,8 @@ public class BookAddPanel extends JPanel {
     private JComboBox alley, bookstand, shelf;
     private JButton confirm, back;
     private JLabel result;
-    private int fieldLength = 200;
+    private JRadioButton oneAuthor, moreAuthors;
+    private ButtonGroup buttonGroup;
 
     private IAuthor authorService = new AuthorService();
     private IBook bookService = new BookService();
@@ -40,7 +41,7 @@ public class BookAddPanel extends JPanel {
         titleLabel.setBounds(20, 20, 100, 30);
 
         title = new JTextArea();
-        title.setBounds(150, 20, fieldLength, 60);
+        title.setBounds(150, 20, 200, 70);
         title.setBorder(BorderFactory.createLineBorder(Color.black));
         title.setLineWrap(true);
 
@@ -48,31 +49,31 @@ public class BookAddPanel extends JPanel {
         firstNameLabel.setBounds(20, 100, 100, 30);
 
         firstName = new JTextField();
-        firstName.setBounds(150, 100, fieldLength, 30);
+        firstName.setBounds(150, 100, 200, 30);
 
         lastNameLabel = new JLabel("Nazwisko autora: ");
         lastNameLabel.setBounds(20, 140, 120, 30);
 
         lastName = new JTextField();
-        lastName.setBounds(150, 140, fieldLength, 30);
+        lastName.setBounds(150, 140, 200, 30);
 
         publisherLabel = new JLabel("Wydawca:");
         publisherLabel.setBounds(20, 180, 100, 30);
 
         publisher = new JTextField();
-        publisher.setBounds(150, 180, fieldLength, 30);
+        publisher.setBounds(150, 180, 200, 30);
 
         genreLabel = new JLabel("Gatunek:");
         genreLabel.setBounds(20, 220, 100, 30);
 
         genre = new JTextField();
-        genre.setBounds(150, 220, fieldLength, 30);
+        genre.setBounds(150, 220, 200, 30);
 
         languageLabel = new JLabel("Język:");
         languageLabel.setBounds(20, 260, 100, 30);
 
         language = new JTextField();
-        language.setBounds(150, 260, fieldLength, 30);
+        language.setBounds(150, 260, 200, 30);
 
         alleyLabel = new JLabel("Alejka:");
         alleyLabel.setBounds(20, 300, 55,30);
@@ -92,8 +93,19 @@ public class BookAddPanel extends JPanel {
         shelf = new JComboBox(new String[]{"-", "1", "2", "3", "4", "5"});
         shelf.setBounds(295,300,55,30);
 
+        oneAuthor = new JRadioButton("1 autor");
+        oneAuthor.setBounds(400,20,200,50);
+        oneAuthor.setSelected(true);
+
+        moreAuthors = new JRadioButton("więcej autorów");
+        moreAuthors.setBounds(400,50,200,50);
+
+        buttonGroup = new ButtonGroup();
+        buttonGroup.add(oneAuthor);
+        buttonGroup.add(moreAuthors);
+
         confirm = new JButton("Dodaj");
-        confirm.setBounds(400, 20, 200, 50);
+        confirm.setBounds(400, 100, 200, 50);
 
         back = new JButton("Cofnij");
         back.setBounds(400, 240, 200, 50);
@@ -121,6 +133,8 @@ public class BookAddPanel extends JPanel {
         add(bookstand);
         add(shelfLabel);
         add(shelf);
+        add(oneAuthor);
+        add(moreAuthors);
         add(confirm);
         add(back);
         add(result);

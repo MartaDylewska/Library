@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class BookPanel extends JPanel{
 
-    private JButton addBook, findBook, lendBook, acceptReturn, back;
+    private JButton addBook, findBook, findAuthor, lendBook, back;
 
     BookPanel(){
 
@@ -22,11 +22,11 @@ public class BookPanel extends JPanel{
         findBook = new JButton("Znajdź książkę");
         findBook.setBounds(200,120,200,50);
 
-        lendBook = new JButton("Wypożycz książkę");
-        lendBook.setBounds(200,220,200,50);
+        findAuthor = new JButton("Znajdź autora");
+        findAuthor.setBounds(200,220,200,50);
 
-        acceptReturn = new JButton("Przyjmij zwrot książki");
-        acceptReturn.setBounds(200,320,200,50);
+        lendBook = new JButton("Wypożycz / Przyjmij zwrot");
+        lendBook.setBounds(200,320,200,50);
 
         back = new JButton("Wróć");
         back.setBounds(200,420,200,50);
@@ -35,9 +35,8 @@ public class BookPanel extends JPanel{
     private void addComps(){
         add(addBook);
         add(findBook);
+        add(findAuthor);
         add(lendBook);
-        add(acceptReturn);
-//        add(showAllBooks);
         add(back);
     }
 
@@ -49,12 +48,12 @@ public class BookPanel extends JPanel{
         return findBook;
     }
 
-    public JButton getLendBook() {
-        return lendBook;
+    public JButton getFindAuthor() {
+        return findAuthor;
     }
 
-    public JButton getAcceptReturn() {
-        return acceptReturn;
+    public JButton getLendBook() {
+        return lendBook;
     }
 
     public JButton getBack() {

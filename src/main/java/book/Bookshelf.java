@@ -1,6 +1,6 @@
 package book;
 
-class Bookshelf {
+public class Bookshelf {
 
     private String alley, bookstand;
     private int shelf;
@@ -11,8 +11,32 @@ class Bookshelf {
         this.shelf = shelf;
     }
 
+    public String getAlley() {
+        return alley;
+    }
+
+    public void setAlley(String alley) {
+        this.alley = alley;
+    }
+
+    public String getBookstand() {
+        return bookstand;
+    }
+
+    public void setBookstand(String bookstand) {
+        this.bookstand = bookstand;
+    }
+
+    public int getShelf() {
+        return shelf;
+    }
+
+    public void setShelf(int shelf) {
+        this.shelf = shelf;
+    }
+
     @Override
     public String toString() {
-        return "located at:" + alley + ", " + bookstand + ", " + shelf + ".";
+        return "lokalizacja: " + alley + ", " + bookstand + ", " + shelf + ".";
     }
 }
