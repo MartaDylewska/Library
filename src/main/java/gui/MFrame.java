@@ -15,6 +15,7 @@ import user.User;
 import user.UserDBServiceImpl;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class MFrame extends JFrame {
     UserShowPanel userShowPanel;
@@ -49,6 +50,15 @@ public class MFrame extends JFrame {
 
     public MFrame() {
         setSize(700, 600);
+        setTitle("Biblioteka");
+        setResizable(false);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int)screenSize.getWidth();
+        int height = (int) screenSize.getHeight();
+        int posX = width / 2 - getWidth() / 2;
+        int posY = height / 2 - getHeight() / 2;
+        setLocation(posX, posY);
 
 //----------------login panel----------------
         loginPanel = new LoginPanel();
