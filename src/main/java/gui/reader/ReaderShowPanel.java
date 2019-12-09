@@ -8,7 +8,10 @@ import config.Validation;
 import images.IPosterDBService;
 import images.Poster;
 import images.PosterDBServiceImpl;
+<<<<<<< HEAD
 import librarian.Librarian;
+=======
+>>>>>>> books
 import reader.IReaderDBService;
 import reader.Reader;
 import reader.ReaderDBServiceImpl;

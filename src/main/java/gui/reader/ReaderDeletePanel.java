@@ -8,7 +8,10 @@ import config.Validation;
 import images.IPosterDBService;
 import images.Poster;
 import images.PosterDBServiceImpl;
+<<<<<<< HEAD
 import librarian.Librarian;
+=======
+>>>>>>> books
 import reader.IReaderDBService;
 import reader.Reader;
 import reader.ReaderDBServiceImpl;
@@ -52,7 +55,11 @@ public class ReaderDeletePanel extends JPanel {
             int cardId = Integer.parseInt(cardIdTxt.getText());
             User user = userDBService.readUserFromDB(cardId);
             readerDBService.deleteReaderFromDB(user.getIdUser());
+<<<<<<< HEAD
             //userDBService.deleteUserFromDB(cardId);
+=======
+            userDBService.deleteUserFromDB(cardId);
+>>>>>>> books
             firstNameTxt.setText("");
             lastNameTxt.setText("");
             emailTxt.setText("");

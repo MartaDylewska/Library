@@ -1,18 +1,18 @@
 package gui;
 
-
 import config.Validation;
 import gui.admin.*;
 import gui.librarian.*;
 import gui.login.LoginPanel;
 import gui.reader.*;
 import gui.user.*;
-import reader.IReaderDBService;
-import reader.Reader;
-import reader.ReaderDBServiceImpl;
 import user.IUserDBService;
 import user.User;
 import user.UserDBServiceImpl;
+import gui.librarian.LibrarianAddPanel;
+import gui.librarian.LibrarianOperationsPanel;
+import gui.librarian.LibrarianShowPanel;
+import gui.librarian.LibrarianUpdatePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,6 +50,7 @@ public class MFrame extends JFrame {
 
     public MFrame() {
         setSize(700, 600);
+
         setTitle("Biblioteka");
         setResizable(false);
 
@@ -377,6 +378,9 @@ public class MFrame extends JFrame {
 
 //-------------LIBRARIAN INTERFACE--------------------------
 /*
+=======
+//-------------LIBRARIAN INTERFACE--------------------------
+>>>>>>> books
         librarianOperationsPanel = new LibrarianOperationsPanel();
         add(librarianOperationsPanel);
 
@@ -425,6 +429,7 @@ public class MFrame extends JFrame {
            });
        });
 
+<<<<<<< HEAD
        librarianOperationsPanel.getDeleteBtn().addActionListener(e -> {
            librarianDeletePanel = new LibrarianDeletePanel();
            add(librarianDeletePanel);
@@ -450,10 +455,29 @@ public class MFrame extends JFrame {
            librariansShowAllPanel.getReturnBtn().addActionListener(e1 -> {
                add(librarianOperationsPanel);
                remove(librariansShowAllPanel);
+=======
+
+//-------------READER INTERFACE-----------------------------
+/*
+       readerOperationsPanel = new ReaderOperationsPanel();
+       add(readerOperationsPanel);
+
+       readerOperationsPanel.getAddBtn().addActionListener(e -> {
+           readerAddPanel = new ReaderAddPanel();
+           add(readerAddPanel);
+           remove(readerOperationsPanel);
+           repaint();
+           revalidate();
+
+           readerAddPanel.getReturnBtn().addActionListener(e1 -> {
+               add(readerOperationsPanel);
+               remove(readerAddPanel);
+>>>>>>> books
                repaint();
                revalidate();
            });
        });
+<<<<<<< HEAD
 */
 
 //-------------READER INTERFACE-----------------------------
@@ -478,6 +502,11 @@ public class MFrame extends JFrame {
 
        readerOperationsPanel.getSearchBtn().addActionListener(e -> {
 
+=======
+
+       readerOperationsPanel.getSearchBtn().addActionListener(e -> {
+
+>>>>>>> books
            readerShowPanel = new ReaderShowPanel();
            add(readerShowPanel);
            remove(readerOperationsPanel);
