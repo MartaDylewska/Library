@@ -101,7 +101,7 @@ class AddBookPanel extends JPanel {
 
         confirm.addActionListener(e -> {
             authorService.addAuthor(firstName.getText(), lastName.getText());
-            bookService.addBook(title.getText(), genre.getText(), publisher.getText(), language.getText(), firstName.getText(), lastName.getText());
+            //bookService.addBook(title.getText(), genre.getText(), publisher.getText(), language.getText(), firstName.getText(), lastName.getText());
             result.setText(bookService.getMessage());
         });
 

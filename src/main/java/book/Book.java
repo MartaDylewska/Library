@@ -5,21 +5,10 @@ class Book{
     private String title, genre, publisher, language;
     private long ISBN;
     private Author author;
-    private Storage storage;
+    private Bookshelf bookshelf;
     private boolean isAvailable;
 
     Book(){
-        setISBN();
-        setAvailable(true);
-    }
-
-    Book(Author author, String title, String genre, String publisher, String language) {
-        this.author = author;
-        this.title = title;
-        this.genre = genre;
-        this.publisher = publisher;
-        this.language = language;
-        setISBN();
     }
 
     private Author getAuthor() {
@@ -58,8 +47,8 @@ class Book{
         return ISBN;
     }
 
-    private void setISBN() {
-        this.ISBN = System.currentTimeMillis();
+    void setISBN(long ISBN) {
+        this.ISBN = ISBN;
     }
 
     private String getLanguage() {
@@ -70,12 +59,12 @@ class Book{
         this.language = language;
     }
 
-    Storage getStorage() {
-        return storage;
+    Bookshelf getBookshelf() {
+        return bookshelf;
     }
 
-    void setStorage(Storage storage) {
-        this.storage = storage;
+    void setBookshelf(Bookshelf bookshelf) {
+        this.bookshelf = bookshelf;
     }
 
     boolean isAvailable() {
