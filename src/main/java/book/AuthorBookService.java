@@ -14,13 +14,15 @@ public class AuthorBookService implements IAuthorBook{
     @Override
     public void addAuthorBook(String firstName, String lastName, String title, String genre, String publisher, String language, String alley, String bookstand, int shelf) {
 
-        authorService.addAuthor(firstName, lastName);
-        int authorId = authorService.getAuthorId(firstName, lastName);
+        int bookId = bookService.addBook(title, publisher, genre, language, alley, bookstand, shelf);
+        if(bookId == 0)
+            bookId = bookService.getBookId(title);
+        int authorId = authorService.addAuthor(firstName, lastName);
+        if(authorId == 0)
+            authorId = authorService.getAuthorId(firstName, lastName);
 
-        bookService.addBook(title, genre, publisher, language, alley, bookstand, shelf);
-        int bookId = bookService.getBookId(title);
+        SQL = "insert into author_book (author_id, book_id) values (?, ?);";
 
-        SQL = "insert into author_book(author_id, book_id) values (?,?);";
         PreparedStatement preparedStatement;
 
         try (Connection conn = connect.connectDB()) {
@@ -54,7 +56,7 @@ public class AuthorBookService implements IAuthorBook{
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-//        authorService.removeAuthor(firstName, lastName);
+        authorService.removeAuthor(firstName, lastName);
     }
 
     @Override
@@ -63,7 +65,7 @@ public class AuthorBookService implements IAuthorBook{
         int authorId = authorService.getAuthorId(firstName, lastName);
         int bookId = bookService.getBookId(title);
 
-        SQL = "delete from author_book where author_book.author_id = ? author_book.book_id = ?;";
+        SQL = "delete from author_book where author_book.author_id = ? and author_book.book_id = ?;";
         PreparedStatement preparedStatement;
 
         try (Connection conn = connect.connectDB()) {
@@ -90,7 +92,7 @@ public class AuthorBookService implements IAuthorBook{
         try (Connection conn = connect.connectDB()) {
             preparedStatement = conn.prepareStatement(SQL);
 
-            preparedStatement.setInt(2, bookId);
+            preparedStatement.setInt(1, bookId);
 
             preparedStatement.executeUpdate();
             message = "Usunięto z bazy.";
@@ -98,7 +100,7 @@ public class AuthorBookService implements IAuthorBook{
             System.out.println(e.getMessage());
         }
 
-//        bookService.removeBook(bookId);
+        bookService.removeBook(bookId);
     }
 
     @Override
@@ -224,6 +226,7 @@ public class AuthorBookService implements IAuthorBook{
         SQL ="select * from author_book inner join book on author_book.book_id = book.book_id " +
                 "inner join author on author.author_id = author_book.author_id " +
                 "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id where author_book.author_id = ?;";
+
         PreparedStatement preparedStatement;
 
         try (Connection conn = connect.connectDB()) {
@@ -268,7 +271,8 @@ public class AuthorBookService implements IAuthorBook{
         SQL = "select * from author_book inner join book on author_book.book_id = book.book_id " +
                 "inner join author on author.author_id = author_book.author_id " +
                 "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id " +
-                "where title = ? or publisher = ? or lang = ? or genre = ?;";
+                "where publisher = ? or lang = ? or genre = ?;";
+
         PreparedStatement preparedStatement;
 
         try (Connection conn = connect.connectDB()) {
@@ -277,7 +281,53 @@ public class AuthorBookService implements IAuthorBook{
             preparedStatement.setString(1, search);
             preparedStatement.setString(2, search);
             preparedStatement.setString(3, search);
-            preparedStatement.setString(4, search);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Book book = new Book();
+                Author author = new Author();
+                author.setFirstName(rs.getString("first_name"));
+                author.setLastName(rs.getString("last_name"));
+                author.setId(rs.getInt("author_id"));
+                Bookshelf bookshelf = new Bookshelf(rs.getString("alley"), rs.getString("bookstand"), rs.getInt("shelf"));
+                book.setTitle(rs.getString("title"));
+                book.setBookshelf(bookshelf);
+                book.setPublisher(rs.getString("publisher"));
+                book.setLanguage(rs.getString("lang"));
+                book.setGenre(rs.getString("genre"));
+                book.setISBN(rs.getLong("isbn"));
+                book.setBookId(rs.getInt("book_id"));
+                AuthorBook authorBook = new AuthorBook();
+                authorBook.setBook(book);
+                authorBook.setAuthor(author);
+                booksOfSearch.add(authorBook);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return booksOfSearch;
+    }
+
+    @Override
+    public List<AuthorBook> getByTitle(String title) {
+
+        List<AuthorBook> booksOfSearch = new ArrayList<>();
+
+        String search = "%" + title + "%";
+
+        SQL = "select * from author_book inner join book on author_book.book_id = book.book_id " +
+                "inner join author on author.author_id = author_book.author_id " +
+                "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id " +
+                "where title like ?;";
+
+        PreparedStatement preparedStatement;
+
+        try (Connection conn = connect.connectDB()) {
+            preparedStatement = conn.prepareStatement(SQL);
+
+            preparedStatement.setString(1, search);
 
             ResultSet rs = preparedStatement.executeQuery();
 

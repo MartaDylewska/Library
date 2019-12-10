@@ -93,6 +93,8 @@ public class BookGetPanel extends JPanel {
                 String lastName = keyWord.getText().substring(coma + 2);
                 int authorId = iAuthor.getAuthorId(firstName, lastName);
                 bookList = iAuthorBook.getBooksOfAuthor(authorId);
+            } else if(searchBy.getSelectedIndex() == 0) {
+                bookList = iAuthorBook.getByTitle(keyWord.getText());
             } else {
                 bookList = iAuthorBook.getBySearch(keyWord.getText());
             }

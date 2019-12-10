@@ -9,9 +9,8 @@ public class Main {
     public static void main(String[] args) {
 
         EventQueue.invokeLater(() -> {
-            //BookFrame window;
-            //window = new BookFrame();
-            MFrame window = new MFrame();
+            BookFrame window = new BookFrame();
+//            MFrame window = new MFrame();
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             window.setVisible(true);
         });

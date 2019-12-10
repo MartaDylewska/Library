@@ -4,21 +4,11 @@ public class Book{
 
     private String title, genre, publisher, language;
     private long ISBN;
-//    private Author author;
     private Bookshelf bookshelf;
-    private boolean isAvailable;
     private int bookId;
 
     Book(){
     }
-
-//    public Author getAuthor() {
-//        return author;
-//    }
-//
-//    void setAuthor(Author author) {
-//        this.author = author;
-//    }
 
     public String getTitle() {
         return title;
@@ -66,14 +56,6 @@ public class Book{
 
     void setBookshelf(Bookshelf bookshelf) {
         this.bookshelf = bookshelf;
-    }
-
-    boolean isAvailable() {
-        return isAvailable;
-    }
-
-    void setAvailable(boolean available) {
-        isAvailable = available;
     }
 
     public int getBookId() {

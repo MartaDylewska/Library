@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface IAuthor {
 
-    void addAuthor(String firstName, String lastName);
+    int addAuthor(String firstName, String lastName);
     List<Author> getAuthors();
     int getAuthorId(String firstName, String lastName);
     void removeAuthor(String firstName, String lastName);

@@ -10,15 +10,15 @@ public class AuthorService implements IAuthor {
     private String SQL, message;
 
     @Override
-    public void addAuthor(String firstName, String lastName) {
+    public int addAuthor(String firstName, String lastName) {
 
         int authorId = getAuthorId(firstName, lastName);
 
-        SQL = "insert into author(first_name, last_name) values (?,?);";
-        PreparedStatement preparedStatement;
+        if(authorId == 0) {
+            SQL = "insert into author (first_name, last_name) values (?,?);";
+            PreparedStatement preparedStatement;
 
-        try (Connection conn = connect.connectDB()) {
-            if (authorId == 0) {
+            try (Connection conn = connect.connectDB()) {
                 preparedStatement = conn.prepareStatement(SQL);
 
                 preparedStatement.setString(1, firstName);
@@ -26,10 +26,13 @@ public class AuthorService implements IAuthor {
 
                 preparedStatement.executeUpdate();
                 message = "Autor dodany do bazy.";
+
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
         }
+
+        return authorId;
     }
 
     @Override
@@ -46,7 +49,7 @@ public class AuthorService implements IAuthor {
 
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next())
-                authorId = rs.getInt(1);
+                authorId = rs.getInt("author_id");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -169,7 +172,6 @@ public class AuthorService implements IAuthor {
     @Override
     public List<Author> getAuthors(String name) {
 
-
         List<Author> authors = new ArrayList<>();
 
         String SQL = "select * from author where first_name = ? or last_name = ?;";
@@ -198,27 +200,19 @@ public class AuthorService implements IAuthor {
     @Override
     public void editAuthor(int id, String firstName, String lastName) {
 
-        int authorId = getAuthorId(firstName, lastName);
+        SQL = "update author set first_name = ?, last_name = ? where author_id = ?;";
+        PreparedStatement preparedStatement;
 
-        if(authorId == 0) {
+        try (Connection conn = connect.connectDB()) {
+            preparedStatement = conn.prepareStatement(SQL);
 
-            SQL = "update author set first_name = ?, last_name = ? where author_id = ?";
-            PreparedStatement preparedStatement;
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setInt(3, id);
 
-            try (Connection conn = connect.connectDB()) {
-                preparedStatement = conn.prepareStatement(SQL);
-
-                preparedStatement.setString(1, firstName);
-                preparedStatement.setString(2, lastName);
-                preparedStatement.setInt(3, id);
-
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
-        } else {
-
-            removeAuthor(id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
 
         message = "Autor zmieniony na: " + firstName + " " + lastName;
