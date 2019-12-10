@@ -58,11 +58,12 @@ public class AdminDBServiceImpl implements IAdminDBService {
 
     @Override
     public Admin readAdminFromDB(int idCard) {
-        Connection connection = initializeDataBaseConnection();
-        PreparedStatement preparedStatement = null;
         IUserDBService userDBService = new UserDBServiceImpl();
         User user = userDBService.readUserFromDB(idCard);
         int userId = user.getIdUser();
+        Connection connection = initializeDataBaseConnection();
+        PreparedStatement preparedStatement = null;
+
         try {
             String queryReadAdmin = "SELECT * FROM admin WHERE (userid) = (?) ";
             preparedStatement = connection.prepareStatement(queryReadAdmin);

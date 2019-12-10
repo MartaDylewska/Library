@@ -44,6 +44,7 @@ public class ReaderUpdatePanel extends JPanel {
         add(updateReaderBtn);
         setPostalCodeKL();
         actionUpdateReaderBtn();
+        searchReaderBtn.setVisible(false);
     }
 
     private void setPostalCodeKL() {

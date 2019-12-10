@@ -64,11 +64,13 @@ public class LibrarianDBServiceImpl implements ILibrarianDBService {
 
     @Override
     public Librarian readLibrarianFromDB(int idCard) {
-        Connection connection = initializeDataBaseConnection();
-        PreparedStatement preparedStatement = null;
         IUserDBService userDBService = new UserDBServiceImpl();
         User user = userDBService.readUserFromDB(idCard);
         int userId = user.getIdUser();
+
+        Connection connection = initializeDataBaseConnection();
+        PreparedStatement preparedStatement = null;
+
         try {
             String queryReadLibrarian = "SELECT * FROM librarian WHERE (userid) = (?) ";
             preparedStatement = connection.prepareStatement(queryReadLibrarian);

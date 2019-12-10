@@ -11,6 +11,8 @@ import gui.login.LoginPanel;
 import gui.poster.PosterOperationsPanel;
 import gui.reader.*;
 import gui.user.*;
+import images.IPosterDBService;
+import images.PosterDBServiceImpl;
 import user.IUserDBService;
 import user.User;
 import user.UserDBServiceImpl;
@@ -21,6 +23,8 @@ import gui.librarian.LibrarianUpdatePanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class MFrame extends JFrame {
     UserShowPanel userShowPanel;
@@ -71,12 +75,17 @@ public class MFrame extends JFrame {
         int posY = height / 2 - getHeight() / 2;
         setLocation(posX, posY);
 
+        IPosterDBService posterDBService = new PosterDBServiceImpl();
+        posterDBService.addImage("C:\\Users\\e495405\\Desktop\\Baza danych zdjęcia\\biblio\\postery\\200_300\\klubEdukacyjny.jpg");
+
 
 
 //----------------login panel----------------
 
         loginPanel = new LoginPanel();
         add(loginPanel);
+        addLoginKeyListener();
+        addRegisterKeyListener();
 
         loginPanel.getRegisterBtn().addActionListener(e -> {
             readerAddPanel = new ReaderAddPanel();
@@ -370,7 +379,38 @@ public class MFrame extends JFrame {
             }
         });
 
+
+
 //
 
     }
-}
+    private void addLoginKeyListener() {
+        loginPanel.getLoginBtn().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                    loginPanel.getLoginBtn().doClick();}
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }});
+        }
+
+    private void addRegisterKeyListener() {
+        loginPanel.getRegisterBtn().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                    loginPanel.getRegisterBtn().doClick();}
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }});
+    }
+
+
+
+    }
+
