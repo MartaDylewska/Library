@@ -100,7 +100,7 @@ public class EventSignInPanel extends JPanel {
                 setCompVisibility(true);
                 signInEventBtn.setVisible(true);
                 for (Event event : eventList) {
-                    if ((event.getIdEvent() + ". " + event.getTitle()).equals(eventChooserBx.getSelectedItem())) {
+                    if ((event.getDateEvent().toString() + " " + event.getTitle()).equals(eventChooserBx.getSelectedItem())) {
                         selectedEvent = event;
                     }
                 }
@@ -146,7 +146,7 @@ public class EventSignInPanel extends JPanel {
         List<Event> eventList = eventDBService.getAllEventsFromDB();
         eventChooserBx.addItem("---wybierz---");
         for (Event e : eventList) {
-            eventChooserBx.addItem(e.getIdEvent() + ". " + e.getTitle());
+            eventChooserBx.addItem(e.getDateEvent().toString() + " " + e.getTitle());
         }
         eventChooserBx.setBounds(30, 10, 300, 50);
     }

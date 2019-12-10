@@ -82,8 +82,8 @@ public class EventAddPanel extends JPanel {
 
     private void createBrowseBtn() {
         browsePosterBtn = new JButton();
-        browsePosterBtn.setText("Wyszukaj");
-        browsePosterBtn.setBounds(400, 140, 200, 30);
+        browsePosterBtn.setText("Wyszukaj plakat...");
+        browsePosterBtn.setBounds(150, 140, 200, 30);
     }
     private void createReturnBtn() {
         returnBtn = new JButton();
@@ -141,7 +141,7 @@ public class EventAddPanel extends JPanel {
 
     private void createPosterTxt() {
         posterTxt = new JTextField();
-        posterTxt.setBounds(150, 140, fieldLength, 30);
+        posterTxt.setBounds(150, 380, fieldLength, 30);
     }
 
 

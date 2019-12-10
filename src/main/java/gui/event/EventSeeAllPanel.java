@@ -90,7 +90,7 @@ public class EventSeeAllPanel extends JPanel {
             if (eventChooserBx.getSelectedIndex() != 0) {
                 setCompVisibility(true);
                 for (Event event : eventList) {
-                    if ((event.getIdEvent() + ". " + event.getTitle()).equals(eventChooserBx.getSelectedItem())) {
+                    if ((event.getDateEvent().toString() + " " + event.getTitle()).equals(eventChooserBx.getSelectedItem())) {
                         selectedEvent = event;
                     }
                 }
@@ -135,7 +135,7 @@ public class EventSeeAllPanel extends JPanel {
         List<Event> eventList = eventDBService.getAllEventsForUser(reader.getIdReader());
         eventChooserBx.addItem("---wybierz---");
         for (Event e : eventList) {
-            eventChooserBx.addItem(e.getIdEvent() + ". " + e.getTitle());
+            eventChooserBx.addItem(e.getDateEvent().toString() + " " + e.getTitle());
         }
         eventChooserBx.setBounds(30, 10, 300, 50);
     }
