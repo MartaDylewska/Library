@@ -2,6 +2,10 @@ package gui;
 
 import config.Validation;
 import gui.admin.*;
+import gui.event.EventAddPanel;
+import gui.event.EventDeletePanel;
+import gui.event.EventSeeAllPanel;
+import gui.event.EventSignInPanel;
 import gui.librarian.*;
 import gui.login.LoginPanel;
 import gui.poster.PosterOperationsPanel;
@@ -48,6 +52,10 @@ public class MFrame extends JFrame {
     LibrarianEntryPanel librarianEntryPanel;
     AdminEntryPanel adminEntryPanel;
     PosterOperationsPanel posterOperationsPanel;
+    EventAddPanel eventAddPanel;
+    EventDeletePanel eventDeletePanel;
+    EventSignInPanel eventSignInPanel;
+    EventSeeAllPanel eventSeeAllPanel;
 
 
     public MFrame() {
@@ -62,12 +70,11 @@ public class MFrame extends JFrame {
         int posX = width / 2 - getWidth() / 2;
         int posY = height / 2 - getHeight() / 2;
         setLocation(posX, posY);
-/*
-        posterOperationsPanel = new PosterOperationsPanel();
-        add(posterOperationsPanel);*/
+
 
 
 //----------------login panel----------------
+
         loginPanel = new LoginPanel();
         add(loginPanel);
 
@@ -110,6 +117,38 @@ public class MFrame extends JFrame {
                             repaint();
                             revalidate();
 
+                            readerEntryPanel.getJoinEventBtn().addActionListener(e1 -> {
+                                eventSignInPanel = new EventSignInPanel();
+                                eventSignInPanel.getCardIdTxt().setText(readerEntryPanel.getCardNrLbl().getText());
+                                add(eventSignInPanel);
+                                remove(readerEntryPanel);
+                                repaint();
+                                revalidate();
+
+                                eventSignInPanel.getReturnBtn().addActionListener(e2 -> {
+                                    add(readerEntryPanel);
+                                    remove(eventSignInPanel);
+                                    repaint();
+                                    revalidate();
+                                });
+                            });
+
+                            readerEntryPanel.getCheckEventBtn().addActionListener(e1 -> {
+                                eventSeeAllPanel = new EventSeeAllPanel(readerEntryPanel);
+                                eventSeeAllPanel.getCardIdTxt().setText(readerEntryPanel.getCardNrLbl().getText());
+                                add(eventSeeAllPanel);
+                                remove(readerEntryPanel);
+                                repaint();
+                                revalidate();
+
+                                eventSeeAllPanel.getReturnBtn().addActionListener(e2 -> {
+                                    add(readerEntryPanel);
+                                    remove(eventSeeAllPanel);
+                                    repaint();
+                                    revalidate();
+                                });
+                            });
+
                             //operacje dotyczące reader entry panel
                             readerEntryPanel.getUpdateBtn().addActionListener(e2 -> {
                                 readerUpdatePanel = new ReaderUpdatePanel();
@@ -132,6 +171,7 @@ public class MFrame extends JFrame {
                             //tutaj trzeba dodać doBooking (zrób rezerwację), oraz lendings (podejrzyj wypożyczenia)
                             //ja dodam eventy dzisiaj
 
+
                             readerEntryPanel.getReturnBtn().addActionListener(e1 -> {
                                 loginPanel.setCardNrTxt("");
                                 loginPanel.setPassTxt("");
@@ -140,6 +180,8 @@ public class MFrame extends JFrame {
                                 repaint();
                                 revalidate();
                             });
+
+
                         } else if (Validation.checkIfLibrarian(user))
                         //---------------------BIBILOTEKARZ---------------------------
                         {
@@ -150,6 +192,36 @@ public class MFrame extends JFrame {
                             remove(loginPanel);
                             repaint();
                             revalidate();
+
+                            librarianEntryPanel.getAddEventBtn().addActionListener(e1 -> {
+                                eventAddPanel = new EventAddPanel();
+                                add(eventAddPanel);
+                                remove(librarianEntryPanel);
+                                repaint();
+                                revalidate();
+
+                                eventAddPanel.getReturnBtn().addActionListener(e2 -> {
+                                    add(librarianEntryPanel);
+                                    remove(eventAddPanel);
+                                    repaint();
+                                    revalidate();
+                                });
+                            });
+
+                            librarianEntryPanel.getDeleteEventBtn().addActionListener(e1 -> {
+                                eventDeletePanel = new EventDeletePanel();
+                                add(eventDeletePanel);
+                                remove(librarianEntryPanel);
+                                repaint();
+                                revalidate();
+
+                                eventDeletePanel.getReturnBtn().addActionListener(e2 -> {
+                                    add(librarianEntryPanel);
+                                    remove(eventDeletePanel);
+                                    repaint();
+                                    revalidate();
+                                });
+                            });
 
                             librarianEntryPanel.getDeleteReaderProfileBtn().addActionListener(e1 -> {
                                 readerDeletePanel = new ReaderDeletePanel();
@@ -298,6 +370,7 @@ public class MFrame extends JFrame {
             }
         });
 
+//
 
     }
 }

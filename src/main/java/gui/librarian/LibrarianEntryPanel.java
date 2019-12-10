@@ -30,7 +30,7 @@ public class LibrarianEntryPanel extends JPanel {
         add(deleteBookBtn);
         add(deleteEventBtn);
         add(updateBookBtn);
-        add(updateEventBtn);
+        //add(updateEventBtn);
         add(returnBtn);
     }
 
@@ -43,7 +43,7 @@ public class LibrarianEntryPanel extends JPanel {
         createDeleteReaderProfileBtn();
         createAddEventBtn();
         createDeleteEventBtn();
-        createUpdateEventBtn();
+        //createUpdateEventBtn();
         createReturnBtn();
     }
 
@@ -149,9 +149,9 @@ public class LibrarianEntryPanel extends JPanel {
         return deleteEventBtn;
     }
 
-    public JButton getUpdateEventBtn() {
+   /* public JButton getUpdateEventBtn() {
         return updateEventBtn;
-    }
+    }*/
 
     public JButton getReturnBtn() {
         return returnBtn;

@@ -19,13 +19,13 @@ public class LoginPanel extends JPanel {
     }
 
     private void addAllButtons(){
-        add(libInfoBtn);
+        //add(libInfoBtn);
         add(loginBtn);
         add(registerBtn);
     }
 
     private void createAllButtons(){
-        createLibInfoBtn();
+        //createLibInfoBtn();
         createLoginBtn();
         createRegisterBtn();
     }
