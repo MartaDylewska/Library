@@ -57,7 +57,31 @@ public class PosterDBServiceImpl implements IPosterDBService {
                 byte[] imgBytes = resultSet.getBytes(1);
                 poster.setImgBytes(imgBytes);
                 poster.setImgName(imgName);
-                // use the data in some way here
+            }
+            resultSet.close();
+            return poster;
+        } catch (SQLException e) {
+            System.err.println("Error during invoke SQL query: \n" + e.getMessage());
+            throw new RuntimeException("Error during invoke SQL query");
+        } finally {
+            closeDBResources(connection, preparedStatement);
+        }
+    }
+
+    @Override
+    public Poster readImageById(int idPoster) {
+        Connection connection = initializeDataBaseConnection();
+        PreparedStatement preparedStatement = null;
+        Poster poster = new Poster();
+        try {
+            String queryReadPoster = "SELECT img FROM images WHERE idimg = ?";
+            preparedStatement = connection.prepareStatement(queryReadPoster);
+            preparedStatement.setInt(1, idPoster);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                byte[] imgBytes = resultSet.getBytes("img");
+                poster.setImgBytes(imgBytes);
+                poster.setImgName(resultSet.getString("imgname"));
             }
             resultSet.close();
             return poster;
