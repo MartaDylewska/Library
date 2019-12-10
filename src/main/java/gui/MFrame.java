@@ -1,6 +1,5 @@
 package gui;
 
-
 import config.Validation;
 import gui.admin.*;
 import gui.librarian.*;
@@ -8,12 +7,13 @@ import gui.login.LoginPanel;
 import gui.poster.PosterOperationsPanel;
 import gui.reader.*;
 import gui.user.*;
-import reader.IReaderDBService;
-import reader.Reader;
-import reader.ReaderDBServiceImpl;
 import user.IUserDBService;
 import user.User;
 import user.UserDBServiceImpl;
+import gui.librarian.LibrarianAddPanel;
+import gui.librarian.LibrarianOperationsPanel;
+import gui.librarian.LibrarianShowPanel;
+import gui.librarian.LibrarianUpdatePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,6 +52,7 @@ public class MFrame extends JFrame {
 
     public MFrame() {
         setSize(700, 600);
+
         setTitle("Biblioteka");
         setResizable(false);
 
@@ -296,6 +297,7 @@ public class MFrame extends JFrame {
                 JOptionPane.showMessageDialog(this, "Niepoprawny numer karty");
             }
         });
+
 
     }
 }

@@ -269,6 +269,7 @@ public class ReaderAddPanel  extends JPanel {
     public JTextField getCardIdTxt(){return cardIdTxt;}
     public JPasswordField getPassField(){return passField;}
 
+
 }
 
 

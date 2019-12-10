@@ -1,25 +1,26 @@
 package book;
 
-class Book{
+public class Book{
 
     private String title, genre, publisher, language;
     private long ISBN;
-    private Author author;
+//    private Author author;
     private Bookshelf bookshelf;
     private boolean isAvailable;
+    private int bookId;
 
     Book(){
     }
 
-    private Author getAuthor() {
-        return author;
-    }
+//    public Author getAuthor() {
+//        return author;
+//    }
+//
+//    void setAuthor(Author author) {
+//        this.author = author;
+//    }
 
-    void setAuthor(Author author) {
-        this.author = author;
-    }
-
-    private String getTitle() {
+    public String getTitle() {
         return title;
     }
 
@@ -27,7 +28,7 @@ class Book{
         this.title = title;
     }
 
-    private String getGenre() {
+    public String getGenre() {
         return genre;
     }
 
@@ -35,7 +36,7 @@ class Book{
         this.genre = genre;
     }
 
-    private String getPublisher() {
+    public String getPublisher() {
         return publisher;
     }
 
@@ -43,7 +44,7 @@ class Book{
         this.publisher = publisher;
     }
 
-    private long getISBN() {
+    public long getISBN() {
         return ISBN;
     }
 
@@ -51,7 +52,7 @@ class Book{
         this.ISBN = ISBN;
     }
 
-    private String getLanguage() {
+    public String getLanguage() {
         return language;
     }
 
@@ -59,7 +60,7 @@ class Book{
         this.language = language;
     }
 
-    Bookshelf getBookshelf() {
+    public Bookshelf getBookshelf() {
         return bookshelf;
     }
 
@@ -75,8 +76,16 @@ class Book{
         isAvailable = available;
     }
 
+    public int getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
+    }
+
     @Override
     public String toString(){
-        return title + ", " + author + ", " + publisher + ", ISBN: " + ISBN;
+        return title + ", " + publisher + ", " + bookshelf;
     }
 }

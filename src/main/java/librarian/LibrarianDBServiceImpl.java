@@ -42,6 +42,7 @@ public class LibrarianDBServiceImpl implements ILibrarianDBService {
 
     @Override
     public void deleteLibrarianFromDB(int idUser) {
+
         Connection connection = initializeDataBaseConnection();
         PreparedStatement preparedStatement = null;
         try {
@@ -100,6 +101,7 @@ public class LibrarianDBServiceImpl implements ILibrarianDBService {
 
     @Override
     public List<Librarian> getAllLibrariansFromDB() {
+
         IUserDBService userDBService = new UserDBServiceImpl();
         //List<User> userList = userDBService.getAllUsersFromDB();
         List<Librarian> librarianList = new ArrayList<>();

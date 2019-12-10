@@ -1,7 +1,5 @@
 package reader;
 
-import librarian.Librarian;
-
 import java.util.List;
 
 public interface IReaderDBService {
