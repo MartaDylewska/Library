@@ -10,6 +10,38 @@ public class Book{
     Book(){
     }
 
+<<<<<<< HEAD
+=======
+    public Book(String title, String genre, String publisher, String language, long ISBN, Bookshelf bookshelf, boolean isAvailable, int bookId) {
+        this.title = title;
+        this.genre = genre;
+        this.publisher = publisher;
+        this.language = language;
+        this.ISBN = ISBN;
+        this.bookshelf = bookshelf;
+        this.isAvailable = isAvailable;
+        this.bookId = bookId;
+    }
+
+    public Book(String title, String genre, String publisher, String language, long ISBN, Bookshelf bookshelf, boolean isAvailable) {
+        this.title = title;
+        this.genre = genre;
+        this.publisher = publisher;
+        this.language = language;
+        this.ISBN = ISBN;
+        this.bookshelf = bookshelf;
+        this.isAvailable = isAvailable;
+    }
+
+    //    public Author getAuthor() {
+//        return author;
+//    }
+//
+//    void setAuthor(Author author) {
+//        this.author = author;
+//    }
+
+>>>>>>> 5cd5476726d0fef5a965817db3a879e97e880edc
     public String getTitle() {
         return title;
     }
@@ -58,6 +90,17 @@ public class Book{
         this.bookshelf = bookshelf;
     }
 
+<<<<<<< HEAD
+=======
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
+>>>>>>> 5cd5476726d0fef5a965817db3a879e97e880edc
     public int getBookId() {
         return bookId;
     }

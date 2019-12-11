@@ -14,5 +14,5 @@ public interface IAuthorBook {
     List<AuthorBook> getAllBooks();
     List<AuthorBook> getBySearch(String search);
     List<AuthorBook> getBooksOfAuthor(int authorId);
-    List<AuthorBook> getByTitle(String title);
+    List<AuthorBook> getBooksByTitle(String title);
 }

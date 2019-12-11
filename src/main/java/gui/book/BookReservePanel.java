@@ -1,25 +1,39 @@
 package gui.book;
 
+import book.*;
+import reader.IReaderDBService;
+import reader.Reader;
+import reader.ReaderDBServiceImpl;
+import reservation.IReservationDBService;
+import reservation.Reservation;
+import reservation.ReservationDBServiceImpl;
+import user.IUserDBService;
+import user.User;
+import user.UserDBServiceImpl;
+
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.List;
 
-import book.*;
-
-public class BookGetPanel extends JPanel {
+public class BookReservePanel extends JPanel {
 
     private JLabel searchByLabel, keyWordLabel, resultListLabel, result;
     private JComboBox searchBy;
     private JTextField keyWord;
     private JList resultList;
-    private JButton search, remove, edit, returnBtn;
+    private JButton search, remove, reserveBtn, returnBtn;
 
     private IBook iBook = new BookService();
     private IAuthor iAuthor = new AuthorService();
     private IAuthorBook iAuthorBook = new AuthorBookService();
     private int bookIdToEdit, authorIdToEdit;
+    private JLabel cardIdTxt;
+    private IUserDBService userDBService = new UserDBServiceImpl();
+    private IReaderDBService readerDBService = new ReaderDBServiceImpl();
+    private IReservationDBService reservationDBService = new ReservationDBServiceImpl();
 
-    public BookGetPanel() {
+    public BookReservePanel() {
 
         setLayout(null);
 
@@ -27,6 +41,7 @@ public class BookGetPanel extends JPanel {
         addComps();
         actions();
         remove.setVisible(false);
+        cardIdTxt.setVisible(false);
     }
 
     private void createBookJList(List<AuthorBook> bookList){
@@ -74,11 +89,16 @@ public class BookGetPanel extends JPanel {
         remove = new JButton("usuń");
         remove.setBounds(400,60,200,30);
 
-        edit = new JButton("edytuj");
-        edit.setBounds(400,100,200,30);
+        reserveBtn = new JButton("rezerwuj");
+        reserveBtn.setBounds(400,100,200,30);
 
         returnBtn = new JButton("cofnij");
         returnBtn.setBounds(400,470,200,30);
+
+
+        cardIdTxt = new JLabel();
+        cardIdTxt.setBounds(30,30, 30,20);
+
     }
 
     private void actions(){
@@ -94,8 +114,6 @@ public class BookGetPanel extends JPanel {
                 String lastName = keyWord.getText().substring(coma + 2);
                 int authorId = iAuthor.getAuthorId(firstName, lastName);
                 bookList = iAuthorBook.getBooksOfAuthor(authorId);
-            } else if(searchBy.getSelectedIndex() == 0) {
-                bookList = iAuthorBook.getByTitle(keyWord.getText());
             } else {
                 bookList = iAuthorBook.getBySearch(keyWord.getText());
             }
@@ -108,26 +126,32 @@ public class BookGetPanel extends JPanel {
             }
         });
 
-        remove.addActionListener(e ->{
-            AuthorBook book = (AuthorBook) resultList.getSelectedValue();
-
-            if(book== null) {
-                JOptionPane.showMessageDialog(null, "Żadna książka nie została wybrana.");
-            } else {
-
-                if (JOptionPane.showConfirmDialog(null, "Czy na pewno usunąć książkę?", "UWAGA!",
-                        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    iAuthorBook.removeBook(book.getBook().getTitle());
-                    List<AuthorBook> bookList = iAuthorBook.getAllBooks();
-                    createBookJList(bookList);
-                    add(resultList);
-                }
+        reserveBtn.addActionListener(e -> {
+            AuthorBook authorBook = (AuthorBook) resultList.getSelectedValue();
+            int bookId = authorBook.getBook().getBookId();
+            IBook bookDBService = new BookService();
+            Book book = bookDBService.getBook(bookId);
+            User user = userDBService.readUserFromDB(Integer.parseInt(cardIdTxt.getText()));
+            Reader reader = readerDBService.readReaderFromDB(user.getIdUser());
+            int readerId = reader.getIdReader();
+            System.out.println(book.isAvailable());
+            if(book.isAvailable()) {
+                Reservation reservation = new Reservation();
+                reservation.setDateCreation(LocalDate.now());
+                reservation.setReader_id(readerId);
+                reservation.setBook_id(bookId);
+                reservationDBService.addReservation(reservation);
+                JOptionPane.showMessageDialog(this,"Rezerwacja dodana do bazy");
+            }
+            else{
+                JOptionPane.showMessageDialog(this,"Książka już została wypożyczona");
             }
         });
+
     }
 
     private void addComps(){
-
+        add(cardIdTxt);
         add(searchByLabel);
         add(searchBy);
         add(keyWordLabel);
@@ -136,7 +160,7 @@ public class BookGetPanel extends JPanel {
         add(result);
         add(search);
         add(remove);
-        add(edit);
+        add(reserveBtn);
         add(returnBtn);
     }
 
@@ -144,8 +168,8 @@ public class BookGetPanel extends JPanel {
         return returnBtn;
     }
 
-    public JButton getEdit() {
-        return edit;
+    public JButton getReserveBtn() {
+        return reserveBtn;
     }
 
     public int getBookIdToEdit() {
@@ -172,4 +196,12 @@ public class BookGetPanel extends JPanel {
         return authorIdToEdit;
     }
     public JList getResultList(){return resultList;}
+
+    public JLabel getCardIdTxt() {
+        return cardIdTxt;
+    }
+
+    public void setCardIdTxt(JLabel cardIdTxt) {
+        this.cardIdTxt = cardIdTxt;
+    }
 }

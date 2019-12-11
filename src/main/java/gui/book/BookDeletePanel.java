@@ -1,32 +1,31 @@
 package gui.book;
 
+import book.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-import book.*;
-
-public class BookGetPanel extends JPanel {
+public class BookDeletePanel extends JPanel {
 
     private JLabel searchByLabel, keyWordLabel, resultListLabel, result;
     private JComboBox searchBy;
     private JTextField keyWord;
     private JList resultList;
-    private JButton search, remove, edit, returnBtn;
+    private JButton search, remove, returnBtn;
 
     private IBook iBook = new BookService();
     private IAuthor iAuthor = new AuthorService();
     private IAuthorBook iAuthorBook = new AuthorBookService();
     private int bookIdToEdit, authorIdToEdit;
 
-    public BookGetPanel() {
+    public BookDeletePanel() {
 
         setLayout(null);
 
         createComps();
         addComps();
         actions();
-        remove.setVisible(false);
     }
 
     private void createBookJList(List<AuthorBook> bookList){
@@ -74,8 +73,6 @@ public class BookGetPanel extends JPanel {
         remove = new JButton("usuń");
         remove.setBounds(400,60,200,30);
 
-        edit = new JButton("edytuj");
-        edit.setBounds(400,100,200,30);
 
         returnBtn = new JButton("cofnij");
         returnBtn.setBounds(400,470,200,30);
@@ -94,8 +91,6 @@ public class BookGetPanel extends JPanel {
                 String lastName = keyWord.getText().substring(coma + 2);
                 int authorId = iAuthor.getAuthorId(firstName, lastName);
                 bookList = iAuthorBook.getBooksOfAuthor(authorId);
-            } else if(searchBy.getSelectedIndex() == 0) {
-                bookList = iAuthorBook.getByTitle(keyWord.getText());
             } else {
                 bookList = iAuthorBook.getBySearch(keyWord.getText());
             }
@@ -136,7 +131,7 @@ public class BookGetPanel extends JPanel {
         add(result);
         add(search);
         add(remove);
-        add(edit);
+
         add(returnBtn);
     }
 
@@ -144,9 +139,6 @@ public class BookGetPanel extends JPanel {
         return returnBtn;
     }
 
-    public JButton getEdit() {
-        return edit;
-    }
 
     public int getBookIdToEdit() {
 
@@ -171,5 +163,4 @@ public class BookGetPanel extends JPanel {
 
         return authorIdToEdit;
     }
-    public JList getResultList(){return resultList;}
 }

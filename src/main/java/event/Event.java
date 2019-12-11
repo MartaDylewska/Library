@@ -71,3 +71,4 @@ public class Event {
         return "Wydarzenie "+title;
     }
 }
+

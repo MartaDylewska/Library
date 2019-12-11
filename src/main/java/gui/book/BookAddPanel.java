@@ -15,23 +15,24 @@ public class BookAddPanel extends JPanel {
     private JTextField[] names;
     private JLabel alleyLabel, bookstandLabel, shelfLabel;
     private JComboBox alley, bookstand, shelf;
-    private JButton confirm, back;
+    private JButton confirm, returnBtn;
     private JLabel result;
-    private JRadioButton oneAuthor, moreAuthors;
+   // private JRadioButton oneAuthor, moreAuthors;
     private ButtonGroup buttonGroup;
 
     private IAuthor authorService = new AuthorService();
     private IBook bookService = new BookService();
     private IAuthorBook authorBookService = new AuthorBookService();
 
-    BookAddPanel() {
+
+    public BookAddPanel() {
 
         setLayout(null);
 
         createComps();
         addComp();
         action();
-        setSeen(false);
+        //setSeen(false);
 
     }
 
@@ -95,32 +96,33 @@ public class BookAddPanel extends JPanel {
 
         moreAuthorsLabel = new JLabel("Autorzy:");
         moreAuthorsLabel.setBounds(20,340,200,30);
+        moreAuthorsLabel.setVisible(false);
 
-        names = new JTextField[10];
+        /*names = new JTextField[10];
         for (int i = 0; i < names.length; i++) {
             names[i] = new JTextField();
             if(i%2 == 0)
                 names[i].setBounds(20,380 + (30 * (i / 2)), 200,30);
             else
                 names[i].setBounds(220,380 + (30 * (i / 2)), 200,30);
-        }
+        }*/
 
-        oneAuthor = new JRadioButton("1 autor");
+      /*  oneAuthor = new JRadioButton("1 autor");
         oneAuthor.setBounds(400,20,200,30);
-        oneAuthor.setSelected(true);
+        oneAuthor.setSelected(true);*/
 
-        moreAuthors = new JRadioButton("więcej autorów");
+        /*moreAuthors = new JRadioButton("więcej autorów");
         moreAuthors.setBounds(400,50,200,30);
 
         buttonGroup = new ButtonGroup();
         buttonGroup.add(oneAuthor);
-        buttonGroup.add(moreAuthors);
+        buttonGroup.add(moreAuthors);*/
 
         confirm = new JButton("Dodaj");
         confirm.setBounds(400, 100, 200, 50);
 
-        back = new JButton("Cofnij");
-        back.setBounds(400, 240, 200, 50);
+        returnBtn = new JButton("Cofnij");
+        returnBtn.setBounds(400, 240, 200, 50);
 
         result = new JLabel();
         result.setBounds(20, 340, 460, 100);
@@ -145,43 +147,44 @@ public class BookAddPanel extends JPanel {
         add(bookstand);
         add(shelfLabel);
         add(shelf);
-        add(oneAuthor);
-        add(moreAuthors);
-        add(moreAuthorsLabel);
+        //add(oneAuthor);
+        //add(moreAuthors);
+        //add(moreAuthorsLabel);
         add(confirm);
-        add(back);
+        add(returnBtn);
         add(result);
-        for (JTextField name : names) {
+        /*for (JTextField name : names) {
             add(name);
-        }
+        }*/
     }
 
     private void action() {
 
         confirm.addActionListener(e -> {
             if(check()) {
-                if(oneAuthor.isSelected()) {
+
 //                    authorService.addAuthor(firstName.getText(), lastName.getText());
                     authorBookService.addAuthorBook(firstName.getText(), lastName.getText(),title.getText(), genre.getText(),
                             publisher.getText(), language.getText(), alley.getSelectedItem().toString(),
                             bookstand.getSelectedItem().toString(), Integer.parseInt(shelf.getSelectedItem().toString()));
                     result.setText(bookService.getMessage());
-                }
+                JOptionPane.showMessageDialog(this, "Książka została dodana do bazy");
+
             } else {
-                JOptionPane.showMessageDialog(null, "Uzupełnij dane.");
+                JOptionPane.showMessageDialog(this, "Uzupełnij dane.");
             }
         });
-        oneAuthor.addActionListener(e ->{
+      /*  oneAuthor.addActionListener(e ->{
             firstName.setEditable(true);
             lastName.setEditable(true);
-            setSeen(false);
-        });
+            //setSeen(false);
+        });*/
 
-        moreAuthors.addActionListener(e ->{
+/*        moreAuthors.addActionListener(e ->{
             firstName.setEditable(false);
             lastName.setEditable(false);
             setSeen(true);
-        });
+        });*/
     }
 
     private boolean check(){
@@ -200,14 +203,14 @@ public class BookAddPanel extends JPanel {
                 genreCheck && languageCheck && alleyCheck && bookstandCheck && shelfCheck;
     }
 
-    private void setSeen(boolean seen){
+/*    private void setSeen(boolean seen){
         moreAuthorsLabel.setVisible(seen);
         for (JTextField name : names) {
             name.setVisible(seen);
         }
-    }
+    }*/
 
-    public JButton getBack() {
-        return back;
+    public JButton getReturnBtn() {
+        return returnBtn;
     }
 }

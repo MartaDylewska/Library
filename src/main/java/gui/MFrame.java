@@ -2,14 +2,18 @@ package gui;
 
 import config.Validation;
 import gui.admin.*;
+import gui.book.*;
 import gui.event.EventAddPanel;
 import gui.event.EventDeletePanel;
 import gui.event.EventSeeAllPanel;
 import gui.event.EventSignInPanel;
+import gui.lending.AcceptReturnPanel;
+import gui.lending.LendingShowPanel;
 import gui.librarian.*;
 import gui.login.LoginPanel;
 import gui.poster.PosterOperationsPanel;
 import gui.reader.*;
+import gui.reservation.ReservationShowPanel;
 import gui.user.*;
 import images.IPosterDBService;
 import images.PosterDBServiceImpl;
@@ -60,6 +64,14 @@ public class MFrame extends JFrame {
     EventDeletePanel eventDeletePanel;
     EventSignInPanel eventSignInPanel;
     EventSeeAllPanel eventSeeAllPanel;
+    BookAddPanel bookAddPanel;
+    BookDeletePanel bookDeletePanel;
+    BookEditPanel bookEditPanel;
+    BookGetPanel bookGetPanel;
+    BookReservePanel bookReservePanel;
+    ReservationShowPanel reservationShowPanel;
+    LendingShowPanel lendingShowPanel;
+    AcceptReturnPanel acceptReturnPanel;
 
 
     public MFrame() {
@@ -75,8 +87,6 @@ public class MFrame extends JFrame {
         int posY = height / 2 - getHeight() / 2;
         setLocation(posX, posY);
 
-        IPosterDBService posterDBService = new PosterDBServiceImpl();
-        posterDBService.addImage("C:\\Users\\e495405\\Desktop\\Baza danych zdjęcia\\biblio\\postery\\200_300\\klubEdukacyjny.jpg");
 
 
 
@@ -142,6 +152,22 @@ public class MFrame extends JFrame {
                                 });
                             });
 
+                            readerEntryPanel.getLendingsBtn().addActionListener(e1 -> {
+                                lendingShowPanel = new LendingShowPanel(readerEntryPanel);
+                                lendingShowPanel.getCardIdTxt().setText(readerEntryPanel.getCardNrLbl().getText());
+                                add(lendingShowPanel);
+                                remove(readerEntryPanel);
+                                repaint();
+                                revalidate();
+
+                                lendingShowPanel.getReturnBtn().addActionListener(e2 -> {
+                                    add(readerEntryPanel);
+                                    remove(lendingShowPanel);
+                                    repaint();
+                                    revalidate();
+                                });
+                            });
+
                             readerEntryPanel.getCheckEventBtn().addActionListener(e1 -> {
                                 eventSeeAllPanel = new EventSeeAllPanel(readerEntryPanel);
                                 eventSeeAllPanel.getCardIdTxt().setText(readerEntryPanel.getCardNrLbl().getText());
@@ -175,6 +201,27 @@ public class MFrame extends JFrame {
                                     revalidate();
                                 });
 
+                            });
+
+                            /*readerEntryPanel.getLendingsBtn().addActionListener(e1 -> {
+                                reservationShowPanel = new ReservationShowPanel();
+                                reservationShowPanel.getCardIdLbl().se
+                            });*/
+
+                            readerEntryPanel.getDoBookingBtn().addActionListener(e1 -> {
+                                bookReservePanel = new BookReservePanel();
+                                bookReservePanel.getCardIdTxt().setText(readerEntryPanel.getCardNrLbl().getText());
+                                add(bookReservePanel);
+                                remove(readerEntryPanel);
+                                repaint();
+                                revalidate();
+
+                                bookReservePanel.getReturnBtn().addActionListener(e2 -> {
+                                    add(readerEntryPanel);
+                                    remove(bookReservePanel);
+                                    repaint();
+                                    revalidate();
+                                });
                             });
 
                             //tutaj trzeba dodać doBooking (zrób rezerwację), oraz lendings (podejrzyj wypożyczenia)
@@ -217,6 +264,36 @@ public class MFrame extends JFrame {
                                 });
                             });
 
+                            librarianEntryPanel.getConfirmReservationBtn().addActionListener(e1 -> {
+                                reservationShowPanel = new ReservationShowPanel();
+                                add(reservationShowPanel);
+                                remove(librarianEntryPanel);
+                                repaint();
+                                revalidate();
+
+                                reservationShowPanel.getReturnBtn().addActionListener(e2 -> {
+                                    add(librarianEntryPanel);
+                                    remove(reservationShowPanel);
+                                    repaint();
+                                    revalidate();
+                                });
+                            });
+
+                            librarianEntryPanel.getAcceptReturnBtn().addActionListener(e1 -> {
+                                acceptReturnPanel = new AcceptReturnPanel();
+                                add(acceptReturnPanel);
+                                remove(librarianEntryPanel);
+                                repaint();
+                                revalidate();
+
+                                acceptReturnPanel.getReturnBtn().addActionListener(e2 -> {
+                                    add(librarianEntryPanel);
+                                    remove(acceptReturnPanel);
+                                    repaint();
+                                    revalidate();
+                                });
+                            });
+
                             librarianEntryPanel.getDeleteEventBtn().addActionListener(e1 -> {
                                 eventDeletePanel = new EventDeletePanel();
                                 add(eventDeletePanel);
@@ -231,6 +308,73 @@ public class MFrame extends JFrame {
                                     revalidate();
                                 });
                             });
+
+                            librarianEntryPanel.getAddBookBtn().addActionListener(e1 -> {
+                                bookAddPanel = new BookAddPanel();
+                                add(bookAddPanel);
+                                remove(librarianEntryPanel);
+                                repaint();
+                                revalidate();
+
+                                bookAddPanel.getReturnBtn().addActionListener(e2 -> {
+                                    add(librarianEntryPanel);
+                                    remove(bookAddPanel);
+                                    repaint();
+                                    revalidate();
+                                });
+                            });
+
+                            librarianEntryPanel.getDeleteBookBtn().addActionListener(e1 -> {
+                                bookDeletePanel = new BookDeletePanel();
+                                add(bookDeletePanel);
+                                remove(librarianEntryPanel);
+                                repaint();
+                                revalidate();
+
+                                bookDeletePanel.getReturnBtn().addActionListener(e2 -> {
+                                    add(librarianEntryPanel);
+                                    remove(bookDeletePanel);
+                                    repaint();
+                                    revalidate();
+                                });
+                            });
+
+                            librarianEntryPanel.getUpdateBookBtn().addActionListener(e1 -> {
+                                bookGetPanel = new BookGetPanel();
+                                add(bookGetPanel);
+                                remove(librarianEntryPanel);
+                                repaint();
+                                revalidate();
+
+                                bookGetPanel.getEdit().addActionListener(e2 -> {
+                                    if(bookGetPanel.getResultList().isSelectionEmpty() == false){
+
+                                    bookEditPanel = new BookEditPanel(bookGetPanel);
+                                    add(bookEditPanel);
+                                    remove(bookGetPanel);
+                                    repaint();
+                                    revalidate();
+
+                                    bookEditPanel.getReturnBtn().addActionListener(e3 -> {
+                                        add(bookGetPanel);
+                                        remove(bookEditPanel);
+                                        repaint();
+                                        revalidate();
+                                    });
+                                }
+                                    else {
+                                        JOptionPane.showMessageDialog(this,"Książka nie została wybrana");
+                                    }});
+
+
+                                bookGetPanel.getReturnBtn().addActionListener(e2 -> {
+                                    add(librarianEntryPanel);
+                                    remove(bookGetPanel);
+                                    repaint();
+                                    revalidate();
+                                });
+                            });
+
 
                             librarianEntryPanel.getDeleteReaderProfileBtn().addActionListener(e1 -> {
                                 readerDeletePanel = new ReaderDeletePanel();
