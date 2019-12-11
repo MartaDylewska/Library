@@ -23,7 +23,7 @@ public class BookFrame extends JFrame {
             repaint();
             revalidate();
 
-            bookAddPanel.getBack().addActionListener(e1 ->{
+            bookAddPanel.getReturnBtn().addActionListener(e1 ->{
                 add(bookPanel);
                 remove(bookAddPanel);
                 repaint();
@@ -38,7 +38,7 @@ public class BookFrame extends JFrame {
             repaint();
             revalidate();
 
-            bookGetPanel.getBack().addActionListener(e1 ->{
+            bookGetPanel.getReturnBtn().addActionListener(e1 ->{
                 add(bookPanel);
                 remove(bookGetPanel);
                 repaint();
@@ -53,7 +53,7 @@ public class BookFrame extends JFrame {
                     repaint();
                     revalidate();
 
-                    bookEditPanel.getBack().addActionListener(e2 ->{
+                    bookEditPanel.getReturnBtn().addActionListener(e2 ->{
                         add(bookGetPanel);
                         remove(bookEditPanel);
                         repaint();

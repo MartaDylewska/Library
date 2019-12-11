@@ -140,11 +140,11 @@ public class AuthorGetPanel extends JPanel {
                 newLastName.setText(author.getLastName());
                 change.setEnabled(true);
 
-                change.addActionListener(e1 ->{
+                /*change.addActionListener(e1 ->{
 //                    bookService.editBook(author.getId(), newFirstName.getText(), newLastName.getText());
                     authorService.editAuthor(author.getId(), newFirstName.getText(), newLastName.getText());
                     result.setText(authorService.getMessage());
-                });
+                });*/
             }
 
         });

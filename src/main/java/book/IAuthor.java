@@ -9,7 +9,7 @@ public interface IAuthor {
     int getAuthorId(String firstName, String lastName);
     void removeAuthor(String firstName, String lastName);
     void removeAuthor(int id);
-    void editAuthor(int id, String firstName, String lastName);
+    //void editAuthor(int id, String firstName, String lastName);
     Author getAuthor(int id);
     List<Author> getAuthors(String name);
     Author getAuthor(String firstName, String lastName);

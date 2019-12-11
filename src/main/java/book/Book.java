@@ -12,7 +12,28 @@ public class Book{
     Book(){
     }
 
-//    public Author getAuthor() {
+    public Book(String title, String genre, String publisher, String language, long ISBN, Bookshelf bookshelf, boolean isAvailable, int bookId) {
+        this.title = title;
+        this.genre = genre;
+        this.publisher = publisher;
+        this.language = language;
+        this.ISBN = ISBN;
+        this.bookshelf = bookshelf;
+        this.isAvailable = isAvailable;
+        this.bookId = bookId;
+    }
+
+    public Book(String title, String genre, String publisher, String language, long ISBN, Bookshelf bookshelf, boolean isAvailable) {
+        this.title = title;
+        this.genre = genre;
+        this.publisher = publisher;
+        this.language = language;
+        this.ISBN = ISBN;
+        this.bookshelf = bookshelf;
+        this.isAvailable = isAvailable;
+    }
+
+    //    public Author getAuthor() {
 //        return author;
 //    }
 //
@@ -68,11 +89,11 @@ public class Book{
         this.bookshelf = bookshelf;
     }
 
-    boolean isAvailable() {
+    public boolean isAvailable() {
         return isAvailable;
     }
 
-    void setAvailable(boolean available) {
+    public void setAvailable(boolean available) {
         isAvailable = available;
     }
 
