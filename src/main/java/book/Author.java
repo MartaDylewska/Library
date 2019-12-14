@@ -3,7 +3,7 @@ package book;
 public class Author {
 
     private String firstName, lastName;
-    private int id;
+    private int authorId;
 
     public String getFirstName() {
         return firstName;
@@ -21,12 +21,12 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public int getId() {
-        return id;
+    public int getAuthorId() {
+        return authorId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
     }
 
     @Override

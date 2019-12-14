@@ -5,6 +5,8 @@ public class AuthorBook {
     private Book book;
     private Author author;
 
+    public AuthorBook(){}
+
     public Book getBook() {
         return book;
     }

@@ -20,17 +20,10 @@ public class BookService implements IBook {
         PreparedStatement preparedStatement = null;
 
         SQL = "select * from book inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id where book.book_id = ? ;";
-<<<<<<< HEAD
 
-        try (Connection conn = connect.connectDB()) {
-            PreparedStatement preparedStatement = conn.prepareStatement(SQL);
-
-            preparedStatement.setInt(1, id);
-=======
         try {
             preparedStatement = connection.prepareStatement(SQL);
             preparedStatement.setInt(1, idBook);
->>>>>>> 5cd5476726d0fef5a965817db3a879e97e880edc
 
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()){
@@ -106,14 +99,11 @@ public class BookService implements IBook {
             preparedStatement.setString(1, title);
 
             ResultSet rs = preparedStatement.executeQuery();
-<<<<<<< HEAD
-            while (rs.next())
-                bookId = rs.getInt("book_id");
-=======
             while (rs.next()){
                 bookId = rs.getInt(1);}
+
             return bookId;
->>>>>>> 5cd5476726d0fef5a965817db3a879e97e880edc
+
         } catch (SQLException e) {
             System.err.println("Error during invoke SQL query: \n" + e.getMessage());
             throw  new RuntimeException("Error during invoke SQL query");
@@ -124,65 +114,40 @@ public class BookService implements IBook {
     }
 
     @Override
-    public int addBook(String title, String genre, String publisher,
+    public void addBook(String title, String genre, String publisher,
                         String language, String alley, String bookstand, int shelf) {
 
-<<<<<<< HEAD
-        int bookShelfId = iBookshelf.getBookshelf(alley, bookstand, shelf);
-        int bookId = getBookId(title);
-
-        if(bookId == 0) {
-            SQL = "insert into book (title, publisher, lang, genre, isbn, bookshelf_id) " +
-                    "values (?, ?, ?, ?, ?, ?);";
-            PreparedStatement preparedStatement;
-
-            try (Connection conn = connect.connectDB()) {
-
-                preparedStatement = conn.prepareStatement(SQL);
-
-                preparedStatement.setString(1, title);
-                preparedStatement.setString(2, publisher);
-                preparedStatement.setString(3, language);
-                preparedStatement.setString(4, genre);
-                preparedStatement.setLong(5, System.currentTimeMillis());
-                preparedStatement.setInt(6, bookShelfId);
-=======
-        int bookshelfId = iBookshelf.getBookshelf(alley, bookstand, shelf);
         Connection connection = initializeDataBaseConnection();
         PreparedStatement preparedStatement = null;
 
-        SQL = "insert into book(title, publisher, lang, genre, available, isbn, bookshelf_id) " +
-                "values (?,?, ?, ?, ?, ?, ?);";
+        SQL = "INSERT INTO book (title, publisher, genre, lang, available, ISBN, bookshelf_id) " +
+                " SELECT ?, ?, ?, ?, ?, ?, (SELECT bookshelf_id from bookshelves where alley = ? and bookstand = ? and shelf = ?)" +
+                "WHERE NOT EXISTS (SELECT 1 FROM book WHERE title = ?);";
 
         try {
             preparedStatement = connection.prepareStatement(SQL);
+
             preparedStatement.setString(1, title);
-//            preparedStatement.setInt(2, authorId);
             preparedStatement.setString(2, publisher);
-            preparedStatement.setString(3, language);
-            preparedStatement.setString(4, genre);
+            preparedStatement.setString(3, genre);
+            preparedStatement.setString(4, language);
             preparedStatement.setBoolean(5,true);
             preparedStatement.setLong(6, System.currentTimeMillis());
-            preparedStatement.setInt(7, bookshelfId);
->>>>>>> 5cd5476726d0fef5a965817db3a879e97e880edc
+            preparedStatement.setString(7, alley);
+            preparedStatement.setString(8, bookstand);
+            preparedStatement.setInt(9, shelf);
+            preparedStatement.setString(10, title);
 
                 preparedStatement.executeUpdate();
                 message = "Książka została dodana do bazy.";
 
-<<<<<<< HEAD
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
-=======
         } catch (SQLException e) {
             System.err.println("Error during invoke SQL query: \n" + e.getMessage());
             throw  new RuntimeException("Error during invoke SQL query");
         }
         finally {
-            closeDBResources(connection,preparedStatement);
->>>>>>> 5cd5476726d0fef5a965817db3a879e97e880edc
+            closeDBResources(connection, preparedStatement);
         }
-        return bookId;
     }
 
     @Override
@@ -385,7 +350,7 @@ public class BookService implements IBook {
 //        return booksOfAuthor;
 //    }
 
-    @Override
+    /*@Override
     public List<Book> getBooks(String search) {
 
         List<Book> booksOfSearch = new ArrayList<>();
@@ -462,7 +427,7 @@ public class BookService implements IBook {
             closeDBResources(connection,preparedStatement);
         }
     }
-
+*/
     @Override
     public String getMessage(){
         return message;

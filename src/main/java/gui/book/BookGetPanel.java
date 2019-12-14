@@ -2,6 +2,7 @@ package gui.book;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import book.*;
@@ -12,7 +13,7 @@ public class BookGetPanel extends JPanel {
     private JComboBox searchBy;
     private JTextField keyWord;
     private JList resultList;
-    private JButton search, remove, edit, returnBtn;
+    private JButton search, remove, edit, location, returnBtn;
 
     private IBook iBook = new BookService();
     private IAuthor iAuthor = new AuthorService();
@@ -26,7 +27,6 @@ public class BookGetPanel extends JPanel {
         createComps();
         addComps();
         actions();
-        remove.setVisible(false);
     }
 
     private void createBookJList(List<AuthorBook> bookList){
@@ -69,13 +69,16 @@ public class BookGetPanel extends JPanel {
         result.setOpaque(true);
 
         search = new JButton("szukaj");
-        search.setBounds(400,20,200,30);
+        search.setBounds(400,20,100,50);
 
         remove = new JButton("usuń");
-        remove.setBounds(400,60,200,30);
+        remove.setBounds(400,70,100,50);
 
         edit = new JButton("edytuj");
-        edit.setBounds(400,100,200,30);
+        edit.setBounds(500,70,100,50);
+
+        location = new JButton("na półkę");
+        location.setBounds(500, 20,100,50);
 
         returnBtn = new JButton("cofnij");
         returnBtn.setBounds(400,470,200,30);
@@ -84,26 +87,31 @@ public class BookGetPanel extends JPanel {
     private void actions(){
 
         search.addActionListener(e -> {
-            List<AuthorBook> bookList;
+            List<AuthorBook> bookList = new ArrayList<>();
 
             if(keyWord.getText().length() == 0){
                 bookList = iAuthorBook.getAllBooks();
             } else if(searchBy.getSelectedIndex() == 1){
-                int coma = keyWord.getText().indexOf(",");
-                String firstName = keyWord.getText().substring(0, coma);
-                String lastName = keyWord.getText().substring(coma + 2);
-                int authorId = iAuthor.getAuthorId(firstName, lastName);
-                bookList = iAuthorBook.getBooksOfAuthor(authorId);
+                if(keyWord.getText().contains(",")) {
+                    int coma = keyWord.getText().indexOf(",");
+                    String firstName = keyWord.getText().substring(0, coma);
+                    String lastName = keyWord.getText().substring(coma + 2);
+                    int authorId = iAuthor.getAuthorId(firstName, lastName);
+                    bookList = iAuthorBook.getBooksOfAuthor(authorId);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Nieprawidlowy format");
+                }
             } else if(searchBy.getSelectedIndex() == 0) {
-                bookList = iAuthorBook.getByTitle(keyWord.getText());
+                bookList = iAuthorBook.getBooksByTitle(keyWord.getText());
             } else {
-                bookList = iAuthorBook.getBySearch(keyWord.getText());
+                bookList = iAuthorBook.getBooksBySearch(keyWord.getText());
             }
 
             if(bookList.size() > 0) {
                 createBookJList(bookList);
                 add(resultList);
             } else {
+                remove(resultList);
                 result.setText("Nie ma takich książek.");
             }
         });
@@ -112,16 +120,28 @@ public class BookGetPanel extends JPanel {
             AuthorBook book = (AuthorBook) resultList.getSelectedValue();
 
             if(book== null) {
-                JOptionPane.showMessageDialog(null, "Żadna książka nie została wybrana.");
+                JOptionPane.showMessageDialog(this, "Żadna książka nie została wybrana.");
             } else {
 
-                if (JOptionPane.showConfirmDialog(null, "Czy na pewno usunąć książkę?", "UWAGA!",
+                if (JOptionPane.showConfirmDialog(this, "Czy na pewno usunąć książkę?", "UWAGA!",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     iAuthorBook.removeBook(book.getBook().getTitle());
-                    List<AuthorBook> bookList = iAuthorBook.getAllBooks();
-                    createBookJList(bookList);
-                    add(resultList);
+                    iBook.removeBook(book.getBook().getBookId());
+                    repaint();
+                    revalidate();
                 }
+            }
+        });
+
+        location.addActionListener(e ->{
+
+            List<AuthorBook> bookList = iAuthorBook.getNotLocatedBooks();
+
+            if(bookList.size() > 0) {
+                createBookJList(bookList);
+                add(resultList);
+            } else {
+                result.setText("Nie ma takich książek.");
             }
         });
     }
@@ -137,6 +157,7 @@ public class BookGetPanel extends JPanel {
         add(search);
         add(remove);
         add(edit);
+        add(location);
         add(returnBtn);
     }
 
@@ -148,7 +169,7 @@ public class BookGetPanel extends JPanel {
         return edit;
     }
 
-    public int getBookIdToEdit() {
+    int getBookIdToEdit() {
 
         bookIdToEdit = 0;
 
@@ -160,13 +181,13 @@ public class BookGetPanel extends JPanel {
         return bookIdToEdit;
     }
 
-    public int getAuthorIdToEdit(){
+    int getAuthorIdToEdit(){
 
         authorIdToEdit = 0;
 
         AuthorBook authorBook = (AuthorBook) resultList.getSelectedValue();
         if(authorBook != null) {
-            authorIdToEdit = authorBook.getAuthor().getId();
+            authorIdToEdit = authorBook.getAuthor().getAuthorId();
         }
 
         return authorIdToEdit;

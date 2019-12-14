@@ -1,6 +1,9 @@
-package gui.book;
+package gui.bookTransfer;
 
 import book.*;
+import bookTransfer.BookTransfer;
+import bookTransfer.BookTransferService;
+import bookTransfer.IBookTransfer;
 import reader.IReaderDBService;
 import reader.Reader;
 import reader.ReaderDBServiceImpl;
@@ -14,6 +17,7 @@ import user.UserDBServiceImpl;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookReservePanel extends JPanel {
@@ -24,10 +28,9 @@ public class BookReservePanel extends JPanel {
     private JList resultList;
     private JButton search, remove, reserveBtn, returnBtn;
 
-    private IBook iBook = new BookService();
     private IAuthor iAuthor = new AuthorService();
     private IAuthorBook iAuthorBook = new AuthorBookService();
-    private int bookIdToEdit, authorIdToEdit;
+    private IBookTransfer iBookTransfer = new BookTransferService();
     private JLabel cardIdTxt;
     private IUserDBService userDBService = new UserDBServiceImpl();
     private IReaderDBService readerDBService = new ReaderDBServiceImpl();
@@ -51,7 +54,6 @@ public class BookReservePanel extends JPanel {
             listModel.addElement(aBookList);
         }
         resultList.setModel(listModel);
-        resultList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane listScroller = new JScrollPane(resultList);
         listScroller.setPreferredSize(new Dimension(250, 80));
     }
@@ -104,50 +106,53 @@ public class BookReservePanel extends JPanel {
     private void actions(){
 
         search.addActionListener(e -> {
-            List<AuthorBook> bookList;
+            List<AuthorBook> bookList = new ArrayList<>();
 
             if(keyWord.getText().length() == 0){
                 bookList = iAuthorBook.getAllBooks();
             } else if(searchBy.getSelectedIndex() == 1){
-                int coma = keyWord.getText().indexOf(",");
-                String firstName = keyWord.getText().substring(0, coma);
-                String lastName = keyWord.getText().substring(coma + 2);
-                int authorId = iAuthor.getAuthorId(firstName, lastName);
-                bookList = iAuthorBook.getBooksOfAuthor(authorId);
+                if(keyWord.getText().contains(",")) {
+                    int coma = keyWord.getText().indexOf(",");
+                    String firstName = keyWord.getText().substring(0, coma);
+                    String lastName = keyWord.getText().substring(coma + 2);
+                    int authorId = iAuthor.getAuthorId(firstName, lastName);
+                    bookList = iAuthorBook.getBooksOfAuthor(authorId);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Nieprawidlowy format");
+                }
+            } else if(searchBy.getSelectedIndex() == 0) {
+                bookList = iAuthorBook.getBooksByTitle(keyWord.getText());
             } else {
-                bookList = iAuthorBook.getBySearch(keyWord.getText());
+                bookList = iAuthorBook.getBooksBySearch(keyWord.getText());
             }
 
             if(bookList.size() > 0) {
                 createBookJList(bookList);
                 add(resultList);
             } else {
+                remove(resultList);
                 result.setText("Nie ma takich książek.");
             }
         });
 
         reserveBtn.addActionListener(e -> {
-            AuthorBook authorBook = (AuthorBook) resultList.getSelectedValue();
-            int bookId = authorBook.getBook().getBookId();
-            IBook bookDBService = new BookService();
-            Book book = bookDBService.getBook(bookId);
+
+            List<AuthorBook> book = resultList.getSelectedValuesList();
+
             User user = userDBService.readUserFromDB(Integer.parseInt(cardIdTxt.getText()));
             Reader reader = readerDBService.readReaderFromDB(user.getIdUser());
             int readerId = reader.getIdReader();
-            System.out.println(book.isAvailable());
-            if(book.isAvailable()) {
-                Reservation reservation = new Reservation();
-                reservation.setDateCreation(LocalDate.now());
-                reservation.setReader_id(readerId);
-                reservation.setBook_id(bookId);
-                reservationDBService.addReservation(reservation);
-                JOptionPane.showMessageDialog(this,"Rezerwacja dodana do bazy");
-            }
-            else{
-                JOptionPane.showMessageDialog(this,"Książka już została wypożyczona");
-            }
-        });
 
+            for (AuthorBook aBook : book) {
+                iBookTransfer.reserveBook(readerId, aBook.getBook().getBookId());
+                JOptionPane.showMessageDialog(this, iBookTransfer.getMessage());
+                repaint();
+                revalidate();
+            }
+
+            if(book.size() == 0)
+                JOptionPane.showMessageDialog(this, "Żadna książka nie została wybrana.");
+        });
     }
 
     private void addComps(){
@@ -167,35 +172,6 @@ public class BookReservePanel extends JPanel {
     public JButton getReturnBtn() {
         return returnBtn;
     }
-
-    public JButton getReserveBtn() {
-        return reserveBtn;
-    }
-
-    public int getBookIdToEdit() {
-
-        bookIdToEdit = 0;
-
-        AuthorBook authorBook = (AuthorBook) resultList.getSelectedValue();
-        if(authorBook != null){
-            bookIdToEdit = authorBook.getBook().getBookId();
-        }
-
-        return bookIdToEdit;
-    }
-
-    public int getAuthorIdToEdit(){
-
-        authorIdToEdit = 0;
-
-        AuthorBook authorBook = (AuthorBook) resultList.getSelectedValue();
-        if(authorBook != null) {
-            authorIdToEdit = authorBook.getAuthor().getId();
-        }
-
-        return authorIdToEdit;
-    }
-    public JList getResultList(){return resultList;}
 
     public JLabel getCardIdTxt() {
         return cardIdTxt;

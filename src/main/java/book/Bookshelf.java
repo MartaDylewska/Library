@@ -5,7 +5,7 @@ public class Bookshelf {
     private String alley, bookstand;
     private int shelf;
 
-    Bookshelf(String alley, String bookstand, int shelf) {
+    public Bookshelf(String alley, String bookstand, int shelf) {
         this.alley = alley;
         this.bookstand = bookstand;
         this.shelf = shelf;

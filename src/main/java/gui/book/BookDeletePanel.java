@@ -92,7 +92,7 @@ public class BookDeletePanel extends JPanel {
                 int authorId = iAuthor.getAuthorId(firstName, lastName);
                 bookList = iAuthorBook.getBooksOfAuthor(authorId);
             } else {
-                bookList = iAuthorBook.getBySearch(keyWord.getText());
+                bookList = iAuthorBook.getBooksBySearch(keyWord.getText());
             }
 
             if(bookList.size() > 0) {
@@ -107,10 +107,10 @@ public class BookDeletePanel extends JPanel {
             AuthorBook book = (AuthorBook) resultList.getSelectedValue();
 
             if(book== null) {
-                JOptionPane.showMessageDialog(null, "Żadna książka nie została wybrana.");
+                JOptionPane.showMessageDialog(this, "Żadna książka nie została wybrana.");
             } else {
 
-                if (JOptionPane.showConfirmDialog(null, "Czy na pewno usunąć książkę?", "UWAGA!",
+                if (JOptionPane.showConfirmDialog(this, "Czy na pewno usunąć książkę?", "UWAGA!",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     iAuthorBook.removeBook(book.getBook().getTitle());
                     List<AuthorBook> bookList = iAuthorBook.getAllBooks();
@@ -139,28 +139,4 @@ public class BookDeletePanel extends JPanel {
         return returnBtn;
     }
 
-
-    public int getBookIdToEdit() {
-
-        bookIdToEdit = 0;
-
-        AuthorBook authorBook = (AuthorBook) resultList.getSelectedValue();
-        if(authorBook != null){
-            bookIdToEdit = authorBook.getBook().getBookId();
-        }
-
-        return bookIdToEdit;
-    }
-
-    public int getAuthorIdToEdit(){
-
-        authorIdToEdit = 0;
-
-        AuthorBook authorBook = (AuthorBook) resultList.getSelectedValue();
-        if(authorBook != null) {
-            authorIdToEdit = authorBook.getAuthor().getId();
-        }
-
-        return authorIdToEdit;
-    }
 }

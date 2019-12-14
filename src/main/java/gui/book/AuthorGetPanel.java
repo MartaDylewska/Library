@@ -12,9 +12,10 @@ public class AuthorGetPanel extends JPanel {
     private JTextField keyWord, newFirstName, newLastName;
     private JList resultList;
     private JButton search, remove, edit, change, back;
+    private JScrollPane listScroller;
 
     private IAuthor authorService = new AuthorService();
-    private IBook bookService = new BookService();
+    private IAuthorBook authorBookService = new AuthorBookService();
 
     public AuthorGetPanel() {
 
@@ -33,8 +34,9 @@ public class AuthorGetPanel extends JPanel {
         }
         resultList.setModel(listModel);
         resultList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane listScroller = new JScrollPane(resultList);
+        listScroller = new JScrollPane(resultList);
         listScroller.setPreferredSize(new Dimension(250, 80));
+//        add(listScroller);
     }
 
     private void createComps() {
@@ -113,17 +115,15 @@ public class AuthorGetPanel extends JPanel {
             Author author = (Author) resultList.getSelectedValue();
 
             if(author == null) {
-                JOptionPane.showMessageDialog(null, "Żaden autor nie został wybrany.");
+                JOptionPane.showMessageDialog(this, "Żaden autor nie został wybrany.");
             } else {
 
-                if (JOptionPane.showConfirmDialog(null, "Czy na pewno usunąć autora?", "UWAGA!",
+                if (JOptionPane.showConfirmDialog(this, "Czy na pewno usunąć autora?", "UWAGA!",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-//                    bookService.removeBook(author.getFirstName(), author.getLastName());
-                    authorService.removeAuthor(author.getFirstName(), author.getLastName());
-                    List<Author> authorList = authorService.getAuthors();
-                    createBookJList(authorList);
-                    add(resultList);
-                    result.setText(authorService.getMessage());
+                    authorBookService.removeBooksOfAuthor(author.getFirstName(), author.getLastName());
+                    authorService.removeAuthor(author.getAuthorId());
+                    repaint();
+                    revalidate();
                 }
             }
         });
@@ -140,11 +140,10 @@ public class AuthorGetPanel extends JPanel {
                 newLastName.setText(author.getLastName());
                 change.setEnabled(true);
 
-                /*change.addActionListener(e1 ->{
-//                    bookService.editBook(author.getId(), newFirstName.getText(), newLastName.getText());
-                    authorService.editAuthor(author.getId(), newFirstName.getText(), newLastName.getText());
+                change.addActionListener(e1 ->{
+                    authorService.editAuthor(author.getAuthorId(), newFirstName.getText(), newLastName.getText());
                     result.setText(authorService.getMessage());
-                });*/
+                });
             }
 
         });

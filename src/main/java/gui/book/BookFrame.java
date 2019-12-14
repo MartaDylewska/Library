@@ -1,5 +1,8 @@
 package gui.book;
 
+import gui.bookTransfer.BookReservePanel;
+import gui.bookTransfer.BookTransferPanel;
+
 import javax.swing.*;
 
 public class BookFrame extends JFrame {
@@ -8,6 +11,7 @@ public class BookFrame extends JFrame {
     private BookAddPanel bookAddPanel;
     private BookGetPanel bookGetPanel;
     private AuthorGetPanel authorGetPanel;
+    private BookTransferPanel bookTransferPanel;
 
     public BookFrame(){
 
@@ -60,7 +64,7 @@ public class BookFrame extends JFrame {
                         revalidate();
                     });
                 } else {
-                    JOptionPane.showMessageDialog(null, "Żadna książka nie została wybrana.");
+                    JOptionPane.showMessageDialog(this, "Żadna książka nie została wybrana.");
                 }
             });
         });
@@ -75,6 +79,21 @@ public class BookFrame extends JFrame {
             authorGetPanel.getBack().addActionListener(e1 ->{
                 add(bookPanel);
                 remove(authorGetPanel);
+                repaint();
+                revalidate();
+            });
+        });
+
+        bookPanel.getLendBook().addActionListener(e ->{
+            bookTransferPanel = new BookTransferPanel();
+            add(bookTransferPanel);
+            remove(bookPanel);
+            repaint();
+            revalidate();
+
+            bookTransferPanel.getBack().addActionListener(e1 -> {
+                add(bookPanel);
+                remove(bookTransferPanel);
                 repaint();
                 revalidate();
             });

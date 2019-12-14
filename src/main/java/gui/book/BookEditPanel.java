@@ -21,6 +21,7 @@ public class BookEditPanel extends JPanel {
     private IBook bookService = new BookService();
     private IAuthor authorService = new AuthorService();
     private IAuthorBook authorBookService = new AuthorBookService();
+    private IBookshelf bookshelfService = new BookshelfService();
     private int bookIdToEdit, authorIdToEdit;
 
     public BookEditPanel(BookGetPanel bookGetPanel) {
@@ -35,7 +36,6 @@ public class BookEditPanel extends JPanel {
         createComps(book, author);
         addComp();
         action(book, author);
-
     }
 
     private void createComps(Book book, Author author) {
@@ -47,7 +47,6 @@ public class BookEditPanel extends JPanel {
             title.setBorder(BorderFactory.createLineBorder(Color.black));
             title.setLineWrap(true);
             title.setText(book.getTitle());
-
 
             firstNameLabel = new JLabel("Imię autora:");
             firstNameLabel.setBounds(20, 100, 100, 30);
@@ -87,24 +86,27 @@ public class BookEditPanel extends JPanel {
             alleyLabel = new JLabel("Alejka:");
             alleyLabel.setBounds(20, 300, 55, 30);
 
-            alley = new JComboBox(new String[]{"-", "A", "B", "C", "D", "E"});
+            String[] alleys = bookshelfService.getAlleys();
+            alley = new JComboBox(alleys);
             alley.setBounds(75, 300, 55, 30);
             String alleyBook = book.getBookshelf().getAlley();
             alley.setSelectedItem(alleyBook);
 
             bookstandLabel = new JLabel("regał: ");
-            bookstandLabel.setBounds(135, 300, 55, 30);
+            bookstandLabel.setBounds(135,300,55,30);
 
-            bookstand = new JComboBox(new String[]{"-", "a", "b", "c", "d", "e"});
-            bookstand.setBounds(185, 300, 55, 30);
+            String[] bookstands = bookshelfService.getBookstands();
+            bookstand = new JComboBox(bookstands);
+            bookstand.setBounds(185,300,55,30);
             String bookstandBook = book.getBookshelf().getBookstand();
             bookstand.setSelectedItem(bookstandBook);
 
             shelfLabel = new JLabel("półka:");
-            shelfLabel.setBounds(245, 300, 55, 30);
+            shelfLabel.setBounds(245,300,55,30);
 
-            shelf = new JComboBox(new String[]{"-", "1", "2", "3", "4", "5"});
-            shelf.setBounds(295, 300, 55, 30);
+            String[] shelves = bookshelfService.getShelves();
+            shelf = new JComboBox(shelves);
+            shelf.setBounds(295,300,55,30);
             String shelfBook = String.valueOf(book.getBookshelf().getShelf());
             shelf.setSelectedItem(shelfBook);
 
@@ -156,10 +158,9 @@ public class BookEditPanel extends JPanel {
                 if(!(title.getText().equals(book.getTitle())) || !(publisher.getText().equals(book.getPublisher())) || !(genre.getText().equals(book.getGenre())) || !(language.getText().equals(book.getLanguage())))
                     bookService.editBook(bookIdToEdit, title.getText(), publisher.getText(), genre.getText(), language.getText());
 
-                //result.setText(bookService.getMessage());
-                JOptionPane.showMessageDialog(null, "Książka została zaktualizowana");
+                JOptionPane.showMessageDialog(this, "Książka została zaktualizowana");
             } else {
-                JOptionPane.showMessageDialog(null, "Uzupełnij dane.");
+                JOptionPane.showMessageDialog(this, "Uzupełnij dane.");
             }
         });
     }
@@ -172,12 +173,9 @@ public class BookEditPanel extends JPanel {
         boolean publisherCheck = publisher.getText().length() > 0 && publisher.getText().length() < 20;
         boolean genreCheck = genre.getText().length() > 0 && genre.getText().length() < 20;
         boolean languageCheck = language.getText().length() > 0 && language.getText().length() < 20;
-        boolean alleyCheck = alley.getSelectedIndex() != 0;
-        boolean bookstandCheck = bookstand.getSelectedIndex() != 0;
-        boolean shelfCheck = shelf.getSelectedIndex() != 0;
 
         return titleCheck && firstNameCheck && lastNameCheck && publisherCheck &&
-                genreCheck && languageCheck && alleyCheck && bookstandCheck && shelfCheck;
+                genreCheck && languageCheck;
     }
 
     public JButton getReturnBtn() {
