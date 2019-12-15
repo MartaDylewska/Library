@@ -36,7 +36,7 @@ public class AuthorGetPanel extends JPanel {
         resultList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listScroller = new JScrollPane(resultList);
         listScroller.setPreferredSize(new Dimension(250, 80));
-//        add(listScroller);
+
     }
 
     private void createComps() {

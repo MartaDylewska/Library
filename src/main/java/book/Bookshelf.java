@@ -37,6 +37,6 @@ public class Bookshelf {
 
     @Override
     public String toString() {
-        return "lokalizacja: " + alley + ", " + bookstand + ", " + shelf + ".";
+        return "lokalizacja: " + alley + ", " + bookstand + ", " + shelf;
     }
 }

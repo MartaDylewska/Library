@@ -1,16 +1,9 @@
 package gui.lending;
 
-import book.Book;
-import book.BookService;
-import book.IBook;
-import event.EventDBServiceImpl;
-import event.IEventDBService;
+import bookTransfer.BookTransfer;
+import bookTransfer.BookTransferService;
+import bookTransfer.IBookTransfer;
 import gui.reader.ReaderEntryPanel;
-import images.IPosterDBService;
-import images.PosterDBServiceImpl;
-import lending.ILendingDBService;
-import lending.Lending;
-import lending.LendingDBServiceImpl;
 import reader.IReaderDBService;
 import reader.Reader;
 import reader.ReaderDBServiceImpl;
@@ -19,23 +12,20 @@ import user.User;
 import user.UserDBServiceImpl;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 public class LendingShowPanel extends JPanel {
-    private JComboBox lendingChooserBx;
-    private JButton viewLendingsBtn,  returnBtn;
-    private JLabel titleLbl, dateCreationLbl, dateDueLbl;
-    private JTextField titleTxt, dateCreationTxt, dateDueTxt;
-    private JLabel cardIdTxt;
-    int fieldLength = 200;
-    int deltaY = 20;
-    Lending selectedLending = null;
-    ReaderEntryPanel readerEntryPanel;
+
+    private ReaderEntryPanel readerEntryPanel;
 
     private IReaderDBService readerDBService = new ReaderDBServiceImpl();
     private IUserDBService userDBService = new UserDBServiceImpl();
-    private ILendingDBService lendingDBService = new LendingDBServiceImpl();
-    private IBook bookDBService = new BookService();
+    private IBookTransfer bookTransfer = new BookTransferService();
+
+    private JLabel lentBooksLabel, reservedBooksLabel, cardIdTxt;
+    private JButton resignBook, returnBtn;
+    private JList<BookTransfer> lentBooks, reservedBooks;
 
     public LendingShowPanel(ReaderEntryPanel readerEntryPanel) {
 
@@ -44,149 +34,105 @@ public class LendingShowPanel extends JPanel {
         createCardIdTxt();
         add(cardIdTxt);
         cardIdTxt.setText(readerEntryPanel.getCardNrLbl().getText());
-        createItems();
-        addItems();
         cardIdTxt.setVisible(false);
-        setCompVisibility(false);
-        setComponentsEditability(false);
-        addActionViewLendingBtn();
+
+        User user = userDBService.readUserFromDB(Integer.parseInt(cardIdTxt.getText()));
+        Reader reader = readerDBService.readReaderFromDB(user.getIdUser());
+        int readerId = reader.getIdReader();
+
+        List<BookTransfer> reservedUserBooks = bookTransfer.getReservedUserBooks(readerId);
+        List<BookTransfer> lentUserBooks = bookTransfer.getLentUserBooks(readerId);
+
+        createComps();
+
+        createLentBooks(lentUserBooks);
+        createReservedBooks(reservedUserBooks);
+
+        addItems();
+        action();
+
+    }
+
+    private void createReservedBooks(List<BookTransfer> bookList){
+
+        DefaultListModel<BookTransfer> listModel = new DefaultListModel<>();
+        for (BookTransfer aBookList : bookList) {
+            listModel.addElement(aBookList);
+        }
+        reservedBooks.setModel(listModel);
+        JScrollPane listScroller = new JScrollPane(reservedBooks);
+        listScroller.setPreferredSize(new Dimension(250, 80));
+    }
+
+    private void createLentBooks(List<BookTransfer> bookList) {
+
+        DefaultListModel<BookTransfer> listModel = new DefaultListModel<>();
+        for (BookTransfer aBookList : bookList) {
+            listModel.addElement(aBookList);
+        }
+        lentBooks.setModel(listModel);
+        JScrollPane listScroller = new JScrollPane(lentBooks);
+        listScroller.setPreferredSize(new Dimension(250, 80));
     }
 
     private void addItems() {
-        //add(cardIdTxt);
-        //System.out.println(cardIdTxt.getText());
-        add(lendingChooserBx);
-        add(dateCreationLbl);
-        add(dateCreationTxt);
-        add(dateDueLbl);
 
-        add(titleLbl);
-        add(titleTxt);
-        add(viewLendingsBtn);
+        add(reservedBooksLabel);
+        add(resignBook);
+        add(reservedBooks);
+        add(lentBooksLabel);
+        add(lentBooks);
         add(returnBtn);
-        add(dateDueTxt);
 
     }
 
-    private void createItems() {
-        //createCardIdTxt();
-        createEventChooserBx();
-        createDateCreationLbl();
-        createDateCreationTxt();
-        createDateDueLbl();
-        createDateDueTxt();
-        createTitleLbl();
-        createTitleTxt();
-        createViewEventBtn();
-        createReturnBtn();
+    private void createComps(){
+
+        reservedBooksLabel = new JLabel("zarezerowane książki:");
+        reservedBooksLabel.setBounds(20,70,200,30);
+
+        resignBook = new JButton("rezygnuj");
+        resignBook.setBounds(400,70,200,30);
+
+        reservedBooks = new JList<>();
+        reservedBooks.setBounds(20,110,580,100);
+        reservedBooks.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        lentBooksLabel = new JLabel("wypożyczone książki:");
+        lentBooksLabel.setBounds(20,230,200,30);
+
+        lentBooks = new JList<>();
+        lentBooks.setBounds(20,270,580,100);
+        lentBooks.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        returnBtn = new JButton("cofnij");
+        returnBtn.setBounds(400,390,200,30);
+
+        cardIdTxt = new JLabel();
+        cardIdTxt.setBounds(30,30, 30,20);
+        cardIdTxt.setVisible(false);
 
     }
 
+    private void action() {
 
-    private void addActionViewLendingBtn() {
-        viewLendingsBtn.addActionListener(e -> {
-            List<Lending> lendingList = lendingDBService.showLendingsForUser(Integer.parseInt(cardIdTxt.getText()));
+        resignBook.addActionListener(e ->{
 
+            List<BookTransfer> book = reservedBooks.getSelectedValuesList();
 
-            if (lendingChooserBx.getSelectedIndex() != 0) {
-                setCompVisibility(true);
-                Book book = null;
-                for (Lending lending : lendingList) {
-                    if (((lending.getIdLending() + " " + lending.getDateCreation().toString()).equals(lendingChooserBx.getSelectedItem()))) {
-                        selectedLending = lending;
-                        book =  bookDBService.getBook(lending.getBook_id());
-
-                    }
-                }
-                titleTxt.setText(book.getTitle());
-                dateCreationTxt.setText(selectedLending.getDateCreation().toString());
-                dateDueTxt.setText(selectedLending.getDateDue().toString());
-
-
-            } else {
-                JOptionPane.showMessageDialog(this, "Proszę wybrać wypożyczenie");
+            for (BookTransfer aBook : book) {
+                bookTransfer.unReserveBook(aBook.getAuthorBook().getBook().getBookId());
+                JOptionPane.showMessageDialog(this, "Zrezygnowano z książki.");
             }
+
+            if(book.size() == 0)
+                JOptionPane.showMessageDialog(this, "Żadna książka nie została wybrana.");
         });
     }
 
     private void createCardIdTxt(){
         cardIdTxt = new JLabel();
         cardIdTxt.setBounds(30,30, 30,20);
-    }
-
-
-    private void createViewEventBtn() {
-        viewLendingsBtn = new JButton();
-        viewLendingsBtn.setText("Podgląd");
-        viewLendingsBtn.setBounds(450, 10, 200, 50);
-    }
-
-    private void createReturnBtn() {
-        returnBtn = new JButton();
-        returnBtn.setText("Powrót");
-        returnBtn.setBounds(450, 300, 200, 50);
-    }
-
-    private void createEventChooserBx() {
-        lendingChooserBx = new JComboBox();
-        //int idEvent = selectedEvent.getIdEvent();
-        //User user = userDBService.readUserFromDB(Integer.parseInt(cardIdTxt.getText()));
-       // Reader reader = readerDBService.readReaderFromDB(user.getIdUser());
-        //List<Lending> lendingList = lendingDBService.showLendingsForUser(Integer.parseInt(cardIdTxt.getText()));
-        lendingChooserBx.addItem("---wybierz---");
-        /*for (Lending l : lendingList) {
-            lendingChooserBx.addItem(l.getIdLending() + " " + l.getDateCreation().toString());
-        }*/
-        lendingChooserBx.setBounds(30, 10, 300, 50);
-    }
-
-    private void createDateDueLbl() {
-        dateDueLbl = new JLabel();
-        dateDueLbl.setText("Data zwrotu");
-        dateDueLbl.setBounds(20, 140 + deltaY, 100, 30);
-    }
-
-    private void createDateDueTxt(){
-        dateDueTxt = new JTextField();
-        dateDueTxt.setBounds(150, 140+deltaY,100,30);
-    }
-
-
-    private void createDateCreationLbl() {
-        dateCreationLbl = new JLabel();
-        dateCreationLbl.setText("Data wypożyczenia");
-        dateCreationLbl.setBounds(20, 100 + deltaY, 100, 30);
-    }
-
-    private void createDateCreationTxt() {
-        dateCreationTxt = new JTextField();
-        dateCreationTxt.setBounds(150, 100 + deltaY, fieldLength, 30);
-    }
-
-    private void createTitleLbl() {
-        titleLbl = new JLabel();
-        titleLbl.setText("Tytuł");
-        titleLbl.setBounds(20, 60 + deltaY, 100, 30);
-    }
-
-    private void createTitleTxt() {
-        titleTxt = new JTextField();
-        titleTxt.setBounds(150, 60 + deltaY, fieldLength+150, 30);
-    }
-
-    private void setCompVisibility(boolean visibility) {
-        titleLbl.setVisible(visibility);
-        dateCreationLbl.setVisible(visibility);
-        dateDueLbl.setVisible(visibility);
-        titleTxt.setVisible(visibility);
-        dateCreationTxt.setVisible(visibility);
-        dateDueTxt.setVisible(visibility);
-    }
-
-    private void setComponentsEditability(boolean editability) {
-        titleTxt.setEditable(editability);
-        dateCreationTxt.setEditable(editability);
-        dateDueTxt.setEditable(editability);
     }
 
     public JLabel getCardIdTxt() {

@@ -1,31 +1,26 @@
 package gui.bookTransfer;
 
 import book.*;
-import bookTransfer.BookTransfer;
 import bookTransfer.BookTransferService;
 import bookTransfer.IBookTransfer;
 import reader.IReaderDBService;
 import reader.Reader;
 import reader.ReaderDBServiceImpl;
-import reservation.IReservationDBService;
-import reservation.Reservation;
-import reservation.ReservationDBServiceImpl;
 import user.IUserDBService;
 import user.User;
 import user.UserDBServiceImpl;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BookReservePanel extends JPanel {
 
     private JLabel searchByLabel, keyWordLabel, resultListLabel, result;
-    private JComboBox searchBy;
+    private JComboBox<String> searchBy;
     private JTextField keyWord;
-    private JList resultList;
+    private JList<AuthorBook> resultList;
     private JButton search, remove, reserveBtn, returnBtn;
 
     private IAuthor iAuthor = new AuthorService();
@@ -34,7 +29,6 @@ public class BookReservePanel extends JPanel {
     private JLabel cardIdTxt;
     private IUserDBService userDBService = new UserDBServiceImpl();
     private IReaderDBService readerDBService = new ReaderDBServiceImpl();
-    private IReservationDBService reservationDBService = new ReservationDBServiceImpl();
 
     public BookReservePanel() {
 
@@ -49,7 +43,7 @@ public class BookReservePanel extends JPanel {
 
     private void createBookJList(List<AuthorBook> bookList){
 
-        DefaultListModel listModel = new DefaultListModel();
+        DefaultListModel<AuthorBook> listModel = new DefaultListModel<>();
         for (AuthorBook aBookList : bookList) {
             listModel.addElement(aBookList);
         }
@@ -63,7 +57,7 @@ public class BookReservePanel extends JPanel {
         searchByLabel = new JLabel("Wyszukaj po:");
         searchByLabel.setBounds(20,20,100,30);
 
-        searchBy = new JComboBox(new String[]{"tytule", "autorze (imię, nazwisko)", "wydawcy", "gatunku", "języku"});
+        searchBy = new JComboBox<>(new String[]{"tytule", "autorze (imię, nazwisko)", "wydawcy", "gatunku", "języku"});
         searchBy.setBounds(150,20,200,30);
 
         keyWordLabel = new JLabel("Słowo kluczowe:");
@@ -75,7 +69,7 @@ public class BookReservePanel extends JPanel {
         resultListLabel = new JLabel("Wyniki wyszukiwania:");
         resultListLabel.setBounds(20,100,200,30);
 
-        resultList = new JList();
+        resultList = new JList<>();
         resultList.setBounds(20,140,580,320);
         resultList.setBorder(BorderFactory.createLineBorder(Color.black));
 
@@ -109,21 +103,21 @@ public class BookReservePanel extends JPanel {
             List<AuthorBook> bookList = new ArrayList<>();
 
             if(keyWord.getText().length() == 0){
-                bookList = iAuthorBook.getAllBooks();
+                bookList = iAuthorBook.getAllBooks(2);
             } else if(searchBy.getSelectedIndex() == 1){
-                if(keyWord.getText().contains(",")) {
+                if(keyWord.getText().contains(", ")) {
                     int coma = keyWord.getText().indexOf(",");
                     String firstName = keyWord.getText().substring(0, coma);
                     String lastName = keyWord.getText().substring(coma + 2);
                     int authorId = iAuthor.getAuthorId(firstName, lastName);
-                    bookList = iAuthorBook.getBooksOfAuthor(authorId);
+                    bookList = iAuthorBook.getBooksOfAuthor(authorId, 2);
                 } else {
-                    JOptionPane.showMessageDialog(this, "Nieprawidlowy format");
+                    JOptionPane.showMessageDialog(this, "Nieprawidlowy format.");
                 }
             } else if(searchBy.getSelectedIndex() == 0) {
-                bookList = iAuthorBook.getBooksByTitle(keyWord.getText());
+                bookList = iAuthorBook.getBooksByTitle(keyWord.getText(), 2);
             } else {
-                bookList = iAuthorBook.getBooksBySearch(keyWord.getText());
+                bookList = iAuthorBook.getBooksBySearch(keyWord.getText(), 2);
             }
 
             if(bookList.size() > 0) {

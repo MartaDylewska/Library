@@ -84,15 +84,15 @@ public class BookDeletePanel extends JPanel {
             List<AuthorBook> bookList;
 
             if(keyWord.getText().length() == 0){
-                bookList = iAuthorBook.getAllBooks();
+                bookList = iAuthorBook.getAllBooks(1);
             } else if(searchBy.getSelectedIndex() == 1){
                 int coma = keyWord.getText().indexOf(",");
                 String firstName = keyWord.getText().substring(0, coma);
                 String lastName = keyWord.getText().substring(coma + 2);
                 int authorId = iAuthor.getAuthorId(firstName, lastName);
-                bookList = iAuthorBook.getBooksOfAuthor(authorId);
+                bookList = iAuthorBook.getBooksOfAuthor(authorId, 2);
             } else {
-                bookList = iAuthorBook.getBooksBySearch(keyWord.getText());
+                bookList = iAuthorBook.getBooksBySearch(keyWord.getText(), 2);
             }
 
             if(bookList.size() > 0) {
@@ -113,7 +113,7 @@ public class BookDeletePanel extends JPanel {
                 if (JOptionPane.showConfirmDialog(this, "Czy na pewno usunąć książkę?", "UWAGA!",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     iAuthorBook.removeBook(book.getBook().getTitle());
-                    List<AuthorBook> bookList = iAuthorBook.getAllBooks();
+                    List<AuthorBook> bookList = iAuthorBook.getAllBooks(1);
                     createBookJList(bookList);
                     add(resultList);
                 }

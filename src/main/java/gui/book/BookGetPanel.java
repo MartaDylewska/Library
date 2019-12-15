@@ -10,10 +10,11 @@ import book.*;
 public class BookGetPanel extends JPanel {
 
     private JLabel searchByLabel, keyWordLabel, resultListLabel, result;
-    private JComboBox searchBy;
+    private JComboBox<String> searchBy;
     private JTextField keyWord;
-    private JList resultList;
-    private JButton search, remove, edit, location, returnBtn;
+    private JList<AuthorBook> resultList;
+    private JButton search, remove, edit, location, unavailable, returnBtn;
+    private JScrollPane scrollpane;
 
     private IBook iBook = new BookService();
     private IAuthor iAuthor = new AuthorService();
@@ -27,18 +28,25 @@ public class BookGetPanel extends JPanel {
         createComps();
         addComps();
         actions();
+
     }
 
     private void createBookJList(List<AuthorBook> bookList){
 
-        DefaultListModel listModel = new DefaultListModel();
+        DefaultListModel<AuthorBook> listModel = new DefaultListModel<>();
         for (AuthorBook aBookList : bookList) {
             listModel.addElement(aBookList);
         }
         resultList.setModel(listModel);
-        resultList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane listScroller = new JScrollPane(resultList);
-        listScroller.setPreferredSize(new Dimension(250, 80));
+
+    }
+
+    private void createScroll(){
+
+        scrollpane = new JScrollPane(resultList);
+        scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollpane.setMinimumSize(new Dimension(100,50));
+        add(scrollpane);
     }
 
     private void createComps() {
@@ -46,7 +54,7 @@ public class BookGetPanel extends JPanel {
         searchByLabel = new JLabel("Wyszukaj po:");
         searchByLabel.setBounds(20,20,100,30);
 
-        searchBy = new JComboBox(new String[]{"tytule", "autorze (imię, nazwisko)", "wydawcy", "gatunku", "języku"});
+        searchBy = new JComboBox<>(new String[]{"tytule", "autorze (imię, nazwisko)", "wydawcy", "gatunku", "języku"});
         searchBy.setBounds(150,20,200,30);
 
         keyWordLabel = new JLabel("Słowo kluczowe:");
@@ -58,7 +66,7 @@ public class BookGetPanel extends JPanel {
         resultListLabel = new JLabel("Wyniki wyszukiwania:");
         resultListLabel.setBounds(20,100,200,30);
 
-        resultList = new JList();
+        resultList = new JList<>();
         resultList.setBounds(20,140,580,320);
         resultList.setBorder(BorderFactory.createLineBorder(Color.black));
 
@@ -69,16 +77,19 @@ public class BookGetPanel extends JPanel {
         result.setOpaque(true);
 
         search = new JButton("szukaj");
-        search.setBounds(400,20,100,50);
+        search.setBounds(400,20,200,30);
 
         remove = new JButton("usuń");
-        remove.setBounds(400,70,100,50);
+        remove.setBounds(170,470,150,30);
 
         edit = new JButton("edytuj");
-        edit.setBounds(500,70,100,50);
+        edit.setBounds(20,470,150,30);
 
-        location = new JButton("na półkę");
-        location.setBounds(500, 20,100,50);
+        location = new JButton("pokaż bez lokalizacji");
+        location.setBounds(400, 60,200,30);
+
+        unavailable = new JButton("pokaż niedostępne");
+        unavailable.setBounds(400, 100, 200,30);
 
         returnBtn = new JButton("cofnij");
         returnBtn.setBounds(400,470,200,30);
@@ -90,21 +101,21 @@ public class BookGetPanel extends JPanel {
             List<AuthorBook> bookList = new ArrayList<>();
 
             if(keyWord.getText().length() == 0){
-                bookList = iAuthorBook.getAllBooks();
+                bookList = iAuthorBook.getAllBooks(1);
             } else if(searchBy.getSelectedIndex() == 1){
                 if(keyWord.getText().contains(",")) {
                     int coma = keyWord.getText().indexOf(",");
                     String firstName = keyWord.getText().substring(0, coma);
                     String lastName = keyWord.getText().substring(coma + 2);
                     int authorId = iAuthor.getAuthorId(firstName, lastName);
-                    bookList = iAuthorBook.getBooksOfAuthor(authorId);
+                    bookList = iAuthorBook.getBooksOfAuthor(authorId, 1);
                 } else {
                     JOptionPane.showMessageDialog(this, "Nieprawidlowy format");
                 }
             } else if(searchBy.getSelectedIndex() == 0) {
-                bookList = iAuthorBook.getBooksByTitle(keyWord.getText());
+                bookList = iAuthorBook.getBooksByTitle(keyWord.getText(), 1);
             } else {
-                bookList = iAuthorBook.getBooksBySearch(keyWord.getText());
+                bookList = iAuthorBook.getBooksBySearch(keyWord.getText(), 1);
             }
 
             if(bookList.size() > 0) {
@@ -114,10 +125,11 @@ public class BookGetPanel extends JPanel {
                 remove(resultList);
                 result.setText("Nie ma takich książek.");
             }
+
         });
 
         remove.addActionListener(e ->{
-            AuthorBook book = (AuthorBook) resultList.getSelectedValue();
+            AuthorBook book = resultList.getSelectedValue();
 
             if(book== null) {
                 JOptionPane.showMessageDialog(this, "Żadna książka nie została wybrana.");
@@ -144,6 +156,17 @@ public class BookGetPanel extends JPanel {
                 result.setText("Nie ma takich książek.");
             }
         });
+
+        unavailable.addActionListener(e ->{
+            List<AuthorBook> bookList = iAuthorBook.getAllBooks(3);
+
+            if(bookList.size() > 0) {
+                createBookJList(bookList);
+                add(resultList);
+            } else {
+                result.setText("Nie ma takich książek.");
+            }
+        });
     }
 
     private void addComps(){
@@ -158,7 +181,9 @@ public class BookGetPanel extends JPanel {
         add(remove);
         add(edit);
         add(location);
+        add(unavailable);
         add(returnBtn);
+//        add(scrollpane);
     }
 
     public JButton getReturnBtn() {
@@ -173,7 +198,7 @@ public class BookGetPanel extends JPanel {
 
         bookIdToEdit = 0;
 
-        AuthorBook authorBook = (AuthorBook) resultList.getSelectedValue();
+        AuthorBook authorBook = resultList.getSelectedValue();
         if(authorBook != null){
             bookIdToEdit = authorBook.getBook().getBookId();
         }
@@ -185,12 +210,12 @@ public class BookGetPanel extends JPanel {
 
         authorIdToEdit = 0;
 
-        AuthorBook authorBook = (AuthorBook) resultList.getSelectedValue();
+        AuthorBook authorBook = resultList.getSelectedValue();
         if(authorBook != null) {
             authorIdToEdit = authorBook.getAuthor().getAuthorId();
         }
 
         return authorIdToEdit;
     }
-    public JList getResultList(){return resultList;}
+    public JList<AuthorBook> getResultList(){return resultList;}
 }

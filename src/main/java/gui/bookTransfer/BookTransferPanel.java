@@ -1,9 +1,14 @@
 package gui.bookTransfer;
 
-import book.*;
 import bookTransfer.BookTransfer;
 import bookTransfer.BookTransferService;
 import bookTransfer.IBookTransfer;
+import reader.IReaderDBService;
+import reader.Reader;
+import reader.ReaderDBServiceImpl;
+import user.IUserDBService;
+import user.User;
+import user.UserDBServiceImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +24,11 @@ public class BookTransferPanel extends JPanel {
     private JTextField userId;
     private JButton showBooks, lendBook, returnBooks, back;
     private JList<BookTransfer> lentBooks, reservedBooks;
+
+    private IReaderDBService readerDBService = new ReaderDBServiceImpl();
+    private IUserDBService userDBService = new UserDBServiceImpl();
+
+    private int readerId;
 
     public BookTransferPanel(){
 
@@ -36,8 +46,6 @@ public class BookTransferPanel extends JPanel {
             listModel.addElement(aBookList);
         }
         reservedBooks.setModel(listModel);
-        JScrollPane listScroller = new JScrollPane(reservedBooks);
-        listScroller.setPreferredSize(new Dimension(250, 80));
     }
 
     private void createLentBooks(List<BookTransfer> usersLentBooks) {
@@ -47,8 +55,6 @@ public class BookTransferPanel extends JPanel {
             listModel.addElement(aBookList);
         }
         lentBooks.setModel(listModel);
-        JScrollPane listScroller = new JScrollPane(lentBooks);
-        listScroller.setPreferredSize(new Dimension(250, 80));
     }
 
     private void createComps(){
@@ -102,8 +108,13 @@ public class BookTransferPanel extends JPanel {
 
         showBooks.addActionListener(e -> {
             if(check()) {
-                List<BookTransfer> reservedUserBooks = bookTransfer.getReservedUserBooks(Integer.parseInt(userId.getText()));
-                List<BookTransfer> lentUserBooks = bookTransfer.getLentUserBooks(Integer.parseInt(userId.getText()));
+
+                User user = userDBService.readUserFromDB(Integer.parseInt(userId.getText()));
+                Reader reader = readerDBService.readReaderFromDB(user.getIdUser());
+                readerId = reader.getIdReader();
+
+                List<BookTransfer> reservedUserBooks = bookTransfer.getReservedUserBooks(readerId);
+                List<BookTransfer> lentUserBooks = bookTransfer.getLentUserBooks(readerId);
 
                 if (reservedUserBooks.size() > 0) {
                     createReservedBooks(reservedUserBooks);

@@ -31,7 +31,7 @@ public class AuthorBookService implements IAuthorBook{
 
             preparedStatement.executeUpdate();
             message = "Dodano książkę z autorem do bazy.";
-            System.out.println(message);
+
         } catch (SQLException e) {
             System.err.println("Error during invoke SQL query: \n" + e.getMessage());
             throw  new RuntimeException("Error during invoke SQL query");
@@ -54,6 +54,7 @@ public class AuthorBookService implements IAuthorBook{
             preparedStatement = connection.prepareStatement(SQL);
             preparedStatement.setInt(1, authorId);
             preparedStatement.executeUpdate();
+
             message = "Książki " + firstName + " " + lastName + " zostały usunięte z bazy.";
         } catch (SQLException e) {
             System.err.println("Error during invoke SQL query: \n" + e.getMessage());
@@ -89,25 +90,52 @@ public class AuthorBookService implements IAuthorBook{
         }
     }
 
+    @Override
+    public void editAuthorBook(int id, String firstName, String lastName) {
+
+        SQL = "update author_book set author_id = (select author_id " +
+                "from author where first_name = ? and last_name = ?) " +
+                "where book_id = ?;";
+
+        Connection connection = initializeDataBaseConnection();
+        PreparedStatement preparedStatement = null;
+
+        try  {
+            preparedStatement = connection.prepareStatement(SQL);
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setInt(3,id);
+
+            preparedStatement.executeUpdate();
+            message = "Dodano książkę z autorem do bazy.";
+
+        } catch (SQLException e) {
+            System.err.println("Error during invoke SQL query: \n" + e.getMessage());
+            throw  new RuntimeException("Error during invoke SQL query");
+        }
+        finally {
+            closeDBResources(connection,preparedStatement);
+        }
+    }
 
     @Override
-    public List<AuthorBook> getAllBooks(/*int option*/) {
+    public List<AuthorBook> getAllBooks(int option) {
 
         List<AuthorBook> allBooks = new ArrayList<>();
         Connection connection = initializeDataBaseConnection();
         PreparedStatement preparedStatement = null;
 
-//        if(option == 1) {
-            SQL = "select * from author_book inner join book on author_book.book_id = book.book_id " +
+        SQL = "select * from author_book inner join book on author_book.book_id = book.book_id " +
                     "inner join author on author.author_id = author_book.author_id " +
-                    "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id " +
-                    "order by title;";
-//        } else {
-//            SQL = "select * from author_book inner join book on author_book.book_id = book.book_id " +
-//                    "inner join author on author.author_id = author_book.author_id " +
-//                    "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id " +
-//                    "order by title;";
-//        }
+                    "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id ";
+
+        if(option == 1){
+            SQL = SQL + "order by title;";
+        } else if(option == 2){
+            SQL = SQL + "where available = true order by title;";
+        } else {
+            SQL = SQL + "where available = false order by title;";
+        }
 
         try  {
             preparedStatement = connection.prepareStatement(SQL);
@@ -144,14 +172,19 @@ public class AuthorBookService implements IAuthorBook{
     }
 
     @Override
-    public List<AuthorBook> getBooksOfAuthor(int authorId) {
+    public List<AuthorBook> getBooksOfAuthor(int authorId, int option) {
 
         List<AuthorBook> booksOfAuthor = new ArrayList<>();
 
         SQL ="select * from author_book inner join book on author_book.book_id = book.book_id " +
                 "inner join author on author.author_id = author_book.author_id " +
-                "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id where author_book.author_id = ?" +
-                " order by title;";
+                "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id where author_book.author_id = ?";
+
+        if(option == 1){
+            SQL = SQL + "order by title;";
+        } else {
+            SQL = SQL + "and available = true order by title;";
+        }
 
         Connection connection = initializeDataBaseConnection();
         PreparedStatement preparedStatement;
@@ -192,7 +225,7 @@ public class AuthorBookService implements IAuthorBook{
     }
 
     @Override
-    public List<AuthorBook> getBooksBySearch(String search) {
+    public List<AuthorBook> getBooksBySearch(String search, int option) {
 
         List<AuthorBook> booksOfSearch = new ArrayList<>();
         Connection connection = initializeDataBaseConnection();
@@ -201,7 +234,13 @@ public class AuthorBookService implements IAuthorBook{
         SQL = "select * from author_book inner join book on author_book.book_id = book.book_id " +
                 "inner join author on author.author_id = author_book.author_id " +
                 "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id " +
-                "where publisher LIKE ? or lang LIKE ? or genre LIKE ? order by title;";
+                "where publisher LIKE ? or lang LIKE ? or genre LIKE ? ";
+
+        if(option == 1){
+            SQL = SQL + "order by title;";
+        } else {
+            SQL = SQL + "and available = true order by title;";
+        }
 
         try  {
             preparedStatement = connection.prepareStatement(SQL);
@@ -240,7 +279,7 @@ public class AuthorBookService implements IAuthorBook{
     }
 
     @Override
-    public List<AuthorBook> getBooksByTitle(String title) {
+    public List<AuthorBook> getBooksByTitle(String title, int option) {
 
         List<AuthorBook> booksOfSearch = new ArrayList<>();
         Connection connection = initializeDataBaseConnection();
@@ -249,7 +288,13 @@ public class AuthorBookService implements IAuthorBook{
         SQL = "select * from author_book inner join book on author_book.book_id = book.book_id " +
                 "inner join author on author.author_id = author_book.author_id " +
                 "inner join bookshelves on bookshelves.bookshelf_id = book.bookshelf_id " +
-                "where title like ? order by last_name;";
+                "where title like ? ";
+
+        if(option == 1){
+            SQL = SQL + "order by title;";
+        } else {
+            SQL = SQL + "and available = true order by title;";
+        }
 
         try  {
             preparedStatement = connection.prepareStatement(SQL);
