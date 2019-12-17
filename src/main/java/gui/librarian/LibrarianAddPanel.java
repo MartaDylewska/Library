@@ -6,6 +6,7 @@ import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
+import gui.general.MyButton;
 import librarian.ILibrarianDBService;
 import librarian.Librarian;
 import librarian.LibrarianDBServiceImpl;
@@ -24,7 +25,7 @@ public class LibrarianAddPanel extends JPanel {
     private JTextField firstNameTxt, lastNameTxt, emailTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
     private JTextField salaryTxt, dateEmploymentTxt;
     private JPasswordField passField;
-    private JButton addLibrarianBtn, returnBtn;
+    private MyButton addLibrarianBtn, returnBtn;
     private int fieldLength = 200;
 
     private IUserDBService userDBService = new UserDBServiceImpl();
@@ -109,15 +110,15 @@ public class LibrarianAddPanel extends JPanel {
     }
 
     private void createReturnBtn() {
-        returnBtn = new JButton();
+        returnBtn = new MyButton(false);
         returnBtn.setText("Powrót");
-        returnBtn.setBounds(400, 300, 200, 50);
+        returnBtn.setBounds(400, 300, 200, 30);
     }
 
     private void createAddBtn() {
-        addLibrarianBtn = new JButton();
+        addLibrarianBtn = new MyButton(true);
         addLibrarianBtn.setText("Wprowadź dane");
-        addLibrarianBtn.setBounds(400, 150, 200, 50);
+        addLibrarianBtn.setBounds(400, 150, 200, 30);
     }
 
     private void addAllLabels() {
@@ -312,7 +313,7 @@ public class LibrarianAddPanel extends JPanel {
         dateEmploymentTxt.setEditable(editability);
     }
 
-    public JButton getReturnBtn() {
+    public MyButton getReturnBtn() {
         return returnBtn;
     }
 }

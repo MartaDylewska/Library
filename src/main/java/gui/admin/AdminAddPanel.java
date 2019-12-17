@@ -9,6 +9,7 @@ import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
+import gui.general.MyButton;
 import librarian.ILibrarianDBService;
 import librarian.LibrarianDBServiceImpl;
 import user.IUserDBService;
@@ -26,7 +27,7 @@ public class AdminAddPanel extends JPanel {
     private JTextField salaryTxt;
     private JCheckBox isFullTimeChbx;
     private JPasswordField passField;
-    private JButton addAdminBtn, returnBtn;
+    private MyButton addAdminBtn, returnBtn;
     private int fieldLength = 200;
 
     private IUserDBService userDBService = new UserDBServiceImpl();
@@ -108,15 +109,15 @@ public class AdminAddPanel extends JPanel {
     }
 
     private void createReturnBtn() {
-        returnBtn = new JButton();
+        returnBtn = new MyButton(false);
         returnBtn.setText("Powrót");
-        returnBtn.setBounds(400, 300, 200, 50);
+        returnBtn.setBounds(400, 300, 200, 30);
     }
 
     private void createAddBtn() {
-        addAdminBtn = new JButton();
+        addAdminBtn = new MyButton(true);
         addAdminBtn.setText("Wprowadź dane");
-        addAdminBtn.setBounds(400, 150, 200, 50);
+        addAdminBtn.setBounds(400, 150, 200, 30);
     }
 
     private void addAllLabels() {
@@ -311,7 +312,7 @@ public class AdminAddPanel extends JPanel {
         isFullTimeChbx.setEnabled(editability);
     }
 
-    public JButton getReturnBtn() {
+    public MyButton getReturnBtn() {
         return returnBtn;
     }
 }

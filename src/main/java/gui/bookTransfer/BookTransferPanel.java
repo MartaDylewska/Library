@@ -3,6 +3,7 @@ package gui.bookTransfer;
 import bookTransfer.BookTransfer;
 import bookTransfer.BookTransferService;
 import bookTransfer.IBookTransfer;
+import gui.general.MyButton;
 import reader.IReaderDBService;
 import reader.Reader;
 import reader.ReaderDBServiceImpl;
@@ -22,7 +23,7 @@ public class BookTransferPanel extends JPanel {
 
     private JLabel userIdLabel, lentBooksLabel, reservedBooksLabel, lendBookLabel, returnBookLabel;
     private JTextField userId;
-    private JButton showBooks, lendBook, returnBooks, back;
+    private MyButton showBooks, lendBook, returnBooks, back;
     private JList<BookTransfer> lentBooks, reservedBooks;
 
     private IReaderDBService readerDBService = new ReaderDBServiceImpl();
@@ -59,49 +60,55 @@ public class BookTransferPanel extends JPanel {
 
     private void createComps(){
 
-        userIdLabel = new JLabel("numer karty:");
-        userIdLabel.setBounds(20,20,100,30);
+        userIdLabel = new JLabel("Numer karty:");
+        userIdLabel.setBounds(50,40,100,30);
 
         userId = new JTextField();
-        userId.setBounds(150,20,200, 30);
+        userId.setBounds(200,40,200, 30);
 
-        showBooks = new JButton("pokaż");
-        showBooks.setBounds(400,20,200,30);
+        showBooks = new MyButton(true);
+        showBooks.setText("Pokaż");
+        showBooks.setBounds(450,40,200,30);
 
-        lendBookLabel = new JLabel("zarezerowane książki:");
-        lendBookLabel.setBounds(20,70,200,30);
+        lendBookLabel = new JLabel("Zarezerowane książki:");
+        lendBookLabel.setBounds(50,100,200,30);
 
         reservedBooksLabel = new JLabel();
-        reservedBooksLabel.setBounds(20,110,580,100);
+        reservedBooksLabel.setBounds(50,140,600,100);
         reservedBooksLabel.setBorder(BorderFactory.createLineBorder(Color.black));
         reservedBooksLabel.setBackground(Color.white);
         reservedBooksLabel.setOpaque(true);
+        reservedBooksLabel.setVerticalAlignment(1);
 
-        lendBook = new JButton("wypożycz");
-        lendBook.setBounds(400,70,200,30);
+        reservedBooks = new JList<>();
+        reservedBooks.setBounds(50,140,600,100);
+        reservedBooks.setBorder(BorderFactory.createLineBorder(Color.black));
 
-        returnBookLabel = new JLabel("wypożyczone książki:");
-        returnBookLabel.setBounds(20,230,200,30);
+        lendBook = new MyButton(true);
+        lendBook.setText("Wypożycz");
+        lendBook.setBounds(450,100,200,30);
+
+        returnBookLabel = new JLabel("Wypożyczone książki:");
+        returnBookLabel.setBounds(50,270,200,30);
 
         lentBooksLabel = new JLabel();
-        lentBooksLabel.setBounds(20,270,580,100);
+        lentBooksLabel.setBounds(50,310,600,100);
         lentBooksLabel.setBorder(BorderFactory.createLineBorder(Color.black));
         lentBooksLabel.setBackground(Color.white);
         lentBooksLabel.setOpaque(true);
-
-        returnBooks = new JButton("przyjmij zwrot");
-        returnBooks.setBounds(400, 230, 200,30);
-
-        back = new JButton("cofnij");
-        back.setBounds(400,390,200,30);
-
-        reservedBooks = new JList<>();
-        reservedBooks.setBounds(20,110,580,100);
-        reservedBooks.setBorder(BorderFactory.createLineBorder(Color.black));
+        lentBooksLabel.setVerticalAlignment(1);
 
         lentBooks = new JList<>();
-        lentBooks.setBounds(20,270,580,100);
+        lentBooks.setBounds(50,310,600,100);
         lentBooks.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        returnBooks = new MyButton(true);
+        returnBooks.setText("Przyjmij zwrot");
+        returnBooks.setBounds(450, 270, 200,30);
+
+        back = new MyButton(false);
+        back.setText("Cofnij");
+        back.setBounds(450,430,200,30);
     }
 
     private void actions(){
@@ -147,8 +154,12 @@ public class BookTransferPanel extends JPanel {
 
             List<BookTransfer> book = reservedBooks.getSelectedValuesList();
 
+            User user = userDBService.readUserFromDB(Integer.parseInt(userId.getText()));
+            Reader reader = readerDBService.readReaderFromDB(user.getIdUser());
+            readerId = reader.getIdReader();
+
             for (BookTransfer aBook : book) {
-                bookTransfer.lendBook(Integer.parseInt(userId.getText()), aBook.getAuthorBook().getBook().getBookId());
+                bookTransfer.lendBook(readerId, aBook.getAuthorBook().getBook().getBookId());
                 bookTransfer.unReserveBook(aBook.getAuthorBook().getBook().getBookId());
                 JOptionPane.showMessageDialog(this, bookTransfer.getMessage());
                 repaint();
@@ -200,7 +211,7 @@ public class BookTransferPanel extends JPanel {
         return isCorrect && !(userId.getText().isEmpty());
     }
 
-    public JButton getBack() {
+    public MyButton getBack() {
         return back;
     }
 }

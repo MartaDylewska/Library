@@ -3,6 +3,7 @@ package gui.event;
 import event.Event;
 import event.EventDBServiceImpl;
 import event.IEventDBService;
+import gui.general.MyButton;
 import images.IPosterDBService;
 import images.Poster;
 import images.PosterDBServiceImpl;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class EventSignInPanel extends JPanel {
     private JComboBox eventChooserBx;
-    private JButton viewEventBtn, signInEventBtn, returnBtn;
+    private MyButton viewEventBtn, signInEventBtn, returnBtn;
     private JLabel titleLbl, dateLbl, posterLbl, shortDescLbl, posterShowLbl;
     private JTextField titleTxt, dateTxt;
     private JTextArea shortDescTxt;
@@ -123,20 +124,20 @@ public class EventSignInPanel extends JPanel {
     }
 
     private void createSignInEventBtn() {
-        signInEventBtn = new JButton();
+        signInEventBtn = new MyButton(true);
         signInEventBtn.setText("Dołącz");
         signInEventBtn.setBounds(450, 150, 200, 50);
         signInEventBtn.setVisible(false);
     }
 
     private void createViewEventBtn() {
-        viewEventBtn = new JButton();
+        viewEventBtn = new MyButton(true);
         viewEventBtn.setText("Podgląd");
         viewEventBtn.setBounds(450, 10, 200, 50);
     }
 
     private void createReturnBtn() {
-        returnBtn = new JButton();
+        returnBtn = new MyButton(false);
         returnBtn.setText("Powrót");
         returnBtn.setBounds(450, 300, 200, 50);
     }
@@ -233,7 +234,7 @@ public class EventSignInPanel extends JPanel {
         this.cardIdTxt = cardIdTxt;
     }
 
-    public JButton getReturnBtn() {
+    public MyButton getReturnBtn() {
         return returnBtn;
     }
 }

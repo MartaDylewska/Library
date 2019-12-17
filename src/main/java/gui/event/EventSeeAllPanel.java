@@ -3,6 +3,7 @@ package gui.event;
 import event.Event;
 import event.EventDBServiceImpl;
 import event.IEventDBService;
+import gui.general.MyButton;
 import gui.reader.ReaderEntryPanel;
 import images.IPosterDBService;
 import images.Poster;
@@ -19,7 +20,7 @@ import java.util.List;
 
 public class EventSeeAllPanel extends JPanel {
     private JComboBox eventChooserBx;
-    private JButton viewEventBtn,  returnBtn;
+    private MyButton viewEventBtn,  returnBtn;
     private JLabel titleLbl, dateLbl, posterLbl, shortDescLbl, posterShowLbl;
     private JTextField titleTxt, dateTxt;
     private JTextArea shortDescTxt;
@@ -114,13 +115,13 @@ public class EventSeeAllPanel extends JPanel {
 
 
     private void createViewEventBtn() {
-        viewEventBtn = new JButton();
+        viewEventBtn = new MyButton(true);
         viewEventBtn.setText("Podgląd");
         viewEventBtn.setBounds(450, 10, 200, 50);
     }
 
     private void createReturnBtn() {
-        returnBtn = new JButton();
+        returnBtn = new MyButton(false);
         returnBtn.setText("Powrót");
         returnBtn.setBounds(450, 300, 200, 50);
     }
@@ -222,7 +223,7 @@ public class EventSeeAllPanel extends JPanel {
         this.cardIdTxt = cardIdTxt;
     }
 
-    public JButton getReturnBtn() {
+    public MyButton getReturnBtn() {
         return returnBtn;
     }
 }

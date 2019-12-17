@@ -3,6 +3,7 @@ package gui.bookTransfer;
 import book.*;
 import bookTransfer.BookTransferService;
 import bookTransfer.IBookTransfer;
+import gui.general.MyButton;
 import reader.IReaderDBService;
 import reader.Reader;
 import reader.ReaderDBServiceImpl;
@@ -21,7 +22,7 @@ public class BookReservePanel extends JPanel {
     private JComboBox<String> searchBy;
     private JTextField keyWord;
     private JList<AuthorBook> resultList;
-    private JButton search, remove, reserveBtn, returnBtn;
+    private MyButton search, reserveBtn, returnBtn;
 
     private IAuthor iAuthor = new AuthorService();
     private IAuthorBook iAuthorBook = new AuthorBookService();
@@ -37,7 +38,6 @@ public class BookReservePanel extends JPanel {
         createComps();
         addComps();
         actions();
-        remove.setVisible(false);
         cardIdTxt.setVisible(false);
     }
 
@@ -55,42 +55,42 @@ public class BookReservePanel extends JPanel {
     private void createComps() {
 
         searchByLabel = new JLabel("Wyszukaj po:");
-        searchByLabel.setBounds(20,20,100,30);
+        searchByLabel.setBounds(50,60,100,30);
 
         searchBy = new JComboBox<>(new String[]{"tytule", "autorze (imię, nazwisko)", "wydawcy", "gatunku", "języku"});
-        searchBy.setBounds(150,20,200,30);
+        searchBy.setBounds(200,60,200,30);
 
         keyWordLabel = new JLabel("Słowo kluczowe:");
-        keyWordLabel.setBounds(20,60,100,30);
+        keyWordLabel.setBounds(50,100,100,30);
 
         keyWord = new JTextField();
-        keyWord.setBounds(150,60,200,30);
+        keyWord.setBounds(200,100,200,30);
 
         resultListLabel = new JLabel("Wyniki wyszukiwania:");
-        resultListLabel.setBounds(20,100,200,30);
+        resultListLabel.setBounds(50,140,200,30);
 
         resultList = new JList<>();
-        resultList.setBounds(20,140,580,320);
+        resultList.setBounds(50,180,600,300);
         resultList.setBorder(BorderFactory.createLineBorder(Color.black));
 
         result = new JLabel();
-        result.setBounds(20,140,580,320);
+        result.setBounds(50,180,600,300);
         result.setBorder(BorderFactory.createLineBorder(Color.black));
         result.setBackground(Color.white);
         result.setOpaque(true);
+        result.setVerticalAlignment(1);
 
-        search = new JButton("szukaj");
-        search.setBounds(400,20,200,30);
+        search = new MyButton(true);
+        search.setText("Szukaj");
+        search.setBounds(450,60,200,30);
 
-        remove = new JButton("usuń");
-        remove.setBounds(400,60,200,30);
+        reserveBtn = new MyButton(true);
+        reserveBtn.setText("Rezerwuj");
+        reserveBtn.setBounds(450,100,200,30);
 
-        reserveBtn = new JButton("rezerwuj");
-        reserveBtn.setBounds(400,100,200,30);
-
-        returnBtn = new JButton("cofnij");
-        returnBtn.setBounds(400,470,200,30);
-
+        returnBtn = new MyButton(false);
+        returnBtn.setText("Cofnij");
+        returnBtn.setBounds(450,490,200,30);
 
         cardIdTxt = new JLabel();
         cardIdTxt.setBounds(30,30, 30,20);
@@ -158,12 +158,11 @@ public class BookReservePanel extends JPanel {
         add(resultListLabel);
         add(result);
         add(search);
-        add(remove);
         add(reserveBtn);
         add(returnBtn);
     }
 
-    public JButton getReturnBtn() {
+    public MyButton getReturnBtn() {
         return returnBtn;
     }
 

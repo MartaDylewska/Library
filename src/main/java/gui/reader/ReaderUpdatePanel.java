@@ -5,7 +5,7 @@ import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
-import librarian.Librarian;
+import gui.general.MyButton;
 import reader.IReaderDBService;
 import reader.Reader;
 import reader.ReaderDBServiceImpl;
@@ -22,7 +22,7 @@ public class ReaderUpdatePanel extends JPanel {
     private JLabel firstNameLbl, lastNamelbl, emailLbl, passLbl, cardIdLbl, postalCodeLbl, cityNameLbl, streetAndBuildingLbl;
     private JTextField firstNameTxt, lastNameTxt, emailTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
     private JPasswordField passField;
-    private JButton searchReaderBtn, updateReaderBtn, returnBtn;
+    private MyButton searchReaderBtn, updateReaderBtn, returnBtn;
     private int fieldLength = 200;
 
     private IUserDBService userDBService = new UserDBServiceImpl();
@@ -126,22 +126,22 @@ public class ReaderUpdatePanel extends JPanel {
     }
 
     private void createSearchBtn() {
-        searchReaderBtn = new JButton();
+        searchReaderBtn = new MyButton(true);
         searchReaderBtn.setText("Wyszukaj");
         searchReaderBtn.setBounds(400, 20, 200, 50);
     }
 
     private void createReturnBtn() {
-        returnBtn = new JButton();
+        returnBtn = new MyButton(false);
         returnBtn.setText("Powrót");
-        returnBtn.setBounds(400, 300, 200, 50);
+        returnBtn.setBounds(350, 380, 150, 30);
     }
 
     private void createUpdateBtn() {
-        updateReaderBtn = new JButton();
+        updateReaderBtn = new MyButton(true);
         updateReaderBtn.setText("Aktualizuj dane");
         updateReaderBtn.setVisible(false);
-        updateReaderBtn.setBounds(400, 150, 200, 50);
+        updateReaderBtn.setBounds(200, 380, 150, 30);
     }
 
     private void addAllLabels() {
@@ -185,91 +185,91 @@ public class ReaderUpdatePanel extends JPanel {
     private void createPassLbl() {
         passLbl = new JLabel();
         passLbl.setText("Hasło");
-        passLbl.setBounds(20, 300, 100, 30);
+        passLbl.setBounds(200, 340, 100, 30);
     }
 
     private void createPassTxt() {
         passField = new JPasswordField();
         passField.setText("------");
-        passField.setBounds(150, 300, fieldLength, 30);
+        passField.setBounds(300, 340, fieldLength, 30);
     }
 
     private void createStreetAndBuildingLbl() {
         streetAndBuildingLbl = new JLabel();
         streetAndBuildingLbl.setText("Ulica/nr");
-        streetAndBuildingLbl.setBounds(20, 260, 100, 30);
+        streetAndBuildingLbl.setBounds(200, 300, 100, 30);
     }
 
     private void createStreetAndBuildingTxt() {
         streetAndBuildingTxt = new JTextField();
-        streetAndBuildingTxt.setBounds(150, 260, fieldLength, 30);
+        streetAndBuildingTxt.setBounds(300, 300, fieldLength, 30);
     }
 
     private void createCityNameLbl() {
         cityNameLbl = new JLabel();
         cityNameLbl.setText("Miasto");
-        cityNameLbl.setBounds(20, 220, 100, 30);
+        cityNameLbl.setBounds(200, 260, 100, 30);
     }
 
     private void createCityNameTxt() {
         cityNameTxt = new JTextField();
-        cityNameTxt.setBounds(150, 220, fieldLength, 30);
+        cityNameTxt.setBounds(300, 260, fieldLength, 30);
         cityNameTxt.setEditable(false);
     }
 
     private void createPostalCodeLbl() {
         postalCodeLbl = new JLabel();
         postalCodeLbl.setText("Kod pocztowy");
-        postalCodeLbl.setBounds(20, 180, 100, 30);
+        postalCodeLbl.setBounds(200, 220, 100, 30);
     }
 
     private void createPostalCodeTxt() {
         postalCodeTxt = new JTextField();
-        postalCodeTxt.setBounds(150, 180, fieldLength, 30);
+        postalCodeTxt.setBounds(300, 220, fieldLength, 30);
     }
 
     private void createEmailLbl() {
         emailLbl = new JLabel();
         emailLbl.setText("Email");
-        emailLbl.setBounds(20, 140, 100, 30);
+        emailLbl.setBounds(200, 180, 100, 30);
     }
 
     private void createEmailTxt() {
         emailTxt = new JTextField();
-        emailTxt.setBounds(150, 140, fieldLength, 30);
+        emailTxt.setBounds(300, 180, fieldLength, 30);
     }
 
     private void createLastnameLbl() {
         lastNamelbl = new JLabel();
         lastNamelbl.setText("Nazwisko");
-        lastNamelbl.setBounds(20, 100, 100, 30);
+        lastNamelbl.setBounds(200, 140, 100, 30);
     }
 
     private void createLastNameTxt() {
         lastNameTxt = new JTextField();
-        lastNameTxt.setBounds(150, 100, fieldLength, 30);
+        lastNameTxt.setBounds(300, 140, fieldLength, 30);
     }
 
     private void createFirstnameLbl() {
         firstNameLbl = new JLabel();
         firstNameLbl.setText("Imię");
-        firstNameLbl.setBounds(20, 60, 100, 30);
+        firstNameLbl.setBounds(200, 100, 100, 30);
     }
 
     private void createFirstNameTxt() {
         firstNameTxt = new JTextField();
-        firstNameTxt.setBounds(150, 60, fieldLength, 30);
+        firstNameTxt.setBounds(300, 100, fieldLength, 30);
     }
 
     private void createCardidLbl() {
         cardIdLbl = new JLabel();
         cardIdLbl.setText("Numer karty");
-        cardIdLbl.setBounds(20, 20, 100, 30);
+        cardIdLbl.setBounds(200, 60, 100, 30);
     }
 
     private void createCardIdTxt() {
         cardIdTxt = new JTextField();
-        cardIdTxt.setBounds(150, 20, fieldLength, 30);
+        cardIdTxt.setBounds(300, 60, fieldLength, 30);
     }
 
     private void setCompVisibility(boolean visibility) {
@@ -307,10 +307,10 @@ public class ReaderUpdatePanel extends JPanel {
         streetAndBuildingTxt.setEnabled(editability);
     }
 
-    public JButton getReturnBtn() {
+    public MyButton getReturnBtn() {
         return returnBtn;
     }
-    public JButton getSearchReaderBtn(){return searchReaderBtn;}
+    public MyButton getSearchReaderBtn(){return searchReaderBtn;}
     public JTextField getCardIdTxt(){return cardIdTxt;}
 
 }

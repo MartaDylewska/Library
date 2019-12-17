@@ -5,6 +5,7 @@ import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
+import gui.general.MyButton;
 import librarian.ILibrarianDBService;
 import librarian.Librarian;
 import librarian.LibrarianDBServiceImpl;
@@ -25,11 +26,11 @@ public class LibrarianUpdatePanel extends JPanel {
     private JTextField firstNameTxt, lastNameTxt, emailTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
     private JTextField salaryTxt, dateEmploymentTxt;
     private JPasswordField passField;
-    private JButton searchLibrarianBtn, updateLibrarianBtn, returnBtn;
+    private MyButton searchLibrarianBtn, updateLibrarianBtn, returnBtn;
     private int fieldLength = 200;
 
     private IUserDBService userDBService = new UserDBServiceImpl();
-    private ICardDBService cardDBService = new CardDBServiceImpl();
+//    private ICardDBService cardDBService = new CardDBServiceImpl();
     private ICityDBService cityDBService = new CityDBServiceImpl();
     private ILibrarianDBService librarianDBService = new LibrarianDBServiceImpl();
 
@@ -132,22 +133,22 @@ public class LibrarianUpdatePanel extends JPanel {
     }
 
     private void createSearchBtn() {
-        searchLibrarianBtn = new JButton();
+        searchLibrarianBtn = new MyButton(true);
         searchLibrarianBtn.setText("Wyszukaj");
-        searchLibrarianBtn.setBounds(400, 20, 200, 50);
+        searchLibrarianBtn.setBounds(400, 20, 200, 30);
     }
 
     private void createReturnBtn() {
-        returnBtn = new JButton();
+        returnBtn = new MyButton(false);
         returnBtn.setText("Powrót");
-        returnBtn.setBounds(400, 300, 200, 50);
+        returnBtn.setBounds(400, 300, 200, 30);
     }
 
     private void createUpdateBtn() {
-        updateLibrarianBtn = new JButton();
+        updateLibrarianBtn = new MyButton(true);
         updateLibrarianBtn.setText("Aktualizuj dane");
         updateLibrarianBtn.setVisible(false);
-        updateLibrarianBtn.setBounds(400, 150, 200, 50);
+        updateLibrarianBtn.setBounds(400, 150, 200, 30);
     }
 
     private void addAllLabels() {
@@ -348,7 +349,7 @@ public class LibrarianUpdatePanel extends JPanel {
         streetAndBuildingTxt.setEnabled(editability);
     }
 
-    public JButton getReturnBtn() {
+    public MyButton getReturnBtn() {
         return returnBtn;
     }
 

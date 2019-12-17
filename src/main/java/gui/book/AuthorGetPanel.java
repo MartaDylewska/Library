@@ -5,13 +5,14 @@ import java.awt.*;
 import java.util.List;
 
 import book.*;
+import gui.general.MyButton;
 
 public class AuthorGetPanel extends JPanel {
 
     private JLabel keyWordLabel, resultListLabel, result, newFirstNameLabel, newLastNameLabel;
     private JTextField keyWord, newFirstName, newLastName;
     private JList resultList;
-    private JButton search, remove, edit, change, back;
+    private MyButton search, remove, edit, change, back;
     private JScrollPane listScroller;
 
     private IAuthor authorService = new AuthorService();
@@ -42,53 +43,59 @@ public class AuthorGetPanel extends JPanel {
     private void createComps() {
 
         keyWordLabel = new JLabel("Słowo kluczowe:");
-        keyWordLabel.setBounds(20,20,100,30);
+        keyWordLabel.setBounds(80,40,100,30);
 
         keyWord = new JTextField();
-        keyWord.setBounds(150,20,200,30);
+        keyWord.setBounds(180,40,200,30);
 
         resultListLabel = new JLabel("Wyniki wyszukiwania:");
-        resultListLabel.setBounds(20,60,200,30);
+        resultListLabel.setBounds(80,80,200,30);
 
         resultList = new JList();
-        resultList.setBounds(20,100,330,320);
+        resultList.setBounds(80,120,300,320);
         resultList.setBorder(BorderFactory.createLineBorder(Color.black));
 
         result = new JLabel();
-        result.setBounds(20,100,330,320);
+        result.setBounds(80,120,300,320);
         result.setBorder(BorderFactory.createLineBorder(Color.black));
         result.setBackground(Color.white);
         result.setOpaque(true);
+        result.setVerticalAlignment(1);
 
-        search = new JButton("szukaj");
-        search.setBounds(400,20,200,50);
+        search = new MyButton(true);
+        search.setText("Szukaj");
+        search.setBounds(400,40,200,30);
 
-        remove = new JButton("usuń");
-        remove.setBounds(400,70,200,50);
+        remove = new MyButton(true);
+        remove.setText("Usuń");
+        remove.setBounds(400,80,200,30);
 
-        edit = new JButton("edytuj");
-        edit.setBounds(400,120,200,50);
+        edit = new MyButton(true);
+        edit.setText("Edytuj");
+        edit.setBounds(400,120,200,30);
 
         newFirstNameLabel = new JLabel("Nowe imię:");
-        newFirstNameLabel.setBounds(400,230,200,30);
+        newFirstNameLabel.setBounds(400,250,200,30);
 
         newFirstName = new JTextField();
-        newFirstName.setBounds(400,270,200,30);
+        newFirstName.setBounds(400,290,200,30);
         newFirstName.setEditable(false);
 
         newLastNameLabel = new JLabel("Nowe nazwisko:");
-        newLastNameLabel.setBounds(400,310,200,30);
+        newLastNameLabel.setBounds(400,320,200,30);
 
         newLastName = new JTextField();
-        newLastName.setBounds(400,350,200,30);
+        newLastName.setBounds(400,370,200,30);
         newLastName.setEditable(false);
 
-        change = new JButton("zatwierdź");
-        change.setBounds(400,390,200,30);
+        change = new MyButton(false);
+        change.setText("Zatwierdź");
+        change.setBounds(400,410,200,30);
         change.setEnabled(false);
 
-        back = new JButton("cofnij");
-        back.setBounds(400,470,200,50);
+        back = new MyButton(false);
+        back.setText("Cofnij");
+        back.setBounds(400,470,200,30);
 
     }
 
@@ -166,7 +173,7 @@ public class AuthorGetPanel extends JPanel {
         add(back);
     }
 
-    public JButton getBack() {
+    public MyButton getBack() {
         return back;
     }
 

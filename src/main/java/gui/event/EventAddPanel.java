@@ -4,6 +4,7 @@ import config.Validation;
 import event.Event;
 import event.EventDBServiceImpl;
 import event.IEventDBService;
+import gui.general.MyButton;
 import images.IPosterDBService;
 import images.Poster;
 import images.PosterDBServiceImpl;
@@ -15,7 +16,7 @@ public class EventAddPanel extends JPanel {
     private JLabel titleLbl, dateLbl, posterLbl, shortDescLbl;
     private JTextField titleTxt, dateTxt, posterTxt;
     private JTextArea shortDescTxt;
-    private JButton addEventBtn, browsePosterBtn,returnBtn;
+    private MyButton addEventBtn, browsePosterBtn,returnBtn;
     private int fieldLength = 200;
     private JFileChooser fileChooser;
 
@@ -81,20 +82,20 @@ public class EventAddPanel extends JPanel {
     }
 
     private void createBrowseBtn() {
-        browsePosterBtn = new JButton();
-        browsePosterBtn.setText("Wyszukaj plakat...");
+        browsePosterBtn = new MyButton(true);
+        browsePosterBtn.setText("Wyszukaj plakat");
         browsePosterBtn.setBounds(150, 140, 200, 30);
     }
     private void createReturnBtn() {
-        returnBtn = new JButton();
+        returnBtn = new MyButton(false);
         returnBtn.setText("Powrót");
-        returnBtn.setBounds(400, 300, 200, 50);
+        returnBtn.setBounds(400, 300, 200, 30);
     }
 
     private void createAddBtn() {
-        addEventBtn = new JButton();
+        addEventBtn = new MyButton(true);
         addEventBtn.setText("Wprowadź dane");
-        addEventBtn.setBounds(400, 250, 200, 50);
+        addEventBtn.setBounds(400, 250, 200, 30);
     }
 
     private void addAllLabels() {
@@ -194,5 +195,5 @@ public class EventAddPanel extends JPanel {
         this.posterTxt = posterTxt;
     }
 
-    public JButton getReturnBtn() {return returnBtn;}
+    public MyButton getReturnBtn() {return returnBtn;}
 }

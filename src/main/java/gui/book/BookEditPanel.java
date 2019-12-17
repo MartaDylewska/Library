@@ -1,6 +1,7 @@
 package gui.book;
 
 import book.*;
+import gui.general.MyButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +15,7 @@ public class BookEditPanel extends JPanel {
     private JTextField firstName, lastName;
     private JLabel alleyLabel, bookstandLabel, shelfLabel;
     private JComboBox alley, bookstand, shelf;
-    private JButton confirm, returnBtn;
-    private JLabel result;
+    private MyButton confirm, returnBtn;
     private int fieldLength = 200;
 
     private IBook bookService = new BookService();
@@ -40,84 +40,83 @@ public class BookEditPanel extends JPanel {
 
     private void createComps(Book book, Author author) {
         titleLabel = new JLabel("Tytuł:");
-        titleLabel.setBounds(20, 20, 100, 30);
+        titleLabel.setBounds(50, 60, 100, 30);
 
         title = new JTextArea();
-        title.setBounds(150, 20, fieldLength, 70);
+        title.setBounds(180, 60, fieldLength, 70);
         title.setBorder(BorderFactory.createLineBorder(Color.black));
         title.setLineWrap(true);
         title.setText(book.getTitle());
 
         firstNameLabel = new JLabel("Imię autora:");
-        firstNameLabel.setBounds(20, 100, 100, 30);
+        firstNameLabel.setBounds(50, 140, 100, 30);
 
         firstName = new JTextField();
-        firstName.setBounds(150, 100, fieldLength, 30);
+        firstName.setBounds(180, 140, fieldLength, 30);
         firstName.setText(author.getFirstName());
 
         lastNameLabel = new JLabel("Nazwisko autora: ");
-        lastNameLabel.setBounds(20, 140, 120, 30);
+        lastNameLabel.setBounds(50, 180, 120, 30);
 
         lastName = new JTextField();
-        lastName.setBounds(150, 140, fieldLength, 30);
+        lastName.setBounds(180, 180, fieldLength, 30);
         lastName.setText(author.getLastName());
 
         publisherLabel = new JLabel("Wydawca:");
-        publisherLabel.setBounds(20, 180, 100, 30);
+        publisherLabel.setBounds(50, 220, 100, 30);
 
         publisher = new JTextField();
-        publisher.setBounds(150, 180, fieldLength, 30);
+        publisher.setBounds(180, 220, fieldLength, 30);
         publisher.setText(book.getPublisher());
 
         genreLabel = new JLabel("Gatunek:");
-        genreLabel.setBounds(20, 220, 100, 30);
+        genreLabel.setBounds(50, 260, 100, 30);
 
         genre = new JTextField();
-        genre.setBounds(150, 220, fieldLength, 30);
+        genre.setBounds(180, 260, fieldLength, 30);
         genre.setText(book.getGenre());
 
         languageLabel = new JLabel("Język:");
-        languageLabel.setBounds(20, 260, 100, 30);
+        languageLabel.setBounds(50, 300, 100, 30);
 
         language = new JTextField();
-        language.setBounds(150, 260, fieldLength, 30);
+        language.setBounds(180, 300, fieldLength, 30);
         language.setText(book.getLanguage());
 
         alleyLabel = new JLabel("Alejka:");
-        alleyLabel.setBounds(20, 300, 55, 30);
+        alleyLabel.setBounds(50, 340, 55, 30);
 
         String[] alleys = bookshelfService.getAlleys();
         alley = new JComboBox(alleys);
-        alley.setBounds(75, 300, 55, 30);
+        alley.setBounds(105, 340, 55, 30);
         String alleyBook = book.getBookshelf().getAlley();
         alley.setSelectedItem(alleyBook);
 
         bookstandLabel = new JLabel("regał: ");
-        bookstandLabel.setBounds(135,300,55,30);
+        bookstandLabel.setBounds(165,340,55,30);
 
         String[] bookstands = bookshelfService.getBookstands();
         bookstand = new JComboBox(bookstands);
-        bookstand.setBounds(185,300,55,30);
+        bookstand.setBounds(215,340,55,30);
         String bookstandBook = book.getBookshelf().getBookstand();
         bookstand.setSelectedItem(bookstandBook);
 
         shelfLabel = new JLabel("półka:");
-        shelfLabel.setBounds(245,300,55,30);
+        shelfLabel.setBounds(275,340,55,30);
 
         String[] shelves = bookshelfService.getShelves();
         shelf = new JComboBox(shelves);
-        shelf.setBounds(295,300,55,30);
+        shelf.setBounds(325,340,55,30);
         String shelfBook = String.valueOf(book.getBookshelf().getShelf());
         shelf.setSelectedItem(shelfBook);
 
-        confirm = new JButton("Zatwierdź");
-        confirm.setBounds(400, 20, 200, 50);
+        confirm = new MyButton(true);
+        confirm.setText("Zatwierdź");
+        confirm.setBounds(400, 60, 200, 30);
 
-        returnBtn = new JButton("Cofnij");
-        returnBtn.setBounds(400, 240, 200, 50);
-
-        result = new JLabel();
-        result.setBounds(20, 300, 460, 100);
+        returnBtn = new MyButton(false);
+        returnBtn.setText("Anuluj");
+        returnBtn.setBounds(400, 340, 200, 30);
 
     }
 
@@ -142,7 +141,6 @@ public class BookEditPanel extends JPanel {
         add(shelf);
         add(confirm);
         add(returnBtn);
-        add(result);
     }
 
     private void action(Book book, Author author) {
@@ -180,7 +178,7 @@ public class BookEditPanel extends JPanel {
                 genreCheck && languageCheck;
     }
 
-    public JButton getReturnBtn() {
+    public MyButton getReturnBtn() {
         return returnBtn;
     }
 }

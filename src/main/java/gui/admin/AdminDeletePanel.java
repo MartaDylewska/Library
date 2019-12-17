@@ -6,6 +6,7 @@ import admin.IAdminDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
+import gui.general.MyButton;
 import images.IPosterDBService;
 import images.Poster;
 import images.PosterDBServiceImpl;
@@ -25,7 +26,7 @@ public class AdminDeletePanel extends JPanel {
     private JTextField firstNameTxt, lastNameTxt, emailTxt, passTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
     private JTextField salaryTxt;
     private JCheckBox isFullTimeChbx;
-    private JButton searchAdminBtn, deleteAdminBtn, returnBtn;
+    private MyButton searchAdminBtn, deleteAdminBtn, returnBtn;
     private int fieldLength = 200;
     private JLabel imageLbl;
 
@@ -105,22 +106,22 @@ public class AdminDeletePanel extends JPanel {
     }
 
     private void createDeleteBtn() {
-        deleteAdminBtn = new JButton();
+        deleteAdminBtn = new MyButton(true);
         deleteAdminBtn.setText("Usuń administratora");
         deleteAdminBtn.setVisible(false);
-        deleteAdminBtn.setBounds(400, 150, 200, 50);
+        deleteAdminBtn.setBounds(400, 150, 200, 30);
     }
 
     private void createSearchBtn() {
-        searchAdminBtn = new JButton();
+        searchAdminBtn = new MyButton(true);
         searchAdminBtn.setText("Wyszukaj");
-        searchAdminBtn.setBounds(400, 20, 200, 50);
+        searchAdminBtn.setBounds(400, 20, 200, 30);
     }
 
     private void createReturnBtn() {
-        returnBtn = new JButton();
+        returnBtn = new MyButton(false);
         returnBtn.setText("Powrót");
-        returnBtn.setBounds(400, 300, 200, 50);
+        returnBtn.setBounds(400, 300, 200, 30);
     }
 
     private void addAllLabels() {
@@ -309,7 +310,7 @@ public class AdminDeletePanel extends JPanel {
         isFullTimeChbx.setEnabled(editability);
     }
 
-    public JButton getReturnBtn() {
+    public MyButton getReturnBtn() {
         return returnBtn;
     }
 }
