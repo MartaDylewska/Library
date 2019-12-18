@@ -1,7 +1,11 @@
 package gui.login;
 
+import gui.Auxiliary;
+import gui.MFrame;
+
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 public class LoginPanel extends JPanel {
 
@@ -9,6 +13,9 @@ public class LoginPanel extends JPanel {
     private JTextField cardNrTxt;
     private JPasswordField passTxt;
     private JButton libInfoBtn, loginBtn, registerBtn;
+    private ImageIcon libIcon;
+    private JLabel imageLabel;
+    private static final String libIconName = "lib.png";
 
     public LoginPanel(){
         setLayout(null);
@@ -16,6 +23,33 @@ public class LoginPanel extends JPanel {
         createAllLabels();
         addAllButtons();
         addAllLabels();
+        setFont();
+        setBorder();
+        createImageLabel();
+        add(imageLabel);
+    }
+
+    private void setBorder(){
+        cardNrLbl.setBorder(Auxiliary.blackBorder());
+        passLbl.setBorder(Auxiliary.blackBorder());
+        cardNrTxt.setBorder(Auxiliary.blackBorder());
+        passTxt.setBorder(Auxiliary.blackBorder());
+        loginBtn.setBorder(Auxiliary.blackBorder());
+        registerBtn.setBorder(Auxiliary.blackBorder());
+    }
+
+    private void setFont(){
+        cardNrLbl.setFont(Auxiliary.panelFont);
+        passLbl.setFont(Auxiliary.panelFont);
+        cardNrTxt.setFont(Auxiliary.panelFont);
+        loginBtn.setFont(Auxiliary.panelFont);
+        registerBtn.setFont(Auxiliary.panelFont);
+    }
+
+    private void createImageLabel(){
+        imageLabel = new JLabel();
+        setImage();
+        imageLabel.setBounds(0,0,700,600);
     }
 
     private void addAllButtons(){
@@ -73,12 +107,12 @@ public class LoginPanel extends JPanel {
     private void createLoginBtn(){
         loginBtn = new JButton();
         loginBtn.setText("ZALOGUJ");
-        loginBtn.setBounds(150,500,150,50);
+        loginBtn.setBounds(100,500,200,50);
     }
     private void createRegisterBtn(){
         registerBtn = new JButton();
         registerBtn.setText("ZAREJESTRUJ");
-        registerBtn.setBounds(400,500,150,50);
+        registerBtn.setBounds(400,500,200,50);
     }
 
     public void setCardNrTxt(String cardNr){this.cardNrTxt.setText(cardNr);}
@@ -93,5 +127,16 @@ public class LoginPanel extends JPanel {
         for (Character c: passTxt.getPassword())
             sb.append(c);
         return sb.toString();
+    }
+    private void setImage(){
+        try {
+            Class<MFrame> mFrameClass = MFrame.class;
+            //libIcon = new ImageIcon(mFrameClass.getResource("resources/lib.png"));
+            libIcon = new ImageIcon(this.getClass().getClassLoader().getResource("lib.png"));
+        } catch (Exception e) {
+            System.out.println("Problem with picture: lib.png");
+            e.printStackTrace();
+        }
+        imageLabel.setIcon(libIcon);
     }
 }

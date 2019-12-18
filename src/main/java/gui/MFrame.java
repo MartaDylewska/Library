@@ -72,6 +72,7 @@ public class MFrame extends JFrame {
     ReservationShowPanel reservationShowPanel;
     LendingShowPanel lendingShowPanel;
     AcceptReturnPanel acceptReturnPanel;
+   // ImagePanel imagePanel;
 
 
     public MFrame() {
@@ -79,21 +80,16 @@ public class MFrame extends JFrame {
 
         setTitle("Biblioteka");
         setResizable(false);
-
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int)screenSize.getWidth();
-        int height = (int) screenSize.getHeight();
-        int posX = width / 2 - getWidth() / 2;
-        int posY = height / 2 - getHeight() / 2;
-        setLocation(posX, posY);
-
-
+        setLocationRelativeTo(null);
 
 
 //----------------login panel----------------
 
         loginPanel = new LoginPanel();
+
         add(loginPanel);
+        loginPanel.setBackground(new Color(0,0,0,0));
+
         addLoginKeyListener();
         addRegisterKeyListener();
 

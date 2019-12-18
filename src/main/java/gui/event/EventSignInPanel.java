@@ -76,6 +76,15 @@ public class EventSignInPanel extends JPanel {
 
     private void addActionSingInEventBtn() {
         signInEventBtn.addActionListener(e -> {
+            List<Event> eventList = eventDBService.getAllEventsFromDB();
+            if (eventChooserBx.getSelectedIndex() != 0) {
+                setCompVisibility(true);
+                signInEventBtn.setVisible(true);
+                for (Event event : eventList) {
+                    if ((event.getDateEvent().toString() + " " + event.getTitle()).equals(eventChooserBx.getSelectedItem())) {
+                        selectedEvent = event;
+                    }
+                }}
             int idEvent = selectedEvent.getIdEvent();
             User user = userDBService.readUserFromDB(Integer.parseInt(cardIdTxt.getText()));
             Reader reader = readerDBService.readReaderFromDB(user.getIdUser());
