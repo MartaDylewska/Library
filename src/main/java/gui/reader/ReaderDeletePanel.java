@@ -5,6 +5,7 @@ import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
+import gui.general.MyButton;
 import images.IPosterDBService;
 import images.Poster;
 import images.PosterDBServiceImpl;
@@ -23,12 +24,12 @@ public class ReaderDeletePanel extends JPanel {
 
     private JLabel firstNameLbl, lastNamelbl, emailLbl, passLbl, cardIdLbl, postalCodeLbl, cityNameLbl, streetAndBuildingLbl;
     private JTextField firstNameTxt, lastNameTxt, emailTxt, passTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
-    private JButton searchReaderBtn, deleteReaderBtn, returnBtn;
+    private MyButton searchReaderBtn, deleteReaderBtn, returnBtn;
     private int fieldLength = 200;
     private JLabel imageLbl;
 
     private IUserDBService userDBService = new UserDBServiceImpl();
-    private ICardDBService cardDBService = new CardDBServiceImpl();
+//    private ICardDBService cardDBService = new CardDBServiceImpl();
     private ICityDBService cityDBService = new CityDBServiceImpl();
     private IReaderDBService readerDBService = new ReaderDBServiceImpl();
 
@@ -101,22 +102,22 @@ public class ReaderDeletePanel extends JPanel {
     }
 
     private void createDeleteBtn() {
-        deleteReaderBtn = new JButton();
+        deleteReaderBtn = new MyButton(true);
         deleteReaderBtn.setText("Usuń użytkownika");
         deleteReaderBtn.setVisible(false);
-        deleteReaderBtn.setBounds(400, 150, 200, 50);
+        deleteReaderBtn.setBounds(400, 150, 200, 30);
     }
 
     private void createSearchBtn() {
-        searchReaderBtn = new JButton();
+        searchReaderBtn = new MyButton(true);
         searchReaderBtn.setText("Wyszukaj");
-        searchReaderBtn.setBounds(400, 20, 200, 50);
+        searchReaderBtn.setBounds(400, 20, 200, 30);
     }
 
     private void createReturnBtn() {
-        returnBtn = new JButton();
+        returnBtn = new MyButton(false);
         returnBtn.setText("Powrót");
-        returnBtn.setBounds(400, 300, 200, 50);
+        returnBtn.setBounds(400, 300, 200, 30);
     }
 
     private void addAllLabels() {
@@ -269,7 +270,7 @@ public class ReaderDeletePanel extends JPanel {
         streetAndBuildingTxt.setEditable(editability);
     }
 
-    public JButton getReturnBtn() {
+    public MyButton getReturnBtn() {
         return returnBtn;
     }
 }

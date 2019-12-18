@@ -5,7 +5,7 @@ public class Bookshelf {
     private String alley, bookstand;
     private int shelf;
 
-    Bookshelf(String alley, String bookstand, int shelf) {
+    public Bookshelf(String alley, String bookstand, int shelf) {
         this.alley = alley;
         this.bookstand = bookstand;
         this.shelf = shelf;
@@ -37,6 +37,6 @@ public class Bookshelf {
 
     @Override
     public String toString() {
-        return "lokalizacja: " + alley + ", " + bookstand + ", " + shelf + ".";
+        return "lokalizacja: " + alley + ", " + bookstand + ", " + shelf;
     }
 }

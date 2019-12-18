@@ -5,6 +5,7 @@ import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
+import gui.general.MyButton;
 import images.IPosterDBService;
 import images.Poster;
 import images.PosterDBServiceImpl;
@@ -25,7 +26,7 @@ public class LibrarianDeletePanel extends JPanel {
     private JLabel salaryLbl, dateEmploymentLbl;
     private JTextField firstNameTxt, lastNameTxt, emailTxt, passTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
     private JTextField salaryTxt, dateEmploymentTxt;
-    private JButton searchLibrarianBtn, deleteLibrarianBtn, returnBtn;
+    private MyButton searchLibrarianBtn, deleteLibrarianBtn, returnBtn;
     private int fieldLength = 200;
     private JLabel imageLbl;
 
@@ -106,22 +107,22 @@ public class LibrarianDeletePanel extends JPanel {
     }
 
     private void createDeleteBtn() {
-        deleteLibrarianBtn = new JButton();
+        deleteLibrarianBtn = new MyButton(true);
         deleteLibrarianBtn.setText("Usuń bibliotekarza");
         deleteLibrarianBtn.setVisible(false);
-        deleteLibrarianBtn.setBounds(400, 150, 200, 50);
+        deleteLibrarianBtn.setBounds(400, 150, 200, 30);
     }
 
     private void createSearchBtn() {
-        searchLibrarianBtn = new JButton();
+        searchLibrarianBtn = new MyButton(true);
         searchLibrarianBtn.setText("Wyszukaj");
-        searchLibrarianBtn.setBounds(400, 20, 200, 50);
+        searchLibrarianBtn.setBounds(400, 20, 200, 30);
     }
 
     private void createReturnBtn() {
-        returnBtn = new JButton();
+        returnBtn = new MyButton(false);
         returnBtn.setText("Powrót");
-        returnBtn.setBounds(400, 300, 200, 50);
+        returnBtn.setBounds(400, 300, 200, 30);
     }
 
     private void addAllLabels() {
@@ -310,7 +311,7 @@ public class LibrarianDeletePanel extends JPanel {
         dateEmploymentTxt.setEditable(editability);
     }
 
-    public JButton getReturnBtn() {
+    public MyButton getReturnBtn() {
         return returnBtn;
     }
 }

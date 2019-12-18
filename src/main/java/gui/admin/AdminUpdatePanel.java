@@ -8,6 +8,7 @@ import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
+import gui.general.MyButton;
 import librarian.ILibrarianDBService;
 import librarian.Librarian;
 import librarian.LibrarianDBServiceImpl;
@@ -28,7 +29,7 @@ public class AdminUpdatePanel extends JPanel {
     private JTextField salaryTxt;
     private JCheckBox isFullTimeChbx;
     private JPasswordField passField;
-    private JButton searchAdminBtn, updateAdminBtn, returnBtn;
+    private MyButton searchAdminBtn, updateAdminBtn, returnBtn;
     private int fieldLength = 200;
 
     private IUserDBService userDBService = new UserDBServiceImpl();
@@ -133,22 +134,22 @@ public class AdminUpdatePanel extends JPanel {
     }
 
     private void createSearchBtn() {
-        searchAdminBtn = new JButton();
+        searchAdminBtn = new MyButton(true);
         searchAdminBtn.setText("Wyszukaj");
-        searchAdminBtn.setBounds(400, 20, 200, 50);
+        searchAdminBtn.setBounds(400, 20, 200, 30);
     }
 
     private void createReturnBtn() {
-        returnBtn = new JButton();
+        returnBtn = new MyButton(false);
         returnBtn.setText("Powrót");
-        returnBtn.setBounds(400, 300, 200, 50);
+        returnBtn.setBounds(400, 300, 200, 30);
     }
 
     private void createUpdateBtn() {
-        updateAdminBtn = new JButton();
+        updateAdminBtn = new MyButton(true);
         updateAdminBtn.setText("Aktualizuj dane");
         updateAdminBtn.setVisible(false);
-        updateAdminBtn.setBounds(400, 150, 200, 50);
+        updateAdminBtn.setBounds(400, 150, 200, 30);
     }
 
     private void addAllLabels() {
@@ -331,7 +332,7 @@ public class AdminUpdatePanel extends JPanel {
         salaryTxt.setVisible(visibility);
     }
 
-    public JButton getReturnBtn() {
+    public MyButton getReturnBtn() {
         return returnBtn;
     }
 

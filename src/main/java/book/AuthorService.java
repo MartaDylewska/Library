@@ -14,21 +14,22 @@ public class AuthorService implements IAuthor {
     @Override
     public void addAuthor(String firstName, String lastName) {
 
-        int authorId = getAuthorId(firstName, lastName);
         Connection connection = initializeDataBaseConnection();
         PreparedStatement preparedStatement = null;
-        SQL = "insert into author(first_name, last_name) values (?,?);";
+
+        SQL = "insert into author (first_name, last_name) select ?, ? where not exists" +
+                "(select 1 from author where first_name = ? and last_name = ?);";
 
         try  {
-            if (authorId == 0) {
-                preparedStatement = connection.prepareStatement(SQL);
-                preparedStatement.setString(1, firstName);
-                preparedStatement.setString(2, lastName);
-                preparedStatement.executeUpdate();
-                message = "Autor dodany do bazy.";
-            }else{
-                System.out.println("Autor istnieje w bazie");
-            }
+            preparedStatement = connection.prepareStatement(SQL);
+
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setString(3, firstName);
+            preparedStatement.setString(4, lastName);
+            preparedStatement.executeUpdate();
+            message = "Autor dodany do bazy.";
+
         } catch (SQLException e){
             System.err.println("Error during invoke SQL query: \n" + e.getMessage());
             throw  new RuntimeException("Error during invoke SQL query");
@@ -42,9 +43,11 @@ public class AuthorService implements IAuthor {
     public int getAuthorId(String firstName, String lastName) {
 
         int authorId = 0;
-        String SQL = "select author_id from author where first_name = ? and last_name = ?;";
+        SQL = "select author_id from author where first_name = ? and last_name = ?;";
+
         Connection connection = initializeDataBaseConnection();
         PreparedStatement preparedStatement = null;
+
         try  {
             preparedStatement = connection.prepareStatement(SQL);
 
@@ -52,34 +55,10 @@ public class AuthorService implements IAuthor {
             preparedStatement.setString(2, lastName);
 
             ResultSet rs = preparedStatement.executeQuery();
+
             while (rs.next()){
                 authorId = rs.getInt(1);}
             return authorId;
-        } catch (SQLException e){
-            System.err.println("Error during invoke SQL query: \n" + e.getMessage());
-            throw  new RuntimeException("Error during invoke SQL query");
-        }
-        finally {
-            closeDBResources(connection,preparedStatement);
-        }
-
-    }
-
-    @Override
-    public void removeAuthor(String firstName, String lastName) {
-
-        SQL = "delete from author where first_name = ? and last_name = ?;";
-        Connection connection = initializeDataBaseConnection();
-        PreparedStatement preparedStatement = null;
-
-        try  {
-            preparedStatement = connection.prepareStatement(SQL);
-
-            preparedStatement.setString(1, firstName);
-            preparedStatement.setString(2, lastName);
-
-            preparedStatement.executeUpdate();
-            System.out.println("Author removed from database.");
         } catch (SQLException e){
             System.err.println("Error during invoke SQL query: \n" + e.getMessage());
             throw  new RuntimeException("Error during invoke SQL query");
@@ -101,7 +80,7 @@ public class AuthorService implements IAuthor {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
             message = "Autor usunięty z bazy.";
-            System.out.println(message);
+
         } catch (SQLException e){
             System.err.println("Error during invoke SQL query: \n" + e.getMessage());
             throw  new RuntimeException("Error during invoke SQL query");
@@ -117,16 +96,16 @@ public class AuthorService implements IAuthor {
         List<Author> authors = new ArrayList<>();
         Connection connection = initializeDataBaseConnection();
         PreparedStatement preparedStatement = null;
-        SQL = "select * from author;";
+        SQL = "select * from author order by last_name;";
 
         try  {
             preparedStatement = connection.prepareStatement(SQL);
-            ResultSet resultSet = preparedStatement.executeQuery(SQL);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Author author = new Author();
                 author.setFirstName(resultSet.getString("first_name"));
                 author.setLastName(resultSet.getString("last_name"));
-                author.setId(resultSet.getInt("author_id"));
+                author.setAuthorId(resultSet.getInt("author_id"));
                 authors.add(author);
             }
         } catch (SQLException e){
@@ -157,7 +136,7 @@ public class AuthorService implements IAuthor {
                 author = new Author();
                 author.setFirstName(rs.getString("first_name"));
                 author.setLastName(rs.getString("last_name"));
-                author.setId(rs.getInt("author_id"));
+                author.setAuthorId(rs.getInt("author_id"));
             }
         } catch (SQLException e){
             System.err.println("Error during invoke SQL query: \n" + e.getMessage());
@@ -166,49 +145,16 @@ public class AuthorService implements IAuthor {
         finally {
             closeDBResources(connection,preparedStatement);
         }
-
-        return author;
-    }
-
-    @Override
-    public Author getAuthor(String firstName, String lastName) {
-
-        Author author = null;
-        String SQL = "select * from author where first_name = ? and last_name = ?;";
-        Connection connection = initializeDataBaseConnection();
-        PreparedStatement preparedStatement = null;
-        try  {
-            preparedStatement = connection.prepareStatement(SQL);
-
-            preparedStatement.setString(1, firstName);
-            preparedStatement.setString(2, lastName);
-
-            ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()){
-                author = new Author();
-                author.setFirstName(rs.getString("first_name"));
-                author.setLastName(rs.getString("last_name"));
-                author.setId(rs.getInt("author_id"));
-            }
-        } catch (SQLException e){
-            System.err.println("Error during invoke SQL query: \n" + e.getMessage());
-            throw  new RuntimeException("Error during invoke SQL query");
-        }
-        finally {
-            closeDBResources(connection,preparedStatement);
-        }
-
         return author;
     }
 
     @Override
     public List<Author> getAuthors(String name) {
 
-
         List<Author> authors = new ArrayList<>();
         Connection connection = initializeDataBaseConnection();
         PreparedStatement preparedStatement = null;
-        String SQL = "select * from author where first_name = ? or last_name = ?;";
+        String SQL = "select * from author where first_name = ? or last_name = ? order by last_name;";
 
         try  {
             preparedStatement = connection.prepareStatement(SQL);
@@ -221,7 +167,7 @@ public class AuthorService implements IAuthor {
                 Author author = new Author();
                 author.setFirstName(rs.getString("first_name"));
                 author.setLastName(rs.getString("last_name"));
-                author.setId(rs.getInt("author_id"));
+                author.setAuthorId(rs.getInt("author_id"));
                 authors.add(author);
             }
         } catch (SQLException e){
@@ -231,42 +177,30 @@ public class AuthorService implements IAuthor {
         finally {
             closeDBResources(connection,preparedStatement);
         }
-
         return authors;
     }
 
- /*   @Override
+    @Override
     public void editAuthor(int id, String firstName, String lastName) {
 
-        int authorId = getAuthorId(firstName, lastName);
+        SQL = "update author set first_name = ?, last_name = ? where author_id = ?;";
 
-        if(authorId == 0) {
+        Connection connection = initializeDataBaseConnection();
+        PreparedStatement preparedStatement;
 
-            SQL = "update author set first_name = ?, last_name = ? where author_id = ?";
-            PreparedStatement preparedStatement;
+        try {
+            preparedStatement = connection.prepareStatement(SQL);
 
-            try (Connection conn = connect.connectDB()) {
-                preparedStatement = conn.prepareStatement(SQL);
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setInt(3, id);
 
-                preparedStatement.setString(1, firstName);
-                preparedStatement.setString(2, lastName);
-                preparedStatement.setInt(3, id);
-
-                preparedStatement.executeUpdate();
-            } catch (SQLException e){
-                System.err.println("Error during invoke SQL query: \n" + e.getMessage());
-                throw  new RuntimeException("Error during invoke SQL query");
-            }
-            finally {
-                closeDBResources(connection,preparedStatement);
-            }
-        } else {
-
-            removeAuthor(id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-
         message = "Autor zmieniony na: " + firstName + " " + lastName;
-    }*/
+    }
 
     @Override
     public String getMessage(){

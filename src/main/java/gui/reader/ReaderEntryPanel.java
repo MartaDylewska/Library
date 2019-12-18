@@ -1,13 +1,15 @@
 package gui.reader;
 
+import gui.general.MyButton;
+
 import javax.swing.*;
 
 public class ReaderEntryPanel extends JPanel {
     private JLabel nameLbl, cardNrLbl;
-    private JButton updateBtn, doBookingBtn, lendingsBtn,joinEventBtn, checkEventBtn;
-    private JButton returnBtn;
-    private int firstBtnY = 10;
-    private int distanceY = 80;
+    private MyButton updateBtn, doBookingBtn, lendingsBtn,joinEventBtn, checkEventBtn;
+    private MyButton returnBtn;
+    private int firstBtnY = 120;
+    private int distanceY = 40;
 
     public ReaderEntryPanel(){
         setLayout(null);
@@ -36,38 +38,38 @@ public class ReaderEntryPanel extends JPanel {
     }
 
     private void createUpdateBtn(){
-        updateBtn = new JButton();
+        updateBtn = new MyButton(true);
         updateBtn.setText("Aktualizuj profil");
-        updateBtn.setBounds(300,firstBtnY,250,50);
+        updateBtn.setBounds(250,firstBtnY,200,30);
     }
 
     private void createDoBookingBtn(){
-        doBookingBtn = new JButton();
+        doBookingBtn = new MyButton(true);
         doBookingBtn.setText("Zarezerwuj książkę");
-        doBookingBtn.setBounds(300,firstBtnY + distanceY,250,50);
+        doBookingBtn.setBounds(250,firstBtnY + distanceY,200,30);
     }
 
     private void createLendingsBtn(){
-        lendingsBtn = new JButton();
-        lendingsBtn.setText("Sprawdź Twoje wypożyczenia");
-        lendingsBtn.setBounds(300,firstBtnY + 2*distanceY,250,50);
+        lendingsBtn = new MyButton(true);
+        lendingsBtn.setText("Sprawdź wypożyczenia");
+        lendingsBtn.setBounds(250,firstBtnY + 2*distanceY,200,30);
     }
     private void createJoinEventBtn(){
-        joinEventBtn = new JButton();
+        joinEventBtn = new MyButton(true);
         joinEventBtn.setText("Dołącz do wydarzenia");
-        joinEventBtn.setBounds(300, firstBtnY + 3*distanceY, 250, 50);
+        joinEventBtn.setBounds(250, firstBtnY + 3*distanceY, 200, 30);
     }
 
     private void createCheckEventBtn(){
-        checkEventBtn = new JButton();
+        checkEventBtn = new MyButton(true);
         checkEventBtn.setText("Sprawdź Twoje wydarzenia");
-        checkEventBtn.setBounds(300, firstBtnY + 4*distanceY, 250, 50);
+        checkEventBtn.setBounds(250, firstBtnY + 4*distanceY, 200, 30);
     }
 
     private void createReturnBtn(){
-        returnBtn = new JButton();
+        returnBtn = new MyButton(false);
         returnBtn.setText("Wyloguj");
-        returnBtn.setBounds(300,firstBtnY+5*distanceY,250,50);
+        returnBtn.setBounds(250,firstBtnY+5*distanceY,200,30);
     }
 
     private void addAllLabels(){
@@ -83,20 +85,20 @@ public class ReaderEntryPanel extends JPanel {
     private void createNameLbl(){
         nameLbl = new JLabel();
         nameLbl.setText("-------");
-        nameLbl.setBounds(50,50,200,50);
+        nameLbl.setBounds(250,40,200,30);
     }
 
     private void createCardNrLbl(){
         cardNrLbl = new JLabel();
-        cardNrLbl.setBounds(50,150,200,50);
+        cardNrLbl.setBounds(250,80,200,30);
         cardNrLbl.setText("----------");
     }
-    public JButton getUpdateBtn(){return updateBtn;}
-    public JButton getDoBookingBtn(){return doBookingBtn;}
-    public JButton getLendingsBtn(){return lendingsBtn;}
-    public JButton getJoinEventBtn(){return joinEventBtn;}
-    public JButton getCheckEventBtn(){return checkEventBtn;}
-    public JButton getReturnBtn(){return returnBtn;}
+    public MyButton getUpdateBtn(){return updateBtn;}
+    public MyButton getDoBookingBtn(){return doBookingBtn;}
+    public MyButton getLendingsBtn(){return lendingsBtn;}
+    public MyButton getJoinEventBtn(){return joinEventBtn;}
+    public MyButton getCheckEventBtn(){return checkEventBtn;}
+    public MyButton getReturnBtn(){return returnBtn;}
     public void setNameLbl(String name){this.nameLbl.setText(name);}
     public void setCardNrLbl(String cardNr){this.cardNrLbl.setText(cardNr);}
     public JLabel getCardNrLbl(){return cardNrLbl;}

@@ -3,27 +3,15 @@ package gui;
 import config.Validation;
 import gui.admin.*;
 import gui.book.*;
-import gui.event.EventAddPanel;
-import gui.event.EventDeletePanel;
-import gui.event.EventSeeAllPanel;
-import gui.event.EventSignInPanel;
-import gui.lending.AcceptReturnPanel;
-import gui.lending.LendingShowPanel;
+import gui.bookTransfer.*;
+import gui.event.*;
+import gui.general.BackgroundPanel;
 import gui.librarian.*;
 import gui.login.LoginPanel;
-import gui.poster.PosterOperationsPanel;
 import gui.reader.*;
-import gui.reservation.ReservationShowPanel;
-import gui.user.*;
-import images.IPosterDBService;
-import images.PosterDBServiceImpl;
 import user.IUserDBService;
 import user.User;
 import user.UserDBServiceImpl;
-import gui.librarian.LibrarianAddPanel;
-import gui.librarian.LibrarianOperationsPanel;
-import gui.librarian.LibrarianShowPanel;
-import gui.librarian.LibrarianUpdatePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,56 +19,50 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class MFrame extends JFrame {
-    UserShowPanel userShowPanel;
-    UserOperationsPanel userOperationsPanel;
-    UserUpdatePanel userUpdatePanel;
-    UserDeletePanel userDeletePanel;
-    UsersShowAllPanel usersShowAllPanel;
-    UserAddPanel userAddPanel;
-    ReaderOperationsPanel readerOperationsPanel;
-    ReaderAddPanel readerAddPanel;
-    ReaderShowPanel readerShowPanel;
-    ReaderUpdatePanel readerUpdatePanel;
-    ReaderDeletePanel readerDeletePanel;
-    ReadersShowAllPanel readersShowAllPanel;
-    LibrarianOperationsPanel librarianOperationsPanel;
-    LibrarianAddPanel librarianAddPanel;
-    LibrarianShowPanel librarianShowPanel;
-    LibrarianUpdatePanel librarianUpdatePanel;
-    LibrarianDeletePanel librarianDeletePanel;
-    LibrariansShowAllPanel librariansShowAllPanel;
-    AdminOperationsPanel adminOperationsPanel;
-    AdminShowPanel adminShowPanel;
-    AdminAddPanel adminAddPanel;
-    AdminDeletePanel adminDeletePanel;
-    AdminUpdatePanel adminUpdatePanel;
-    AdminsShowAllPanel adminsShowAllPanel;
-    LoginPanel loginPanel;
-    ReaderEntryPanel readerEntryPanel;
-    LibrarianEntryPanel librarianEntryPanel;
-    AdminEntryPanel adminEntryPanel;
-    PosterOperationsPanel posterOperationsPanel;
-    EventAddPanel eventAddPanel;
-    EventDeletePanel eventDeletePanel;
-    EventSignInPanel eventSignInPanel;
-    EventSeeAllPanel eventSeeAllPanel;
-    BookAddPanel bookAddPanel;
-    BookDeletePanel bookDeletePanel;
-    BookEditPanel bookEditPanel;
-    BookGetPanel bookGetPanel;
-    BookReservePanel bookReservePanel;
-    ReservationShowPanel reservationShowPanel;
-    LendingShowPanel lendingShowPanel;
-    AcceptReturnPanel acceptReturnPanel;
-   // ImagePanel imagePanel;
 
+
+    private ReaderAddPanel readerAddPanel;
+    private ReaderUpdatePanel readerUpdatePanel;
+    private ReaderDeletePanel readerDeletePanel;
+    private LibrarianAddPanel librarianAddPanel;
+    private LibrarianUpdatePanel librarianUpdatePanel;
+    private LibrarianDeletePanel librarianDeletePanel;
+    private AdminAddPanel adminAddPanel;
+    private AdminDeletePanel adminDeletePanel;
+    private AdminUpdatePanel adminUpdatePanel;
+    private LoginPanel loginPanel;
+    private ReaderEntryPanel readerEntryPanel;
+    private LibrarianEntryPanel librarianEntryPanel;
+    private AdminEntryPanel adminEntryPanel;
+    private EventAddPanel eventAddPanel;
+    private EventDeletePanel eventDeletePanel;
+    private EventSignInPanel eventSignInPanel;
+    private EventSeeAllPanel eventSeeAllPanel;
+    private BookAddPanel bookAddPanel;
+    private BookEditPanel bookEditPanel;
+    private BookGetPanel bookGetPanel;
+    private BookReservePanel bookReservePanel;
+    private AuthorGetPanel authorGetPanel;
+    private BookTransferPanel bookTransferPanel;
+    private BookShowPanel bookShowPanel;
 
     public MFrame() {
+
         setSize(700, 600);
 
         setTitle("Biblioteka");
         setResizable(false);
-        setLocationRelativeTo(null);
+
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int)screenSize.getWidth();
+        int height = (int) screenSize.getHeight();
+        int posX = width / 2 - getWidth() / 2;
+        int posY = height / 2 - getHeight() / 2;
+        setLocation(posX, posY);
+
+        BackgroundPanel backgroundPanel = new BackgroundPanel();
+        add(backgroundPanel);
 
 
 //----------------login panel----------------
@@ -149,16 +131,16 @@ public class MFrame extends JFrame {
                             });
 
                             readerEntryPanel.getLendingsBtn().addActionListener(e1 -> {
-                                lendingShowPanel = new LendingShowPanel(readerEntryPanel);
-                                lendingShowPanel.getCardIdTxt().setText(readerEntryPanel.getCardNrLbl().getText());
-                                add(lendingShowPanel);
+                                bookShowPanel = new BookShowPanel(readerEntryPanel);
+                                bookShowPanel.getCardIdTxt().setText(readerEntryPanel.getCardNrLbl().getText());
+                                add(bookShowPanel);
                                 remove(readerEntryPanel);
                                 repaint();
                                 revalidate();
 
-                                lendingShowPanel.getReturnBtn().addActionListener(e2 -> {
+                                bookShowPanel.getReturnBtn().addActionListener(e2 -> {
                                     add(readerEntryPanel);
-                                    remove(lendingShowPanel);
+                                    remove(bookShowPanel);
                                     repaint();
                                     revalidate();
                                 });
@@ -260,35 +242,35 @@ public class MFrame extends JFrame {
                                 });
                             });
 
-                            librarianEntryPanel.getConfirmReservationBtn().addActionListener(e1 -> {
-                                reservationShowPanel = new ReservationShowPanel();
-                                add(reservationShowPanel);
+                            librarianEntryPanel.getLendBook().addActionListener(e1 -> {
+                                bookTransferPanel = new BookTransferPanel();
+                                add(bookTransferPanel);
                                 remove(librarianEntryPanel);
                                 repaint();
                                 revalidate();
 
-                                reservationShowPanel.getReturnBtn().addActionListener(e2 -> {
+                                bookTransferPanel.getBack().addActionListener(e2 -> {
                                     add(librarianEntryPanel);
-                                    remove(reservationShowPanel);
+                                    remove(bookTransferPanel);
                                     repaint();
                                     revalidate();
                                 });
                             });
 
-                            librarianEntryPanel.getAcceptReturnBtn().addActionListener(e1 -> {
-                                acceptReturnPanel = new AcceptReturnPanel();
-                                add(acceptReturnPanel);
-                                remove(librarianEntryPanel);
-                                repaint();
-                                revalidate();
-
-                                acceptReturnPanel.getReturnBtn().addActionListener(e2 -> {
-                                    add(librarianEntryPanel);
-                                    remove(acceptReturnPanel);
-                                    repaint();
-                                    revalidate();
-                                });
-                            });
+//                            librarianEntryPanel.getAcceptReturnBtn().addActionListener(e1 -> {
+//                                acceptReturnPanel = new AcceptReturnPanel();
+//                                add(acceptReturnPanel);
+//                                remove(librarianEntryPanel);
+//                                repaint();
+//                                revalidate();
+//
+//                                acceptReturnPanel.getReturnBtn().addActionListener(e2 -> {
+//                                    add(librarianEntryPanel);
+//                                    remove(acceptReturnPanel);
+//                                    repaint();
+//                                    revalidate();
+//                                });
+//                            });
 
                             librarianEntryPanel.getDeleteEventBtn().addActionListener(e1 -> {
                                 eventDeletePanel = new EventDeletePanel();
@@ -305,7 +287,7 @@ public class MFrame extends JFrame {
                                 });
                             });
 
-                            librarianEntryPanel.getAddBookBtn().addActionListener(e1 -> {
+                            librarianEntryPanel.getAddBook().addActionListener(e1 -> {
                                 bookAddPanel = new BookAddPanel();
                                 add(bookAddPanel);
                                 remove(librarianEntryPanel);
@@ -320,22 +302,22 @@ public class MFrame extends JFrame {
                                 });
                             });
 
-                            librarianEntryPanel.getDeleteBookBtn().addActionListener(e1 -> {
-                                bookDeletePanel = new BookDeletePanel();
-                                add(bookDeletePanel);
+                            librarianEntryPanel.getFindAuthor().addActionListener(e1 -> {
+                                authorGetPanel = new AuthorGetPanel();
+                                add(authorGetPanel);
                                 remove(librarianEntryPanel);
                                 repaint();
                                 revalidate();
 
-                                bookDeletePanel.getReturnBtn().addActionListener(e2 -> {
+                                authorGetPanel.getBack().addActionListener(e2 -> {
                                     add(librarianEntryPanel);
-                                    remove(bookDeletePanel);
+                                    remove(authorGetPanel);
                                     repaint();
                                     revalidate();
                                 });
                             });
 
-                            librarianEntryPanel.getUpdateBookBtn().addActionListener(e1 -> {
+                            librarianEntryPanel.getFindBook().addActionListener(e1 -> {
                                 bookGetPanel = new BookGetPanel();
                                 add(bookGetPanel);
                                 remove(librarianEntryPanel);
@@ -343,7 +325,7 @@ public class MFrame extends JFrame {
                                 revalidate();
 
                                 bookGetPanel.getEdit().addActionListener(e2 -> {
-                                    if(bookGetPanel.getResultList().isSelectionEmpty() == false){
+                                    if(!bookGetPanel.getResultList().isSelectionEmpty()){
 
                                     bookEditPanel = new BookEditPanel(bookGetPanel);
                                     add(bookEditPanel);
@@ -549,8 +531,5 @@ public class MFrame extends JFrame {
             public void keyReleased(KeyEvent e) {
             }});
     }
-
-
-
-    }
+}
 

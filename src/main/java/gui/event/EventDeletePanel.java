@@ -4,6 +4,7 @@ package gui.event;
 import event.Event;
 import event.EventDBServiceImpl;
 import event.IEventDBService;
+import gui.general.MyButton;
 import images.IPosterDBService;
 import images.Poster;
 import images.PosterDBServiceImpl;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class EventDeletePanel extends JPanel {
     private JComboBox eventChooserBx;
-    private JButton viewEventBtn, deleteEventBtn, returnBtn;
+    private MyButton viewEventBtn, deleteEventBtn, returnBtn;
     private JLabel titleLbl, dateLbl, posterLbl, shortDescLbl, posterShowLbl;
     private JTextField titleTxt, dateTxt;
     private JTextArea shortDescTxt;
@@ -103,22 +104,22 @@ public class EventDeletePanel extends JPanel {
     }
 
     private void createDeleteEventBtn() {
-        deleteEventBtn = new JButton();
+        deleteEventBtn = new MyButton(true);
         deleteEventBtn.setText("Usuń");
-        deleteEventBtn.setBounds(450, 150, 200, 50);
+        deleteEventBtn.setBounds(450, 150, 200, 30);
         deleteEventBtn.setVisible(false);
     }
 
     private void createViewEventBtn() {
-        viewEventBtn = new JButton();
+        viewEventBtn = new MyButton(true);
         viewEventBtn.setText("Podgląd");
-        viewEventBtn.setBounds(450, 10, 200, 50);
+        viewEventBtn.setBounds(450, 10, 200, 30);
     }
 
     private void createReturnBtn() {
-        returnBtn = new JButton();
+        returnBtn = new MyButton(false);
         returnBtn.setText("Powrót");
-        returnBtn.setBounds(450, 300, 200, 50);
+        returnBtn.setBounds(450, 300, 200, 30);
     }
 
     private void createEventChooserBx() {
@@ -205,7 +206,7 @@ public class EventDeletePanel extends JPanel {
         this.posterShowLbl = posterShowLbl;
     }
 
-    public JButton getReturnBtn() {
+    public MyButton getReturnBtn() {
         return returnBtn;
     }
 

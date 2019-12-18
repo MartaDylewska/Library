@@ -1,15 +1,17 @@
 package gui.admin;
 
+import gui.general.MyButton;
+
 import javax.swing.*;
 
 public class AdminEntryPanel extends JPanel {
     private JLabel nameLbl, cardNrLbl;
-    private JButton addLibrarianBtn, deleteLibrarianBtn, updateLibrarianBtn;
-    private JButton addAdminBtn, deleteAdminBtn, updateAdminBtn;
-    private JButton returnBtn;
-    private int firstBtnY = 10;
-    private int distanceY = 50;
-    private int buttonHeight = 40;
+    private MyButton addLibrarianBtn, deleteLibrarianBtn, updateLibrarianBtn;
+    private MyButton addAdminBtn, deleteAdminBtn, updateAdminBtn;
+    private MyButton returnBtn;
+    private int firstBtnY = 120;
+    private int distanceY = 40;
+    private int buttonHeight = 30;
 
     public AdminEntryPanel(){
         setLayout(null);
@@ -40,39 +42,39 @@ public class AdminEntryPanel extends JPanel {
     }
 
     private void createAddLibrarianBtn() {
-        addLibrarianBtn = new JButton();
+        addLibrarianBtn = new MyButton(true);
         addLibrarianBtn.setText("Dodaj profil Bibiliotekarza");
-        addLibrarianBtn.setBounds(300, firstBtnY, 250, buttonHeight);
+        addLibrarianBtn.setBounds(250, firstBtnY, 200, buttonHeight);
     }
     private void createDeleteLibrarianBtn() {
-        deleteLibrarianBtn = new JButton();
+        deleteLibrarianBtn = new MyButton(true);
         deleteLibrarianBtn.setText("Usuń profil Bibiliotekarza");
-        deleteLibrarianBtn.setBounds(300, firstBtnY + distanceY, 250, buttonHeight);
+        deleteLibrarianBtn.setBounds(250, firstBtnY + distanceY, 200, buttonHeight);
     }
     private void createUpdateLibrarianBtn() {
-        updateLibrarianBtn = new JButton();
-        updateLibrarianBtn.setText("Aktualizuj profil Bibiliotekarza");
-        updateLibrarianBtn.setBounds(300, firstBtnY + 2 * distanceY, 250, buttonHeight);
+        updateLibrarianBtn = new MyButton(true);
+        updateLibrarianBtn.setText("Aktualizuj Bibiliotekarza");
+        updateLibrarianBtn.setBounds(250, firstBtnY + 2 * distanceY, 200, buttonHeight);
     }
     private void createAddAdminBtn() {
-        addAdminBtn = new JButton();
+        addAdminBtn = new MyButton(true);
         addAdminBtn.setText("Dodaj profil Administratora");
-        addAdminBtn.setBounds(300, firstBtnY + 3 * distanceY, 250, buttonHeight);
+        addAdminBtn.setBounds(250, firstBtnY + 3 * distanceY, 200, buttonHeight);
     }
     private void createDeleteAdminBtn() {
-        deleteAdminBtn = new JButton();
+        deleteAdminBtn = new MyButton(true);
         deleteAdminBtn.setText("Usuń profil Administratora");
-        deleteAdminBtn.setBounds(300, firstBtnY + 4 * distanceY, 250, buttonHeight);
+        deleteAdminBtn.setBounds(250, firstBtnY + 4 * distanceY, 200, buttonHeight);
     }
     private void createUpdateAdminBtn(){
-        updateAdminBtn = new JButton();
-        updateAdminBtn.setText("Aktualizuj profil Administratora");
-        updateAdminBtn.setBounds(300, firstBtnY + 5*distanceY,250,buttonHeight);
+        updateAdminBtn = new MyButton(true);
+        updateAdminBtn.setText("Aktualizuj Administratora");
+        updateAdminBtn.setBounds(250, firstBtnY + 5*distanceY,200,buttonHeight);
     }
     private void createReturnBtn() {
-        returnBtn = new JButton();
+        returnBtn = new MyButton(false);
         returnBtn.setText("Wyloguj");
-        returnBtn.setBounds(300, firstBtnY + 9 * distanceY, 250, buttonHeight);
+        returnBtn.setBounds(250, firstBtnY + 6 * distanceY, 200, buttonHeight);
     }
 
     private void addAllLabels() {
@@ -88,39 +90,39 @@ public class AdminEntryPanel extends JPanel {
     private void createNameLbl() {
         nameLbl = new JLabel();
         nameLbl.setText("-------");
-        nameLbl.setBounds(50, 50, 200, 50);
+        nameLbl.setBounds(250, 40, 200, 30);
     }
 
     private void createCardNrLbl() {
         cardNrLbl = new JLabel();
-        cardNrLbl.setBounds(50, 150, 200, 50);
+        cardNrLbl.setBounds(250, 80, 200, 30);
         cardNrLbl.setText("----------");
     }
 
-    public JButton getAddLibrarianBtn() {
+    public MyButton getAddLibrarianBtn() {
         return addLibrarianBtn;
     }
 
-    public JButton getDeleteLibrarianBtn() {
+    public MyButton getDeleteLibrarianBtn() {
         return deleteLibrarianBtn;
     }
 
-    public JButton getUpdateLibrarianBtn() {
+    public MyButton getUpdateLibrarianBtn() {
         return updateLibrarianBtn;
     }
 
-    public JButton getAddAdminBtn() {
+    public MyButton getAddAdminBtn() {
         return addAdminBtn;
     }
-    public JButton getDeleteAdminBtn() {
+    public MyButton getDeleteAdminBtn() {
         return deleteAdminBtn;
     }
 
-    public JButton getUpdateAdminBtn() {
+    public MyButton getUpdateAdminBtn() {
         return updateAdminBtn;
     }
 
-    public JButton getReturnBtn() {
+    public MyButton getReturnBtn() {
         return returnBtn;
     }
 

@@ -4,12 +4,11 @@ public class Book{
 
     private String title, genre, publisher, language;
     private long ISBN;
-//    private Author author;
     private Bookshelf bookshelf;
-    private boolean isAvailable;
     private int bookId;
+    private boolean isAvailable;
 
-    Book(){
+    public Book(){
     }
 
     public Book(String title, String genre, String publisher, String language, long ISBN, Bookshelf bookshelf, boolean isAvailable, int bookId) {
@@ -23,29 +22,11 @@ public class Book{
         this.bookId = bookId;
     }
 
-    public Book(String title, String genre, String publisher, String language, long ISBN, Bookshelf bookshelf, boolean isAvailable) {
-        this.title = title;
-        this.genre = genre;
-        this.publisher = publisher;
-        this.language = language;
-        this.ISBN = ISBN;
-        this.bookshelf = bookshelf;
-        this.isAvailable = isAvailable;
-    }
-
-    //    public Author getAuthor() {
-//        return author;
-//    }
-//
-//    void setAuthor(Author author) {
-//        this.author = author;
-//    }
-
     public String getTitle() {
         return title;
     }
 
-    void setTitle(String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -53,7 +34,7 @@ public class Book{
         return genre;
     }
 
-    void setGenre(String genre) {
+    public void setGenre(String genre) {
         this.genre = genre;
     }
 
@@ -61,7 +42,7 @@ public class Book{
         return publisher;
     }
 
-    void setPublisher(String publisher) {
+    public void setPublisher(String publisher) {
         this.publisher = publisher;
     }
 
@@ -69,7 +50,7 @@ public class Book{
         return ISBN;
     }
 
-    void setISBN(long ISBN) {
+    public void setISBN(long ISBN) {
         this.ISBN = ISBN;
     }
 
@@ -77,7 +58,7 @@ public class Book{
         return language;
     }
 
-    void setLanguage(String language) {
+    public void setLanguage(String language) {
         this.language = language;
     }
 
@@ -85,7 +66,7 @@ public class Book{
         return bookshelf;
     }
 
-    void setBookshelf(Bookshelf bookshelf) {
+    public void setBookshelf(Bookshelf bookshelf) {
         this.bookshelf = bookshelf;
     }
 
@@ -107,6 +88,6 @@ public class Book{
 
     @Override
     public String toString(){
-        return title + ", " + publisher + ", " + bookshelf;
+        return title + ", " + publisher;
     }
 }
