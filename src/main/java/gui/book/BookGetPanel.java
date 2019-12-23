@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import book.*;
+import gui.Auxiliary;
+import gui.general.CustButton;
 import gui.general.MyButton;
 
 public class BookGetPanel extends JPanel {
@@ -14,48 +16,84 @@ public class BookGetPanel extends JPanel {
     private JComboBox<String> searchBy;
     private JTextField keyWord;
     private JList<AuthorBook> resultList;
-    private MyButton search, remove, edit, location, unavailable, returnBtn;
+    private CustButton search, remove, edit, location, unavailable, returnBtn;
     private JScrollPane scrollpane;
+    private List<Component> componentBoldList = new ArrayList<>();
+    private List<Component> componentPlainList = new ArrayList<>();
 
     private IBook iBook = new BookService();
     private IAuthor iAuthor = new AuthorService();
     private IAuthorBook iAuthorBook = new AuthorBookService();
     private int bookIdToEdit, authorIdToEdit;
+    private JLabel rectLabel;
 
     public BookGetPanel() {
-
         setLayout(null);
-
         createComps();
         addComps();
+        createScroll();
         actions();
+        createRectLabel();
+        add(rectLabel);
+        createCompBoldList();
+        createCompPlainList();
+        setFont();
+        Auxiliary.setImageAsBackground(this);
+    }
 
+    private void setFont(){
+        for (Component c: componentPlainList)
+            c.setFont(Auxiliary.panelPlainFont);
+        for (Component c: componentBoldList)
+            c.setFont(Auxiliary.panelFont);
+    }
+
+    private void createCompBoldList(){
+        componentBoldList.add(searchByLabel);
+        componentBoldList.add(keyWordLabel);
+        componentBoldList.add(resultListLabel);
+        componentBoldList.add(result);
+        //componentBoldList.add(searchBy);
+    }
+
+    private void createCompPlainList(){
+        componentPlainList.add(keyWord);
+        componentPlainList.add(resultList);
+        componentPlainList.add(searchBy);
+    }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        //rectLabel.setText("aa");
+        rectLabel.setBounds(20,10,660,530);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        rectLabel.setVisible(true);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
     }
 
     private void createBookJList(List<AuthorBook> bookList){
-
         DefaultListModel<AuthorBook> listModel = new DefaultListModel<>();
         for (AuthorBook aBookList : bookList) {
             listModel.addElement(aBookList);
         }
         resultList.setModel(listModel);
         resultList.setLayoutOrientation(JList.VERTICAL);
-
     }
 
     private void createScroll(){
-
-        scrollpane = new JScrollPane(resultListLabel);
+        scrollpane = new JScrollPane();
         scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollpane.setPreferredSize(new Dimension(100,50));
-        scrollpane.setBounds(20,140,580,320);
-        scrollpane.getViewport().add(resultList, null);
+        scrollpane.setBounds(50,160,600,320);
+        scrollpane.setViewportView(resultList);
+        scrollpane.setBorder(Auxiliary.blackBorder());
         add(scrollpane);
         repaint();
     }
 
     private void createComps() {
-
         searchByLabel = new JLabel("Wyszukaj po:");
         searchByLabel.setBounds(50,40,100,30);
 
@@ -63,7 +101,7 @@ public class BookGetPanel extends JPanel {
         searchBy.setBounds(180,40,200,30);
 
         keyWordLabel = new JLabel("Słowo kluczowe:");
-        keyWordLabel.setBounds(50,80,100,30);
+        keyWordLabel.setBounds(50,80,130,30);
 
         keyWord = new JTextField();
         keyWord.setBounds(180,80,200,30);
@@ -82,27 +120,27 @@ public class BookGetPanel extends JPanel {
         result.setOpaque(true);
         result.setVerticalAlignment(1);
 
-        search = new MyButton(true);
+        search = new CustButton();
         search.setText("Szukaj");
         search.setBounds(450,40,200,30);
 
-        remove = new MyButton(true);
+        remove = new CustButton();
         remove.setText("Usuń");
         remove.setBounds(250,490,200,30);
 
-        edit = new MyButton(true);
+        edit = new CustButton();
         edit.setText("Edytuj");
         edit.setBounds(50,490,200,30);
 
-        location = new MyButton(true);
+        location = new CustButton();
         location.setText("Pokaż bez lokalizacji");
         location.setBounds(450, 80,200,30);
 
-        unavailable = new MyButton(true);
+        unavailable = new CustButton();
         unavailable.setText("Pokaż niedostępne");
         unavailable.setBounds(450, 120, 200,30);
 
-        returnBtn = new MyButton(false);
+        returnBtn = new CustButton();
         returnBtn.setText("Anuluj");
         returnBtn.setBounds(450,490,200,30);
     }
@@ -132,9 +170,11 @@ public class BookGetPanel extends JPanel {
 
             if(bookList.size() > 0) {
                 createBookJList(bookList);
-                add(resultList);
+                //add(resultList);
+                add(scrollpane);
             } else {
-                remove(resultList);
+                remove(scrollpane);
+                //remove(resultList);
                 result.setText("Nie ma takich książek.");
             }
 
@@ -163,7 +203,8 @@ public class BookGetPanel extends JPanel {
 
             if(bookList.size() > 0) {
                 createBookJList(bookList);
-                add(resultList);
+                add(scrollpane);
+                //add(resultList);
             } else {
                 result.setText("Nie ma takich książek.");
             }
@@ -174,7 +215,8 @@ public class BookGetPanel extends JPanel {
 
             if(bookList.size() > 0) {
                 createBookJList(bookList);
-                add(resultList);
+                add(scrollpane);
+                //add(resultList);
             } else {
                 result.setText("Nie ma takich książek.");
             }
@@ -188,21 +230,21 @@ public class BookGetPanel extends JPanel {
         add(keyWordLabel);
         add(keyWord);
         add(resultListLabel);
-        add(result);
+        //add(result);
         add(search);
         add(remove);
         add(edit);
-        add(location);
+        //add(location);
         add(unavailable);
         add(returnBtn);
 //        add(scrollpane);
     }
 
-    public MyButton getReturnBtn() {
+    public CustButton getReturnBtn() {
         return returnBtn;
     }
 
-    public MyButton getEdit() {
+    public CustButton getEdit() {
         return edit;
     }
 

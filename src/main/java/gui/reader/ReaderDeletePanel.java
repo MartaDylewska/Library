@@ -5,6 +5,8 @@ import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
+import gui.Auxiliary;
+import gui.general.CustButton;
 import gui.general.MyButton;
 import images.IPosterDBService;
 import images.Poster;
@@ -19,17 +21,22 @@ import user.User;
 import user.UserDBServiceImpl;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReaderDeletePanel extends JPanel {
 
     private JLabel firstNameLbl, lastNamelbl, emailLbl, passLbl, cardIdLbl, postalCodeLbl, cityNameLbl, streetAndBuildingLbl;
     private JTextField firstNameTxt, lastNameTxt, emailTxt, passTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
-    private MyButton searchReaderBtn, deleteReaderBtn, returnBtn;
+    private CustButton searchReaderBtn, deleteReaderBtn, returnBtn;
     private int fieldLength = 200;
     private JLabel imageLbl;
+    private JLabel rectLabel;
+    private List<Component> componentPlainList = new ArrayList<>();
+    private List<Component> componentBoldList = new ArrayList<>();
 
     private IUserDBService userDBService = new UserDBServiceImpl();
-//    private ICardDBService cardDBService = new CardDBServiceImpl();
     private ICityDBService cityDBService = new CityDBServiceImpl();
     private IReaderDBService readerDBService = new ReaderDBServiceImpl();
 
@@ -47,7 +54,45 @@ public class ReaderDeletePanel extends JPanel {
         createDeleteBtn();
         add(deleteReaderBtn);
         actionDeleteReaderBtn();
+        createRectLabel();
+        add(rectLabel);
+        Auxiliary.setImageAsBackground(this);
+        setFontForAllElements();
     }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        rectLabel.setBounds(10,10,680,350);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        rectLabel.setVisible(true);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
+    }
+
+    private void setFontForAllElements(){
+        componentPlainList.add(firstNameTxt);
+        componentPlainList.add(lastNameTxt);
+        componentPlainList.add(emailTxt);
+        componentPlainList.add(cardIdTxt);
+        componentPlainList.add(postalCodeTxt);
+        componentPlainList.add(cityNameTxt);
+        componentPlainList.add(streetAndBuildingTxt);
+
+        componentBoldList.add(firstNameLbl);
+        componentBoldList.add(lastNamelbl);
+        componentBoldList.add(emailLbl);
+        componentBoldList.add(passLbl);
+        componentBoldList.add(cardIdLbl);
+        componentBoldList.add(postalCodeLbl);
+        componentBoldList.add(cityNameLbl);
+        componentBoldList.add(streetAndBuildingLbl);
+
+        for (Component c: componentPlainList) {
+            c.setFont(Auxiliary.panelPlainFont);
+        }
+
+    }
+
     private void actionDeleteReaderBtn() {
 
         deleteReaderBtn.addActionListener(e -> {
@@ -102,20 +147,20 @@ public class ReaderDeletePanel extends JPanel {
     }
 
     private void createDeleteBtn() {
-        deleteReaderBtn = new MyButton(true);
+        deleteReaderBtn = new CustButton();
         deleteReaderBtn.setText("Usuń użytkownika");
         deleteReaderBtn.setVisible(false);
         deleteReaderBtn.setBounds(400, 150, 200, 30);
     }
 
     private void createSearchBtn() {
-        searchReaderBtn = new MyButton(true);
+        searchReaderBtn = new CustButton();
         searchReaderBtn.setText("Wyszukaj");
         searchReaderBtn.setBounds(400, 20, 200, 30);
     }
 
     private void createReturnBtn() {
-        returnBtn = new MyButton(false);
+        returnBtn = new CustButton();
         returnBtn.setText("Powrót");
         returnBtn.setBounds(400, 300, 200, 30);
     }
@@ -154,19 +199,11 @@ public class ReaderDeletePanel extends JPanel {
         createStreetAndBuildingTxt();
     }
 
-    private void createImgLabel() {
-        imageLbl = new JLabel();
-        IPosterDBService posterDBService = new PosterDBServiceImpl();
-        Poster poster = posterDBService.readImage("poster2.png");
-        ImageIcon icon = new ImageIcon(poster.getImgBytes());
-        imageLbl.setIcon(icon);
-        imageLbl.setBounds(200, 150, 200, 200);
-    }
-
     private void createStreetAndBuildingLbl() {
         streetAndBuildingLbl = new JLabel();
         streetAndBuildingLbl.setText("Ulica/nr");
         streetAndBuildingLbl.setBounds(20, 260, 100, 30);
+        streetAndBuildingLbl.setFont(Auxiliary.panelFont);
     }
 
     private void createStreetAndBuildingTxt() {
@@ -178,6 +215,7 @@ public class ReaderDeletePanel extends JPanel {
         cityNameLbl = new JLabel();
         cityNameLbl.setText("Miasto");
         cityNameLbl.setBounds(20, 220, 100, 30);
+        cityNameLbl.setFont(Auxiliary.panelFont);
     }
 
     private void createCityNameTxt() {
@@ -190,6 +228,7 @@ public class ReaderDeletePanel extends JPanel {
         postalCodeLbl = new JLabel();
         postalCodeLbl.setText("Kod pocztowy");
         postalCodeLbl.setBounds(20, 180, 100, 30);
+        postalCodeLbl.setFont(Auxiliary.panelFont);
     }
 
     private void createPostalCodeTxt() {
@@ -201,6 +240,7 @@ public class ReaderDeletePanel extends JPanel {
         emailLbl = new JLabel();
         emailLbl.setText("Email");
         emailLbl.setBounds(20, 140, 100, 30);
+        emailLbl.setFont(Auxiliary.panelFont);
     }
 
     private void createEmailTxt() {
@@ -212,6 +252,7 @@ public class ReaderDeletePanel extends JPanel {
         lastNamelbl = new JLabel();
         lastNamelbl.setText("Nazwisko");
         lastNamelbl.setBounds(20, 100, 100, 30);
+        lastNamelbl.setFont(Auxiliary.panelFont);
     }
 
     private void createLastNameTxt() {
@@ -223,6 +264,7 @@ public class ReaderDeletePanel extends JPanel {
         firstNameLbl = new JLabel();
         firstNameLbl.setText("Imię");
         firstNameLbl.setBounds(20, 60, 100, 30);
+        firstNameLbl.setFont(Auxiliary.panelFont);
     }
 
     private void createFirstNameTxt() {
@@ -234,6 +276,7 @@ public class ReaderDeletePanel extends JPanel {
         cardIdLbl = new JLabel();
         cardIdLbl.setText("Numer karty");
         cardIdLbl.setBounds(20, 20, 100, 30);
+        cardIdLbl.setFont(Auxiliary.panelFont);
     }
 
     private void createCardIdTxt() {
@@ -270,7 +313,7 @@ public class ReaderDeletePanel extends JPanel {
         streetAndBuildingTxt.setEditable(editability);
     }
 
-    public MyButton getReturnBtn() {
+    public CustButton getReturnBtn() {
         return returnBtn;
     }
 }

@@ -67,6 +67,33 @@ public class BookTransferService implements IBookTransfer {
     }
 
     @Override
+    public int getReservedUserBooksCount(int readerId) {
+        Connection connection = initializeDataBaseConnection();
+        PreparedStatement preparedStatement = null;
+        int reservationCount = 0;
+
+        SQL = "select count(*) as liczba_rezerwacji from reservation"+
+        "where reader_id = ?"+
+        "group by reservation.reader_id;";
+
+        try {
+            preparedStatement = connection.prepareStatement(SQL);
+            preparedStatement.setInt(1, readerId);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                reservationCount = rs.getInt(1);
+            }
+            return reservationCount;
+        }catch (SQLException e) {
+            System.err.println("Error during invoke SQL query: \n" + e.getMessage());
+            throw  new RuntimeException("Error during invoke SQL query");
+        }
+        finally {
+            closeDBResources(connection,preparedStatement);
+        }
+    }
+
+    @Override
     public List<BookTransfer> getLentUserBooks(int userId) {
         List<BookTransfer> usersBooks = new ArrayList<>();
 
@@ -115,6 +142,30 @@ public class BookTransferService implements IBookTransfer {
         finally {
             closeDBResources(connection,preparedStatement);
         }
+    }
+
+    @Override
+    public int getLentUserBooksCount(int readerId) {
+        Connection connection = initializeDataBaseConnection();
+        PreparedStatement preparedStatement = null;
+        int ledndingsCount = 0;
+        SQL = "select count(*) as liczba_wyp\n" +
+                "from lending\n" +
+                "where reader_id = ?\n" +
+                "group by reader_id;";
+        try {
+            preparedStatement = connection.prepareStatement(SQL);
+            preparedStatement.setInt(1, readerId);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                ledndingsCount = rs.getInt(1);
+            }
+            return ledndingsCount;
+        }catch (SQLException e) {
+            System.err.println("Error during invoke SQL query: \n" + e.getMessage());
+            throw  new RuntimeException("Error during invoke SQL query");
+        }
+        finally {closeDBResources(connection,preparedStatement);}
     }
 
     @Override
@@ -188,7 +239,7 @@ public class BookTransferService implements IBookTransfer {
             preparedStatement.setInt(1, bookId);
             preparedStatement.executeUpdate();
 
-            message = "Książka została wzrócona.";
+            message = "Książka została zwrócona.";
         } catch (SQLException e) {
             System.err.println("Error during invoke SQL query: \n" + e.getMessage());
             throw  new RuntimeException("Error during invoke SQL query");

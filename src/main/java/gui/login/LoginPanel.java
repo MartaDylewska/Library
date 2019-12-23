@@ -1,21 +1,19 @@
 package gui.login;
-
-
 import gui.Auxiliary;
-import gui.general.MyButton;
-
+import gui.general.CustButton;
 import javax.swing.*;
-import java.util.Objects;
+import java.awt.*;
 
 
 public class LoginPanel extends JPanel {
 
-    private JLabel cardNrLbl, passLbl;
+    private JLabel cardNrLbl, passLbl, imageLabel;
     private JTextField cardNrTxt;
     private ImageIcon image;
     private JPasswordField passTxt;
+    private JLabel rectLabel;
 
-    private MyButton libInfoBtn, loginBtn, registerBtn;
+    private CustButton loginBtn, registerBtn;
 
 
     public LoginPanel(){
@@ -25,14 +23,24 @@ public class LoginPanel extends JPanel {
         createAllLabels();
         addAllButtons();
         addAllLabels();
-
+        createImage();
         setFont();
         setBorder();
+        createRectLabel();
+        add(rectLabel);
+        Auxiliary.setImageAsBackground(this);
+    }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        rectLabel.setBounds(200,20,300,380);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        rectLabel.setVisible(true);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
     }
 
     private void setBorder(){
-        cardNrLbl.setBorder(Auxiliary.blackBorder());
-        passLbl.setBorder(Auxiliary.blackBorder());
         cardNrTxt.setBorder(Auxiliary.blackBorder());
         passTxt.setBorder(Auxiliary.blackBorder());
         loginBtn.setBorder(Auxiliary.blackBorder());
@@ -42,7 +50,7 @@ public class LoginPanel extends JPanel {
     private void setFont(){
         cardNrLbl.setFont(Auxiliary.panelFont);
         passLbl.setFont(Auxiliary.panelFont);
-        cardNrTxt.setFont(Auxiliary.panelFont);
+        cardNrTxt.setFont(Auxiliary.panelPlainFont);
         loginBtn.setFont(Auxiliary.panelFont);
         registerBtn.setFont(Auxiliary.panelFont);
     }
@@ -72,8 +80,8 @@ public class LoginPanel extends JPanel {
 
     private void createCardNrLbl(){
         cardNrLbl = new JLabel();
-        cardNrLbl.setText("Numer karty:");
-        cardNrLbl.setBounds(250,140,200,30);
+        cardNrLbl.setText("Numer karty");
+        cardNrLbl.setBounds(250,150,200,30);
     }
 
     private void createCardNrTxt(){
@@ -83,36 +91,40 @@ public class LoginPanel extends JPanel {
 
     private void createPassLbl(){
         passLbl = new JLabel();
-        passLbl.setText("Hasło:");
-        passLbl.setBounds(250,220,200,30);
+        passLbl.setText("Hasło");
+        passLbl.setBounds(250,230,200,30);
     }
     private void createPassTxt(){
         passTxt = new JPasswordField();
         passTxt.setBounds(250,260,200,30);
     }
+    private void createImage(){
+        imageLabel = new JLabel();
+        imageLabel.setBounds(250,40,200,100);
+        try {
+            image = new ImageIcon("src/main/resources/logo.png");
+        } catch (Exception e) {
+            System.out.println("Problem with picture logo.png.");
+        }
+        imageLabel.setIcon(image);
+        add(imageLabel);
+    }
 
-    /*private void createLibInfoBtn(){
-        libInfoBtn = new MyButton();
-        libInfoBtn.setText("<html><center>"+"INFO"+"<br>"+"O"+"<br>"+"BIBLIOTECE"+"</center></html>");
-        libInfoBtn.setBounds(500,70,150,150);
-        libInfoBtn.setFocusPainted(false);
-    }*/
     private void createLoginBtn(){
 
-        loginBtn = new MyButton(true);
+        loginBtn = new CustButton();
         loginBtn.setText("Zaloguj się");
         loginBtn.setBounds(250,300,200,30);
     }
     private void createRegisterBtn(){
-        registerBtn = new MyButton(false);
-        registerBtn.setText("załóż konto");
+        registerBtn = new CustButton();
+        registerBtn.setText("Załóż konto");
         registerBtn.setBounds(250,340,200,30);
     }
     public void setCardNrTxt(String cardNr){this.cardNrTxt.setText(cardNr);}
     public void setPassTxt(String pass){this.passTxt.setText(pass);}
-//    public MyButton getLibInfoBtn(){return libInfoBtn;}
-    public MyButton getLoginBtn(){return loginBtn;}
-    public MyButton getRegisterBtn(){return registerBtn;}
+    public JButton getLoginBtn(){return loginBtn;}
+    public JButton getRegisterBtn(){return registerBtn;}
     public JTextField getCardNrTxt(){return cardNrTxt;}
     public JPasswordField getPassTxt(){return passTxt;}
     public String getPasswordToString(JPasswordField passTxt){
@@ -121,5 +133,6 @@ public class LoginPanel extends JPanel {
             sb.append(c);
         return sb.toString();
     }
+
 
 }

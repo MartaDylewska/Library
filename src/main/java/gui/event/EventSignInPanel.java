@@ -3,6 +3,8 @@ package gui.event;
 import event.Event;
 import event.EventDBServiceImpl;
 import event.IEventDBService;
+import gui.Auxiliary;
+import gui.general.CustButton;
 import gui.general.MyButton;
 import images.IPosterDBService;
 import images.Poster;
@@ -15,11 +17,13 @@ import user.User;
 import user.UserDBServiceImpl;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventSignInPanel extends JPanel {
     private JComboBox eventChooserBx;
-    private MyButton viewEventBtn, signInEventBtn, returnBtn;
+    private CustButton viewEventBtn, signInEventBtn, returnBtn;
     private JLabel titleLbl, dateLbl, posterLbl, shortDescLbl, posterShowLbl;
     private JTextField titleTxt, dateTxt;
     private JTextArea shortDescTxt;
@@ -27,6 +31,8 @@ public class EventSignInPanel extends JPanel {
     int fieldLength = 200;
     int deltaY = 20;
     Event selectedEvent = null;
+    private JLabel rectLabel;
+    private List<Component> componentList = new ArrayList<>();
 
     private IPosterDBService posterDBService = new PosterDBServiceImpl();
     private IEventDBService eventDBService = new EventDBServiceImpl();
@@ -37,10 +43,40 @@ public class EventSignInPanel extends JPanel {
         setLayout(null);
         createItems();
         addItems();
-        setCompVisibility(false);
         setComponentsEditability(false);
         addActionViewEventBtn();
         addActionSingInEventBtn();
+        createRectLabel();
+        add(rectLabel);
+        setCompVisibility(false);
+        createCompList();
+        setFont();
+        Auxiliary.setImageAsBackground(this);
+    }
+
+    private void createCompList(){
+        componentList.add(titleLbl);
+        componentList.add(dateLbl);
+        componentList.add(posterLbl);
+        componentList.add(shortDescLbl);
+        componentList.add(titleTxt);
+        componentList.add(dateTxt);
+        componentList.add(shortDescTxt);
+        componentList.add(eventChooserBx);
+    }
+
+    private void setFont(){
+        for (Component c: componentList)
+            c.setFont(Auxiliary.panelPlainFont);
+    }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        rectLabel.setBounds(30,50,350,510);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        rectLabel.setVisible(false);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
     }
 
     private void addItems() {
@@ -133,20 +169,20 @@ public class EventSignInPanel extends JPanel {
     }
 
     private void createSignInEventBtn() {
-        signInEventBtn = new MyButton(true);
+        signInEventBtn = new CustButton();
         signInEventBtn.setText("Dołącz");
         signInEventBtn.setBounds(450, 150, 200, 50);
         signInEventBtn.setVisible(false);
     }
 
     private void createViewEventBtn() {
-        viewEventBtn = new MyButton(true);
+        viewEventBtn = new CustButton();
         viewEventBtn.setText("Podgląd");
         viewEventBtn.setBounds(450, 10, 200, 50);
     }
 
     private void createReturnBtn() {
-        returnBtn = new MyButton(false);
+        returnBtn = new CustButton();
         returnBtn.setText("Powrót");
         returnBtn.setBounds(450, 300, 200, 50);
     }
@@ -158,18 +194,18 @@ public class EventSignInPanel extends JPanel {
         for (Event e : eventList) {
             eventChooserBx.addItem(e.getDateEvent().toString() + " " + e.getTitle());
         }
-        eventChooserBx.setBounds(30, 10, 300, 50);
+        eventChooserBx.setBounds(30, 10, 350, 30);
     }
 
     private void createShortDescLbl() {
         shortDescLbl = new JLabel();
         shortDescLbl.setText("Krótki opis");
-        shortDescLbl.setBounds(20, 140 + deltaY + 300 + 20, 100, 30);
+        shortDescLbl.setBounds(40, 120 + deltaY + 300 + 20, 100, 30);
     }
 
     private void createShortDescTxt() {
         shortDescTxt = new JTextArea();
-        shortDescTxt.setBounds(150, 140 + deltaY + 300 + 20, fieldLength, 100);
+        shortDescTxt.setBounds(150, 120 + deltaY + 300 + 20, fieldLength, 80);
         shortDescTxt.setWrapStyleWord(true);
         shortDescTxt.setLineWrap(true);
     }
@@ -178,35 +214,35 @@ public class EventSignInPanel extends JPanel {
     private void createPosterLbl() {
         posterLbl = new JLabel();
         posterLbl.setText("Plakat");
-        posterLbl.setBounds(20, 140 + deltaY, 100, 30);
+        posterLbl.setBounds(40, 120 + deltaY, 100, 30);
     }
 
     private void createPosterShowLbl() {
         posterShowLbl = new JLabel();
-        posterShowLbl.setBounds(150, 140 + deltaY, fieldLength, 300);
+        posterShowLbl.setBounds(150, 120 + deltaY, fieldLength, 300);
     }
 
 
     private void createDateLbl() {
         dateLbl = new JLabel();
         dateLbl.setText("Data");
-        dateLbl.setBounds(20, 100 + deltaY, 100, 30);
+        dateLbl.setBounds(40, 80 + deltaY, 100, 30);
     }
 
     private void createDateTxt() {
         dateTxt = new JTextField();
-        dateTxt.setBounds(150, 100 + deltaY, fieldLength, 30);
+        dateTxt.setBounds(150, 80 + deltaY, fieldLength, 30);
     }
 
     private void createTitleLbl() {
         titleLbl = new JLabel();
         titleLbl.setText("Tytuł");
-        titleLbl.setBounds(20, 60 + deltaY, 100, 30);
+        titleLbl.setBounds(40, 40 + deltaY, 100, 30);
     }
 
     private void createTitleTxt() {
         titleTxt = new JTextField();
-        titleTxt.setBounds(150, 60 + deltaY, fieldLength, 30);
+        titleTxt.setBounds(150, 40 + deltaY, fieldLength, 30);
     }
 
 
@@ -219,6 +255,7 @@ public class EventSignInPanel extends JPanel {
         dateTxt.setVisible(visibility);
         posterShowLbl.setVisible(visibility);
         shortDescTxt.setVisible(visibility);
+        rectLabel.setVisible(visibility);
     }
 
     private void setComponentsEditability(boolean editability) {
@@ -243,7 +280,7 @@ public class EventSignInPanel extends JPanel {
         this.cardIdTxt = cardIdTxt;
     }
 
-    public MyButton getReturnBtn() {
+    public CustButton getReturnBtn() {
         return returnBtn;
     }
 }

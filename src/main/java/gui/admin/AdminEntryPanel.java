@@ -1,17 +1,21 @@
 package gui.admin;
 
+import gui.Auxiliary;
+import gui.general.CustButton;
 import gui.general.MyButton;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class AdminEntryPanel extends JPanel {
     private JLabel nameLbl, cardNrLbl;
-    private MyButton addLibrarianBtn, deleteLibrarianBtn, updateLibrarianBtn;
-    private MyButton addAdminBtn, deleteAdminBtn, updateAdminBtn;
-    private MyButton returnBtn;
+    private CustButton addLibrarianBtn, deleteLibrarianBtn, updateLibrarianBtn;
+    private CustButton addAdminBtn, deleteAdminBtn, updateAdminBtn;
+    private CustButton returnBtn;
     private int firstBtnY = 120;
     private int distanceY = 40;
     private int buttonHeight = 30;
+    private JLabel rectLabel;
 
     public AdminEntryPanel(){
         setLayout(null);
@@ -19,6 +23,19 @@ public class AdminEntryPanel extends JPanel {
         addAllLabels();
         createAllBtns();
         addAllBtns();
+        createRectLabel();
+        add(rectLabel);
+        Auxiliary.setImageAsBackground(this);
+    }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        //rectLabel.setText("aa");
+        rectLabel.setBounds(200,20,300,410);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        rectLabel.setVisible(true);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
     }
 
     private void addAllBtns() {
@@ -42,37 +59,37 @@ public class AdminEntryPanel extends JPanel {
     }
 
     private void createAddLibrarianBtn() {
-        addLibrarianBtn = new MyButton(true);
-        addLibrarianBtn.setText("Dodaj profil Bibiliotekarza");
+        addLibrarianBtn = new CustButton();
+        addLibrarianBtn.setText("Dodaj Bibiliotekarza");
         addLibrarianBtn.setBounds(250, firstBtnY, 200, buttonHeight);
     }
     private void createDeleteLibrarianBtn() {
-        deleteLibrarianBtn = new MyButton(true);
-        deleteLibrarianBtn.setText("Usuń profil Bibiliotekarza");
+        deleteLibrarianBtn = new CustButton();
+        deleteLibrarianBtn.setText("Usuń Bibiliotekarza");
         deleteLibrarianBtn.setBounds(250, firstBtnY + distanceY, 200, buttonHeight);
     }
     private void createUpdateLibrarianBtn() {
-        updateLibrarianBtn = new MyButton(true);
+        updateLibrarianBtn = new CustButton();
         updateLibrarianBtn.setText("Aktualizuj Bibiliotekarza");
         updateLibrarianBtn.setBounds(250, firstBtnY + 2 * distanceY, 200, buttonHeight);
     }
     private void createAddAdminBtn() {
-        addAdminBtn = new MyButton(true);
-        addAdminBtn.setText("Dodaj profil Administratora");
+        addAdminBtn = new CustButton();
+        addAdminBtn.setText("Dodaj Administratora");
         addAdminBtn.setBounds(250, firstBtnY + 3 * distanceY, 200, buttonHeight);
     }
     private void createDeleteAdminBtn() {
-        deleteAdminBtn = new MyButton(true);
-        deleteAdminBtn.setText("Usuń profil Administratora");
+        deleteAdminBtn = new CustButton();
+        deleteAdminBtn.setText("Usuń Administratora");
         deleteAdminBtn.setBounds(250, firstBtnY + 4 * distanceY, 200, buttonHeight);
     }
     private void createUpdateAdminBtn(){
-        updateAdminBtn = new MyButton(true);
+        updateAdminBtn = new CustButton();
         updateAdminBtn.setText("Aktualizuj Administratora");
         updateAdminBtn.setBounds(250, firstBtnY + 5*distanceY,200,buttonHeight);
     }
     private void createReturnBtn() {
-        returnBtn = new MyButton(false);
+        returnBtn = new CustButton();
         returnBtn.setText("Wyloguj");
         returnBtn.setBounds(250, firstBtnY + 6 * distanceY, 200, buttonHeight);
     }
@@ -90,39 +107,43 @@ public class AdminEntryPanel extends JPanel {
     private void createNameLbl() {
         nameLbl = new JLabel();
         nameLbl.setText("-------");
-        nameLbl.setBounds(250, 40, 200, 30);
+        nameLbl.setBounds(250,40,200,30);
+        nameLbl.setFont(new Font("Arial Narrow", Font.BOLD, 20));
+        nameLbl.setForeground(new Color(78,52,46,255));
     }
 
     private void createCardNrLbl() {
         cardNrLbl = new JLabel();
-        cardNrLbl.setBounds(250, 80, 200, 30);
+        cardNrLbl.setBounds(250,60,200,30);
         cardNrLbl.setText("----------");
+        cardNrLbl.setFont(new Font("Arial Narrow", Font.BOLD, 16));
+        cardNrLbl.setForeground(new Color(78,52,46,255));
     }
 
-    public MyButton getAddLibrarianBtn() {
+    public CustButton getAddLibrarianBtn() {
         return addLibrarianBtn;
     }
 
-    public MyButton getDeleteLibrarianBtn() {
+    public CustButton getDeleteLibrarianBtn() {
         return deleteLibrarianBtn;
     }
 
-    public MyButton getUpdateLibrarianBtn() {
+    public CustButton getUpdateLibrarianBtn() {
         return updateLibrarianBtn;
     }
 
-    public MyButton getAddAdminBtn() {
+    public CustButton getAddAdminBtn() {
         return addAdminBtn;
     }
-    public MyButton getDeleteAdminBtn() {
+    public CustButton getDeleteAdminBtn() {
         return deleteAdminBtn;
     }
 
-    public MyButton getUpdateAdminBtn() {
+    public CustButton getUpdateAdminBtn() {
         return updateAdminBtn;
     }
 
-    public MyButton getReturnBtn() {
+    public CustButton getReturnBtn() {
         return returnBtn;
     }
 

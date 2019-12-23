@@ -1,10 +1,14 @@
 package gui.book;
 
 import book.*;
+import gui.Auxiliary;
+import gui.general.CustButton;
 import gui.general.MyButton;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookEditPanel extends JPanel {
 
@@ -15,8 +19,11 @@ public class BookEditPanel extends JPanel {
     private JTextField firstName, lastName;
     private JLabel alleyLabel, bookstandLabel, shelfLabel;
     private JComboBox alley, bookstand, shelf;
-    private MyButton confirm, returnBtn;
+    private CustButton confirm, returnBtn;
     private int fieldLength = 200;
+    private List<Component> componentBoldList = new ArrayList<>();
+    private List<Component> componentPlainList = new ArrayList<>();
+    private JLabel rectLabel;
 
     private IBook bookService = new BookService();
     private IAuthor authorService = new AuthorService();
@@ -32,10 +39,56 @@ public class BookEditPanel extends JPanel {
         Author author = authorService.getAuthor(authorIdToEdit);
 
         setLayout(null);
-
         createComps(book, author);
         addComp();
         action(book, author);
+        createCompBoldList();
+        createCompPlainList();
+        setFont();
+        createRectLabel();
+        add(rectLabel);
+        Auxiliary.setImageAsBackground(this);
+    }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        //rectLabel.setText("aa");
+        rectLabel.setBounds(20,10,660,530);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        rectLabel.setVisible(true);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
+    }
+
+    private void setFont(){
+        for (Component c: componentBoldList)
+            c.setFont(Auxiliary.panelFont);
+        for (Component c: componentPlainList)
+            c.setFont(Auxiliary.panelPlainFont);
+    }
+
+    private void createCompBoldList(){
+        componentBoldList.add(titleLabel);
+        componentBoldList.add(publisherLabel);
+        componentBoldList.add(genreLabel);
+        componentBoldList.add(languageLabel);
+        componentBoldList.add(firstNameLabel);
+        componentBoldList.add(lastNameLabel);
+        componentBoldList.add(alleyLabel);
+        componentBoldList.add(bookstandLabel);
+        componentBoldList.add(shelfLabel);
+    }
+
+    private void createCompPlainList(){
+        componentPlainList.add(publisher);
+        componentPlainList.add(genre);
+        componentPlainList.add(language);
+        componentPlainList.add(title);
+        componentPlainList.add(firstName);
+        componentPlainList.add(lastName);
+        componentPlainList.add(alley);
+        componentPlainList.add(bookstand);
+        componentPlainList.add(shelf);
     }
 
     private void createComps(Book book, Author author) {
@@ -110,11 +163,11 @@ public class BookEditPanel extends JPanel {
         String shelfBook = String.valueOf(book.getBookshelf().getShelf());
         shelf.setSelectedItem(shelfBook);
 
-        confirm = new MyButton(true);
+        confirm = new CustButton();
         confirm.setText("Zatwierdź");
         confirm.setBounds(400, 60, 200, 30);
 
-        returnBtn = new MyButton(false);
+        returnBtn = new CustButton();
         returnBtn.setText("Anuluj");
         returnBtn.setBounds(400, 340, 200, 30);
 
@@ -178,7 +231,7 @@ public class BookEditPanel extends JPanel {
                 genreCheck && languageCheck;
     }
 
-    public MyButton getReturnBtn() {
+    public CustButton getReturnBtn() {
         return returnBtn;
     }
 }

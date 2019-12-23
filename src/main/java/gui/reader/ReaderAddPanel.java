@@ -6,7 +6,8 @@ import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
-import gui.general.MyButton;
+import gui.Auxiliary;
+import gui.general.CustButton;
 import reader.IReaderDBService;
 import reader.ReaderDBServiceImpl;
 import user.IUserDBService;
@@ -17,18 +18,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReaderAddPanel  extends JPanel {
     private JLabel firstNameLbl, lastNamelbl, emailLbl, passLbl, cardIdLbl, postalCodeLbl, cityNameLbl, streetAndBuildingLbl;
     private JTextField firstNameTxt, lastNameTxt, emailTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
     private JPasswordField passField;
-    private MyButton addReaderBtn, returnBtn;
+    private CustButton addReaderBtn, returnBtn;
     private int fieldLength = 200;
     private String message;
     private JCheckBox notRobot;
+    private JLabel rectLabel;
+    private List<Component> componentPlainList = new ArrayList<>();
+    private List<Component> componentBoldList = new ArrayList<>();
 
     private IUserDBService userDBService = new UserDBServiceImpl();
-    private ICardDBService cardDBService = new CardDBServiceImpl();
     private ICityDBService cityDBService = new CityDBServiceImpl();
     private IReaderDBService readerDBService = new ReaderDBServiceImpl();
 
@@ -44,9 +49,51 @@ public class ReaderAddPanel  extends JPanel {
         add(returnBtn);
         createAddBtn();
         add(addReaderBtn);
+        add(rectLabel);
         setPostalCodeKL();
         actionAddReaderBtn();
+        Auxiliary.setImageAsBackground(this);
+        setFontForAllElements();
     }
+
+    private void setFontForAllElements(){
+        componentPlainList.add(firstNameTxt);
+        componentPlainList.add(lastNameTxt);
+        componentPlainList.add(emailTxt);
+        componentPlainList.add(cardIdTxt);
+        componentPlainList.add(postalCodeTxt);
+        componentPlainList.add(cityNameTxt);
+        componentPlainList.add(streetAndBuildingTxt);
+
+        componentBoldList.add(firstNameLbl);
+        componentBoldList.add(lastNamelbl);
+        componentBoldList.add(emailLbl);
+        componentBoldList.add(passLbl);
+        componentBoldList.add(cardIdLbl);
+        componentBoldList.add(postalCodeLbl);
+        componentBoldList.add(cityNameLbl);
+        componentBoldList.add(streetAndBuildingLbl);
+        componentBoldList.add(notRobot);
+
+        for (Component c: componentPlainList) {
+            c.setFont(Auxiliary.panelPlainFont);
+        }
+
+        for(Component c: componentBoldList)
+            c.setFont(Auxiliary.panelFont);
+        returnBtn.setFont(Auxiliary.buttonFont);
+        addReaderBtn.setFont(Auxiliary.buttonFont);
+    }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        rectLabel.setBounds(150,20,400,450);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        rectLabel.setVisible(true);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
+    }
+
     private void setPostalCodeKL() {
         postalCodeTxt.addKeyListener(new KeyListener() {
             @Override
@@ -97,13 +144,13 @@ public class ReaderAddPanel  extends JPanel {
     }
 
     private void createReturnBtn() {
-        returnBtn = new MyButton(false);
+        returnBtn = new CustButton();
         returnBtn.setText("Anuluj");
         returnBtn.setBounds(350, 380, 150, 30);
     }
 
     private void createAddBtn() {
-        addReaderBtn = new MyButton(true);
+        addReaderBtn = new CustButton();
         addReaderBtn.setText("Załóż konto");
         addReaderBtn.setBounds(200, 380, 150, 30);
     }
@@ -126,6 +173,7 @@ public class ReaderAddPanel  extends JPanel {
         add(passLbl);
         add(passField);
         add(notRobot);
+
     }
 
     private void createAllLabels() {
@@ -145,6 +193,7 @@ public class ReaderAddPanel  extends JPanel {
         createStreetAndBuildingTxt();
         createPassLbl();
         createPassTxt();
+        createRectLabel();
     }
 
     private void createPassLbl() {
@@ -156,6 +205,7 @@ public class ReaderAddPanel  extends JPanel {
     private void createPassTxt() {
         passField = new JPasswordField();
         passField.setBounds(300, 300, fieldLength, 30);
+        passField.setBorder(Auxiliary.blackBorder());
     }
 
     private void createStreetAndBuildingLbl() {
@@ -167,6 +217,7 @@ public class ReaderAddPanel  extends JPanel {
     private void createStreetAndBuildingTxt() {
         streetAndBuildingTxt = new JTextField();
         streetAndBuildingTxt.setBounds(300, 260, fieldLength, 30);
+        streetAndBuildingTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createCityNameLbl() {
@@ -182,6 +233,7 @@ public class ReaderAddPanel  extends JPanel {
         cityNameTxt.setBackground(Color.white);
         cityNameTxt.setBorder(BorderFactory.createLineBorder(Color.black));
         cityNameTxt.setOpaque(true);
+        cityNameTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createPostalCodeLbl() {
@@ -193,6 +245,7 @@ public class ReaderAddPanel  extends JPanel {
     private void createPostalCodeTxt() {
         postalCodeTxt = new JTextField();
         postalCodeTxt.setBounds(300, 180, fieldLength, 30);
+        postalCodeTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createEmailLbl() {
@@ -204,6 +257,7 @@ public class ReaderAddPanel  extends JPanel {
     private void createEmailTxt() {
         emailTxt = new JTextField();
         emailTxt.setBounds(300, 140, fieldLength, 30);
+        emailTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createLastnameLbl() {
@@ -215,6 +269,7 @@ public class ReaderAddPanel  extends JPanel {
     private void createLastNameTxt() {
         lastNameTxt = new JTextField();
         lastNameTxt.setBounds(300, 100, fieldLength, 30);
+        lastNameTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createFirstnameLbl() {
@@ -226,6 +281,7 @@ public class ReaderAddPanel  extends JPanel {
     private void createFirstNameTxt() {
         firstNameTxt = new JTextField();
         firstNameTxt.setBounds(300, 60, fieldLength, 30);
+        firstNameTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createCardidLbl() {
@@ -237,6 +293,7 @@ public class ReaderAddPanel  extends JPanel {
     private void createCardIdTxt() {
         cardIdTxt = new JTextField();
         cardIdTxt.setBounds(300, 20, fieldLength, 30);
+        cardIdTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void setCompVisibility(boolean visibility) {
@@ -290,7 +347,7 @@ public class ReaderAddPanel  extends JPanel {
         return emailCorrect && postalCorrect && !empty && notRobot.isSelected();
     }
 
-    public MyButton getReturnBtn() {
+    public CustButton getReturnBtn() {
         return returnBtn;
     }
     public JTextField getCardIdTxt(){return cardIdTxt;}

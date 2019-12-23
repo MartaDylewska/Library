@@ -55,6 +55,7 @@ public class BookTransfer {
 
     @Override
     public String toString() {
-        return authorBook +", " + authorBook.getBook().getBookshelf().toString() + ", ważne do: " + duedate.toString();
+        //return authorBook +", " + authorBook.getBook().getBookshelf().toString() + ", ważne do: " + duedate.toString();
+        return authorBook +", " + "ważne do: " + duedate.toString();
     }
 }

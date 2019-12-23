@@ -4,22 +4,28 @@ package gui.event;
 import event.Event;
 import event.EventDBServiceImpl;
 import event.IEventDBService;
-import gui.general.MyButton;
+import gui.Auxiliary;
+import gui.general.CustButton;
 import images.IPosterDBService;
 import images.Poster;
 import images.PosterDBServiceImpl;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventDeletePanel extends JPanel {
     private JComboBox eventChooserBx;
-    private MyButton viewEventBtn, deleteEventBtn, returnBtn;
+    private CustButton viewEventBtn, deleteEventBtn, returnBtn;
     private JLabel titleLbl, dateLbl, posterLbl, shortDescLbl, posterShowLbl;
     private JTextField titleTxt, dateTxt;
     private JTextArea shortDescTxt;
     int fieldLength = 200;
     int deltaY = 20;
+    private JLabel rectLabel;
+    private List<Component> componentBoldList = new ArrayList<>();
+    private List<Component> componentPlainList = new ArrayList<>();
 
     private IPosterDBService posterDBService = new PosterDBServiceImpl();
     private IEventDBService eventDBService = new EventDBServiceImpl();
@@ -28,10 +34,43 @@ public class EventDeletePanel extends JPanel {
         setLayout(null);
         createItems();
         addItems();
-        setCompVisibility(false);
+
         setComponentsEditability(false);
         addActionViewEventBtn();
         addActionDeleteEventBtn();
+        createRectLabel();
+        add(rectLabel);
+        setCompVisibility(false);
+        createCompList();
+        setFont();
+        Auxiliary.setImageAsBackground(this);
+    }
+
+    private void createCompList(){
+        componentBoldList.add(titleLbl);
+        componentBoldList.add(dateLbl);
+        componentBoldList.add(posterLbl);
+        componentBoldList.add(shortDescLbl);
+        componentPlainList.add(titleTxt);
+        componentPlainList.add(dateTxt);
+        componentPlainList.add(shortDescTxt);
+        componentPlainList.add(eventChooserBx);
+    }
+
+    private void setFont(){
+        for (Component c: componentBoldList)
+            c.setFont(Auxiliary.panelFont);
+        for (Component c: componentPlainList)
+            c.setFont(Auxiliary.panelPlainFont);
+    }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        rectLabel.setBounds(30,50,350,510);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        //rectLabel.setVisible(false);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
     }
 
     private void addItems() {
@@ -104,20 +143,20 @@ public class EventDeletePanel extends JPanel {
     }
 
     private void createDeleteEventBtn() {
-        deleteEventBtn = new MyButton(true);
+        deleteEventBtn = new CustButton();
         deleteEventBtn.setText("Usuń");
         deleteEventBtn.setBounds(450, 150, 200, 30);
         deleteEventBtn.setVisible(false);
     }
 
     private void createViewEventBtn() {
-        viewEventBtn = new MyButton(true);
+        viewEventBtn = new CustButton();
         viewEventBtn.setText("Podgląd");
         viewEventBtn.setBounds(450, 10, 200, 30);
     }
 
     private void createReturnBtn() {
-        returnBtn = new MyButton(false);
+        returnBtn = new CustButton();
         returnBtn.setText("Powrót");
         returnBtn.setBounds(450, 300, 200, 30);
     }
@@ -129,18 +168,18 @@ public class EventDeletePanel extends JPanel {
         for (Event e : eventList) {
             eventChooserBx.addItem(e.getIdEvent() + ". " + e.getTitle());
         }
-        eventChooserBx.setBounds(30, 10, 300, 50);
+        eventChooserBx.setBounds(30, 10, 350, 30);
     }
 
     private void createShortDescLbl() {
         shortDescLbl = new JLabel();
         shortDescLbl.setText("Krótki opis");
-        shortDescLbl.setBounds(20, 140 + deltaY + 300 + 20, 100, 30);
+        shortDescLbl.setBounds(40, 120 + deltaY + 300 + 20, 100, 30);
     }
 
     private void createShortDescTxt() {
         shortDescTxt = new JTextArea();
-        shortDescTxt.setBounds(150, 140 + deltaY + 300 + 20, fieldLength, 100);
+        shortDescTxt.setBounds(150, 120 + deltaY + 300 + 20, fieldLength, 80);
         shortDescTxt.setWrapStyleWord(true);
         shortDescTxt.setLineWrap(true);
     }
@@ -149,35 +188,35 @@ public class EventDeletePanel extends JPanel {
     private void createPosterLbl() {
         posterLbl = new JLabel();
         posterLbl.setText("Plakat");
-        posterLbl.setBounds(20, 140 + deltaY, 100, 30);
+        posterLbl.setBounds(40, 120 + deltaY, 100, 30);
     }
 
     private void createPosterShowLbl() {
         posterShowLbl = new JLabel();
-        posterShowLbl.setBounds(150, 140 + deltaY, fieldLength, 300);
+        posterShowLbl.setBounds(150, 120 + deltaY, fieldLength, 300);
     }
 
 
     private void createDateLbl() {
         dateLbl = new JLabel();
         dateLbl.setText("Data");
-        dateLbl.setBounds(20, 100 + deltaY, 100, 30);
+        dateLbl.setBounds(40, 80 + deltaY, 100, 30);
     }
 
     private void createDateTxt() {
         dateTxt = new JTextField();
-        dateTxt.setBounds(150, 100 + deltaY, fieldLength, 30);
+        dateTxt.setBounds(150, 80 + deltaY, fieldLength, 30);
     }
 
     private void createTitleLbl() {
         titleLbl = new JLabel();
         titleLbl.setText("Tytuł");
-        titleLbl.setBounds(20, 60 + deltaY, 100, 30);
+        titleLbl.setBounds(40, 40 + deltaY, 100, 30);
     }
 
     private void createTitleTxt() {
         titleTxt = new JTextField();
-        titleTxt.setBounds(150, 60 + deltaY, fieldLength, 30);
+        titleTxt.setBounds(150, 40 + deltaY, fieldLength, 30);
     }
 
 
@@ -190,6 +229,7 @@ public class EventDeletePanel extends JPanel {
         dateTxt.setVisible(visibility);
         posterShowLbl.setVisible(visibility);
         shortDescTxt.setVisible(visibility);
+        rectLabel.setVisible(visibility);
     }
 
     private void setComponentsEditability(boolean editability) {
@@ -206,7 +246,7 @@ public class EventDeletePanel extends JPanel {
         this.posterShowLbl = posterShowLbl;
     }
 
-    public MyButton getReturnBtn() {
+    public CustButton getReturnBtn() {
         return returnBtn;
     }
 

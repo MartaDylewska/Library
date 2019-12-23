@@ -5,7 +5,6 @@ import gui.admin.*;
 import gui.book.*;
 import gui.bookTransfer.*;
 import gui.event.*;
-import gui.general.BackgroundPanel;
 import gui.librarian.*;
 import gui.login.LoginPanel;
 import gui.reader.*;
@@ -19,8 +18,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class MFrame extends JFrame {
-
-
     private ReaderAddPanel readerAddPanel;
     private ReaderUpdatePanel readerUpdatePanel;
     private ReaderDeletePanel readerDeletePanel;
@@ -49,11 +46,8 @@ public class MFrame extends JFrame {
     public MFrame() {
 
         setSize(700, 600);
-
         setTitle("Biblioteka");
         setResizable(false);
-
-
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)screenSize.getWidth();
         int height = (int) screenSize.getHeight();
@@ -61,20 +55,21 @@ public class MFrame extends JFrame {
         int posY = height / 2 - getHeight() / 2;
         setLocation(posX, posY);
 
-        BackgroundPanel backgroundPanel = new BackgroundPanel();
-        add(backgroundPanel);
-
-
 //----------------login panel----------------
 
         loginPanel = new LoginPanel();
-
         add(loginPanel);
-        loginPanel.setBackground(new Color(0,0,0,0));
-
+        repaint();
+        revalidate();
         addLoginKeyListener();
         addRegisterKeyListener();
-
+        //for tests - librarian
+        /*loginPanel.getCardNrTxt().setText("150009");
+        loginPanel.getPassTxt().setText("aneprz123");*/
+        //
+        //for tests - admin
+         loginPanel.getCardNrTxt().setText("150011");
+        loginPanel.getPassTxt().setText("jerpli123");
         loginPanel.getRegisterBtn().addActionListener(e -> {
             readerAddPanel = new ReaderAddPanel();
             add(readerAddPanel);
@@ -202,10 +197,6 @@ public class MFrame extends JFrame {
                                 });
                             });
 
-                            //tutaj trzeba dodać doBooking (zrób rezerwację), oraz lendings (podejrzyj wypożyczenia)
-                            //ja dodam eventy dzisiaj
-
-
                             readerEntryPanel.getReturnBtn().addActionListener(e1 -> {
                                 loginPanel.setCardNrTxt("");
                                 loginPanel.setPassTxt("");
@@ -257,20 +248,6 @@ public class MFrame extends JFrame {
                                 });
                             });
 
-//                            librarianEntryPanel.getAcceptReturnBtn().addActionListener(e1 -> {
-//                                acceptReturnPanel = new AcceptReturnPanel();
-//                                add(acceptReturnPanel);
-//                                remove(librarianEntryPanel);
-//                                repaint();
-//                                revalidate();
-//
-//                                acceptReturnPanel.getReturnBtn().addActionListener(e2 -> {
-//                                    add(librarianEntryPanel);
-//                                    remove(acceptReturnPanel);
-//                                    repaint();
-//                                    revalidate();
-//                                });
-//                            });
 
                             librarianEntryPanel.getDeleteEventBtn().addActionListener(e1 -> {
                                 eventDeletePanel = new EventDeletePanel();

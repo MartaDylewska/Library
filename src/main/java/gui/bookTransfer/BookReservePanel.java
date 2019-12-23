@@ -3,6 +3,8 @@ package gui.bookTransfer;
 import book.*;
 import bookTransfer.BookTransferService;
 import bookTransfer.IBookTransfer;
+import gui.Auxiliary;
+import gui.general.CustButton;
 import gui.general.MyButton;
 import reader.IReaderDBService;
 import reader.Reader;
@@ -22,7 +24,8 @@ public class BookReservePanel extends JPanel {
     private JComboBox<String> searchBy;
     private JTextField keyWord;
     private JList<AuthorBook> resultList;
-    private MyButton search, reserveBtn, returnBtn;
+    private CustButton search, reserveBtn, returnBtn;
+    private JLabel rectLabel;
 
     private IAuthor iAuthor = new AuthorService();
     private IAuthorBook iAuthorBook = new AuthorBookService();
@@ -34,11 +37,22 @@ public class BookReservePanel extends JPanel {
     public BookReservePanel() {
 
         setLayout(null);
-
         createComps();
         addComps();
         actions();
         cardIdTxt.setVisible(false);
+        createRectLabel();
+        add(rectLabel);
+        Auxiliary.setImageAsBackground(this);
+    }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        rectLabel.setBounds(30,20,640,520);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        rectLabel.setVisible(true);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
     }
 
     private void createBookJList(List<AuthorBook> bookList){
@@ -56,22 +70,29 @@ public class BookReservePanel extends JPanel {
 
         searchByLabel = new JLabel("Wyszukaj po:");
         searchByLabel.setBounds(50,60,100,30);
+        searchByLabel.setFont(Auxiliary.panelFont);
 
         searchBy = new JComboBox<>(new String[]{"tytule", "autorze (imię, nazwisko)", "wydawcy", "gatunku", "języku"});
         searchBy.setBounds(200,60,200,30);
+        searchBy.setFont(Auxiliary.panelFont);
 
         keyWordLabel = new JLabel("Słowo kluczowe:");
-        keyWordLabel.setBounds(50,100,100,30);
+        keyWordLabel.setBounds(50,100,150,30);
+        keyWordLabel.setFont(Auxiliary.panelFont);
 
         keyWord = new JTextField();
         keyWord.setBounds(200,100,200,30);
+        keyWord.setBorder(Auxiliary.blackBorder());
+        keyWord.setFont(Auxiliary.panelFont);
 
         resultListLabel = new JLabel("Wyniki wyszukiwania:");
         resultListLabel.setBounds(50,140,200,30);
+        resultListLabel.setFont(Auxiliary.panelFont);
 
         resultList = new JList<>();
         resultList.setBounds(50,180,600,300);
         resultList.setBorder(BorderFactory.createLineBorder(Color.black));
+        resultList.setFont(Auxiliary.panelFont);
 
         result = new JLabel();
         result.setBounds(50,180,600,300);
@@ -79,16 +100,17 @@ public class BookReservePanel extends JPanel {
         result.setBackground(Color.white);
         result.setOpaque(true);
         result.setVerticalAlignment(1);
+        result.setFont(Auxiliary.panelFont);
 
-        search = new MyButton(true);
+        search = new CustButton();
         search.setText("Szukaj");
         search.setBounds(450,60,200,30);
 
-        reserveBtn = new MyButton(true);
+        reserveBtn = new CustButton();
         reserveBtn.setText("Rezerwuj");
         reserveBtn.setBounds(450,100,200,30);
 
-        returnBtn = new MyButton(false);
+        returnBtn = new CustButton();
         returnBtn.setText("Cofnij");
         returnBtn.setBounds(450,490,200,30);
 
@@ -138,10 +160,17 @@ public class BookReservePanel extends JPanel {
             int readerId = reader.getIdReader();
 
             for (AuthorBook aBook : book) {
-                iBookTransfer.reserveBook(readerId, aBook.getBook().getBookId());
-                JOptionPane.showMessageDialog(this, iBookTransfer.getMessage());
-                repaint();
-                revalidate();
+                if(iBookTransfer.getReservedUserBooksCount(readerId)>=5){
+                    JOptionPane.showMessageDialog(this, "Zbyt duża liczba rezerwacji");
+                }
+                else {
+                    iBookTransfer.reserveBook(readerId, aBook.getBook().getBookId());
+                    JOptionPane.showMessageDialog(this, iBookTransfer.getMessage());
+                    List<AuthorBook> bookList = new ArrayList<>();
+                    createBookJList(bookList);
+                    repaint();
+                    revalidate();
+                }
             }
 
             if(book.size() == 0)
@@ -162,7 +191,7 @@ public class BookReservePanel extends JPanel {
         add(returnBtn);
     }
 
-    public MyButton getReturnBtn() {
+    public CustButton getReturnBtn() {
         return returnBtn;
     }
 

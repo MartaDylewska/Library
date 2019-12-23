@@ -3,6 +3,8 @@ package gui.bookTransfer;
 import bookTransfer.BookTransfer;
 import bookTransfer.BookTransferService;
 import bookTransfer.IBookTransfer;
+import gui.Auxiliary;
+import gui.general.CustButton;
 import gui.general.MyButton;
 import reader.IReaderDBService;
 import reader.Reader;
@@ -13,6 +15,7 @@ import user.UserDBServiceImpl;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -23,8 +26,11 @@ public class BookTransferPanel extends JPanel {
 
     private JLabel userIdLabel, lentBooksLabel, reservedBooksLabel, lendBookLabel, returnBookLabel;
     private JTextField userId;
-    private MyButton showBooks, lendBook, returnBooks, back;
+    private CustButton showBooks, lendBook, returnBooks, back;
     private JList<BookTransfer> lentBooks, reservedBooks;
+    private List<Component> componentBoldList = new ArrayList<>();
+    private List<Component> componentPlainList = new ArrayList<>();
+    private JLabel rectLabel;
 
     private IReaderDBService readerDBService = new ReaderDBServiceImpl();
     private IUserDBService userDBService = new UserDBServiceImpl();
@@ -37,7 +43,46 @@ public class BookTransferPanel extends JPanel {
         createComps();
         addComps();
         actions();
+        createCompBoldList();
+        createCompPlainList();
+        setFont();
+        createRectLabel();
+        add(rectLabel);
+        Auxiliary.setImageAsBackground(this);
 
+    }
+
+    private void setFont(){
+        for (Component c: componentBoldList)
+            c.setFont(Auxiliary.panelFont);
+        for (Component c: componentPlainList)
+            c.setFont(Auxiliary.panelPlainFont);
+    }
+
+
+    private void createCompBoldList(){
+        componentBoldList.add(userIdLabel);
+        componentBoldList.add(returnBookLabel);
+        componentBoldList.add(lendBookLabel);
+    }
+
+    private void createCompPlainList(){
+        componentPlainList.add(userId);
+        componentPlainList.add(lentBooksLabel);
+        componentPlainList.add(reservedBooks);
+        componentPlainList.add(reservedBooksLabel);
+        componentPlainList.add(lentBooks);
+
+    }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        //rectLabel.setText("aa");
+        rectLabel.setBounds(20,10,660,530);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        rectLabel.setVisible(true);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
     }
 
     private void createReservedBooks(List<BookTransfer> usersReservedBooks){
@@ -65,8 +110,9 @@ public class BookTransferPanel extends JPanel {
 
         userId = new JTextField();
         userId.setBounds(200,40,200, 30);
+        userId.setBorder(Auxiliary.blackBorder());
 
-        showBooks = new MyButton(true);
+        showBooks = new CustButton();
         showBooks.setText("Pokaż");
         showBooks.setBounds(450,40,200,30);
 
@@ -84,7 +130,7 @@ public class BookTransferPanel extends JPanel {
         reservedBooks.setBounds(50,140,600,100);
         reservedBooks.setBorder(BorderFactory.createLineBorder(Color.black));
 
-        lendBook = new MyButton(true);
+        lendBook = new CustButton();
         lendBook.setText("Wypożycz");
         lendBook.setBounds(450,100,200,30);
 
@@ -102,11 +148,11 @@ public class BookTransferPanel extends JPanel {
         lentBooks.setBounds(50,310,600,100);
         lentBooks.setBorder(BorderFactory.createLineBorder(Color.black));
 
-        returnBooks = new MyButton(true);
+        returnBooks = new CustButton();
         returnBooks.setText("Przyjmij zwrot");
         returnBooks.setBounds(450, 270, 200,30);
 
-        back = new MyButton(false);
+        back = new CustButton();
         back.setText("Cofnij");
         back.setBounds(450,430,200,30);
     }
@@ -123,25 +169,21 @@ public class BookTransferPanel extends JPanel {
                 List<BookTransfer> reservedUserBooks = bookTransfer.getReservedUserBooks(readerId);
                 List<BookTransfer> lentUserBooks = bookTransfer.getLentUserBooks(readerId);
 
-                if (reservedUserBooks.size() > 0) {
-                    createReservedBooks(reservedUserBooks);
-                    add(reservedBooks);
-                } else {
-                    reservedBooksLabel.setText("Brak zarezerowanych książek.");
-                }
-
-                if (lentUserBooks.size() > 0) {
-                    createLentBooks(lentUserBooks);
-                    add(lentBooks);
-                } else {
-                    lentBooksLabel.setText("Brak wypożyczonych książek.");
-                }
-
                 if(lentUserBooks.size() >= 3){
                     lendBook.setEnabled(false);
                 } else {
                     lendBook.setEnabled(true);
                 }
+
+                if(reservedUserBooks.size()==0){
+                    reservedBooksLabel.setText("Brak zarezerowanych książek.");
+                }
+                else {createReservedBooks(reservedUserBooks);
+                    add(reservedBooks);}
+
+                if(lentUserBooks.size() == 0){lentBooksLabel.setText("Brak wypożyczonych książek.");}
+                else {createLentBooks(lentUserBooks);
+                    add(lentBooks);}
 
                 for (BookTransfer books : reservedUserBooks) {
                     if(books.getDuedate().before(new Date()))
@@ -211,7 +253,7 @@ public class BookTransferPanel extends JPanel {
         return isCorrect && !(userId.getText().isEmpty());
     }
 
-    public MyButton getBack() {
+    public CustButton getBack() {
         return back;
     }
 }

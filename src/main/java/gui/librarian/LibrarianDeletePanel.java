@@ -5,6 +5,8 @@ import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
+import gui.Auxiliary;
+import gui.general.CustButton;
 import gui.general.MyButton;
 import images.IPosterDBService;
 import images.Poster;
@@ -19,6 +21,9 @@ import user.User;
 import user.UserDBServiceImpl;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LibrarianDeletePanel extends JPanel {
 
@@ -26,9 +31,13 @@ public class LibrarianDeletePanel extends JPanel {
     private JLabel salaryLbl, dateEmploymentLbl;
     private JTextField firstNameTxt, lastNameTxt, emailTxt, passTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
     private JTextField salaryTxt, dateEmploymentTxt;
-    private MyButton searchLibrarianBtn, deleteLibrarianBtn, returnBtn;
+    private CustButton searchLibrarianBtn, deleteLibrarianBtn, returnBtn;
     private int fieldLength = 200;
     private JLabel imageLbl;
+    private JLabel rectLabel;
+    private java.util.List<Component> componentPlainList = new ArrayList<>();
+    private List<Component> componentBoldList = new ArrayList<>();
+
 
     private IUserDBService userDBService = new UserDBServiceImpl();
     private ICityDBService cityDBService = new CityDBServiceImpl();
@@ -48,7 +57,60 @@ public class LibrarianDeletePanel extends JPanel {
         createDeleteBtn();
         add(deleteLibrarianBtn);
         actionDeleteLibrarianBtn();
+        createRectLabel();
+        add(rectLabel);
+        Auxiliary.setImageAsBackground(this);
+        setFontForAllElements();
     }
+    private void setFontForAllElements(){
+        componentPlainList.add(firstNameTxt);
+        componentPlainList.add(lastNameTxt);
+        componentPlainList.add(emailTxt);
+        componentPlainList.add(cardIdTxt);
+        componentPlainList.add(postalCodeTxt);
+        componentPlainList.add(cityNameTxt);
+        componentPlainList.add(streetAndBuildingTxt);
+        componentPlainList.add(salaryTxt);
+        componentPlainList.add(dateEmploymentTxt);
+
+        componentBoldList.add(firstNameLbl);
+        //firstNameLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(lastNamelbl);
+        //lastNamelbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(emailLbl);
+        //emailLbl.setFont(Auxiliary.panelFont);
+
+        componentBoldList.add(cardIdLbl);
+       // cardIdLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(postalCodeLbl);
+        //postalCodeLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(cityNameLbl);
+        //cityNameLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(streetAndBuildingLbl);
+       // streetAndBuildingLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(salaryLbl);
+        //salaryLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(dateEmploymentLbl);
+        //dateEmploymentLbl.setFont(Auxiliary.panelFont);
+
+        for (Component c: componentPlainList) {
+            c.setFont(Auxiliary.panelPlainFont);
+        }
+        for (Component c: componentBoldList) {
+            c.setFont(Auxiliary.panelFont);
+        }
+
+    }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        rectLabel.setBounds(10,10,350,390);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        rectLabel.setVisible(true);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
+    }
+
 
     private void actionDeleteLibrarianBtn() {
 
@@ -107,20 +169,20 @@ public class LibrarianDeletePanel extends JPanel {
     }
 
     private void createDeleteBtn() {
-        deleteLibrarianBtn = new MyButton(true);
+        deleteLibrarianBtn = new CustButton();
         deleteLibrarianBtn.setText("Usuń bibliotekarza");
         deleteLibrarianBtn.setVisible(false);
         deleteLibrarianBtn.setBounds(400, 150, 200, 30);
     }
 
     private void createSearchBtn() {
-        searchLibrarianBtn = new MyButton(true);
+        searchLibrarianBtn = new CustButton();
         searchLibrarianBtn.setText("Wyszukaj");
         searchLibrarianBtn.setBounds(400, 20, 200, 30);
     }
 
     private void createReturnBtn() {
-        returnBtn = new MyButton(false);
+        returnBtn = new CustButton();
         returnBtn.setText("Powrót");
         returnBtn.setBounds(400, 300, 200, 30);
     }
@@ -170,7 +232,7 @@ public class LibrarianDeletePanel extends JPanel {
     private void createDateEmplLbl(){
         dateEmploymentLbl = new JLabel();
         dateEmploymentLbl.setText("Data zatrudnienia");
-        dateEmploymentLbl.setBounds(20, 340, 100, 30);
+        dateEmploymentLbl.setBounds(20, 340, 130, 30);
     }
 
     private void createDateEmplTxt(){
@@ -311,7 +373,7 @@ public class LibrarianDeletePanel extends JPanel {
         dateEmploymentTxt.setEditable(editability);
     }
 
-    public MyButton getReturnBtn() {
+    public CustButton getReturnBtn() {
         return returnBtn;
     }
 }

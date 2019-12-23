@@ -1,10 +1,13 @@
 package gui.book;
 
 import book.*;
-import gui.general.MyButton;
+import gui.Auxiliary;
+import gui.general.CustButton;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookAddPanel extends JPanel {
 
@@ -16,10 +19,13 @@ public class BookAddPanel extends JPanel {
     private JTextField[] names;
     private JLabel alleyLabel, bookstandLabel, shelfLabel;
     private JComboBox alley, bookstand, shelf;
-    private MyButton confirm, returnBtn;
+    private CustButton confirm, returnBtn;
     private JRadioButton oneAuthor, moreAuthors;
     private ButtonGroup buttonGroup;
     private String alertMessage;
+    private List<Component> componentBoldList = new ArrayList<>();
+    private List<Component> componentPlainList = new ArrayList<>();
+    private JLabel rectLabel;
 
     private IAuthor authorService = new AuthorService();
     private IBook bookService = new BookService();
@@ -30,12 +36,63 @@ public class BookAddPanel extends JPanel {
     public BookAddPanel() {
 
         setLayout(null);
-
         createComps();
         addComp();
         action();
         setSeen(false);
+        createCompBoldList();
+        createCompPlainList();
+        setFont();
+        createRectLabel();
+        add(rectLabel);
+        Auxiliary.setImageAsBackground(this);
 
+    }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        //rectLabel.setText("aa");
+        rectLabel.setBounds(20,10,660,530);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        rectLabel.setVisible(true);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
+    }
+
+    private void setFont(){
+        for (Component c: componentBoldList)
+                c.setFont(Auxiliary.panelFont);
+        for (Component c: componentPlainList)
+            c.setFont(Auxiliary.panelPlainFont);
+    }
+
+
+    private void createCompBoldList(){
+        componentBoldList.add(titleLabel);
+        componentBoldList.add(publisherLabel);
+        componentBoldList.add(genreLabel);
+        componentBoldList.add(languageLabel);
+        componentBoldList.add(firstNameLabel);
+        componentBoldList.add(lastNameLabel);
+        componentBoldList.add(moreAuthorsLabel);
+        componentBoldList.add(alleyLabel);
+        componentBoldList.add(bookstandLabel);
+        componentBoldList.add(shelfLabel);
+    }
+
+    private void createCompPlainList(){
+        componentPlainList.add(publisher);
+        componentPlainList.add(genre);
+        componentPlainList.add(language);
+        componentPlainList.add(title);
+        componentPlainList.add(firstName);
+        componentPlainList.add(lastName);
+        componentPlainList.add(alley);
+        componentPlainList.add(bookstand);
+        componentPlainList.add(shelf);
+        componentPlainList.add(oneAuthor);
+        componentPlainList.add(moreAuthorsLabel);
+        componentPlainList.add(moreAuthors);
     }
 
     private void createComps() {
@@ -45,7 +102,7 @@ public class BookAddPanel extends JPanel {
 
         title = new JTextArea();
         title.setBounds(180, 20, 200, 70);
-        title.setBorder(BorderFactory.createLineBorder(Color.black));
+        title.setBorder(Auxiliary.blackBorder());
         title.setLineWrap(true);
 
         firstNameLabel = new JLabel("Imię autora:");
@@ -53,30 +110,35 @@ public class BookAddPanel extends JPanel {
 
         firstName = new JTextField();
         firstName.setBounds(180, 100, 200, 30);
+        firstName.setBorder(Auxiliary.blackBorder());
 
         lastNameLabel = new JLabel("Nazwisko autora: ");
         lastNameLabel.setBounds(50, 140, 120, 30);
 
         lastName = new JTextField();
         lastName.setBounds(180, 140, 200, 30);
+        lastName.setBorder(Auxiliary.blackBorder());
 
         publisherLabel = new JLabel("Wydawca:");
         publisherLabel.setBounds(50, 180, 100, 30);
 
         publisher = new JTextField();
         publisher.setBounds(180, 180, 200, 30);
+        publisher.setBorder(Auxiliary.blackBorder());
 
         genreLabel = new JLabel("Gatunek:");
         genreLabel.setBounds(50, 220, 100, 30);
 
         genre = new JTextField();
         genre.setBounds(180, 220, 200, 30);
+        genre.setBorder(Auxiliary.blackBorder());
 
         languageLabel = new JLabel("Język:");
         languageLabel.setBounds(50, 260, 100, 30);
 
         language = new JTextField();
         language.setBounds(180, 260, 200, 30);
+        language.setBorder(Auxiliary.blackBorder());
 
         alleyLabel = new JLabel("Alejka:");
         alleyLabel.setBounds(50, 300, 55,30);
@@ -106,6 +168,7 @@ public class BookAddPanel extends JPanel {
         names = new JTextField[10];
         for (int i = 0; i < names.length; i++) {
             names[i] = new JTextField();
+           // names[i].setBorder(Auxiliary.blackBorder());
             if(i%2 == 0)
                 names[i].setBounds(50,380 + (30 * (i / 2)), 200,30);
             else
@@ -123,11 +186,11 @@ public class BookAddPanel extends JPanel {
         buttonGroup.add(oneAuthor);
         buttonGroup.add(moreAuthors);
 
-        confirm = new MyButton(true);
+        confirm = new CustButton();
         confirm.setText("Dodaj");
         confirm.setBounds(400, 100, 200, 30);
 
-        returnBtn = new MyButton(false);
+        returnBtn = new CustButton();
         returnBtn.setText("Cofnij");
         returnBtn.setBounds(400, 240, 200, 30);
     }
@@ -244,7 +307,7 @@ public class BookAddPanel extends JPanel {
         }
     }
 
-    public MyButton getReturnBtn() {
+    public CustButton getReturnBtn() {
         return returnBtn;
     }
 }
