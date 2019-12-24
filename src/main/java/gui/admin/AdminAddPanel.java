@@ -9,6 +9,8 @@ import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
+import gui.Auxiliary;
+import gui.general.CustButton;
 import gui.general.MyButton;
 import librarian.ILibrarianDBService;
 import librarian.LibrarianDBServiceImpl;
@@ -17,8 +19,11 @@ import user.User;
 import user.UserDBServiceImpl;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdminAddPanel extends JPanel {
     private JLabel firstNameLbl, lastNamelbl, emailLbl, passLbl, cardIdLbl, postalCodeLbl, cityNameLbl, streetAndBuildingLbl;
@@ -27,8 +32,11 @@ public class AdminAddPanel extends JPanel {
     private JTextField salaryTxt;
     private JCheckBox isFullTimeChbx;
     private JPasswordField passField;
-    private MyButton addAdminBtn, returnBtn;
+    private CustButton addAdminBtn, returnBtn;
     private int fieldLength = 200;
+    private JLabel rectLabel;
+    private List<Component> componentPlainList = new ArrayList<>();
+    private List<Component> componentBoldList = new ArrayList<>();
 
     private IUserDBService userDBService = new UserDBServiceImpl();
     private ICardDBService cardDBService = new CardDBServiceImpl();
@@ -48,6 +56,58 @@ public class AdminAddPanel extends JPanel {
         add(addAdminBtn);
         setPostalCodeKL();
         actionAddAdminBtn();
+        createRectLabel();
+        add(rectLabel);
+        Auxiliary.setImageAsBackground(this);
+        setFontForAllElements();
+    }
+
+    private void setFontForAllElements(){
+        componentPlainList.add(firstNameTxt);
+        componentPlainList.add(lastNameTxt);
+        componentPlainList.add(emailTxt);
+        componentPlainList.add(cardIdTxt);
+        componentPlainList.add(postalCodeTxt);
+        componentPlainList.add(cityNameTxt);
+        componentPlainList.add(streetAndBuildingTxt);
+        componentPlainList.add(salaryTxt);
+
+        componentBoldList.add(firstNameLbl);
+        //firstNameLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(lastNamelbl);
+        //lastNamelbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(emailLbl);
+        //emailLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(passLbl);
+        componentBoldList.add(cardIdLbl);
+        // cardIdLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(postalCodeLbl);
+        //postalCodeLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(cityNameLbl);
+        //cityNameLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(streetAndBuildingLbl);
+        // streetAndBuildingLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(salaryLbl);
+        //salaryLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(isFullTimeLbl);
+        //dateEmploymentLbl.setFont(Auxiliary.panelFont);
+
+        for (Component c: componentPlainList) {
+            c.setFont(Auxiliary.panelPlainFont);
+        }
+        for (Component c: componentBoldList) {
+            c.setFont(Auxiliary.panelFont);
+        }
+
+    }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        rectLabel.setBounds(10,10,350,420);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        rectLabel.setVisible(true);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
     }
     private void setPostalCodeKL() {
         postalCodeTxt.addKeyListener(new KeyListener() {
@@ -109,13 +169,13 @@ public class AdminAddPanel extends JPanel {
     }
 
     private void createReturnBtn() {
-        returnBtn = new MyButton(false);
+        returnBtn = new CustButton();
         returnBtn.setText("Powrót");
         returnBtn.setBounds(400, 300, 200, 30);
     }
 
     private void createAddBtn() {
-        addAdminBtn = new MyButton(true);
+        addAdminBtn = new CustButton();
         addAdminBtn.setText("Wprowadź dane");
         addAdminBtn.setBounds(400, 150, 200, 30);
     }
@@ -176,6 +236,7 @@ public class AdminAddPanel extends JPanel {
         isFullTimeChbx = new JCheckBox();
         isFullTimeChbx.setSelected(false);
         isFullTimeChbx.setBounds(150, 380, 30, 30);
+        isFullTimeChbx.setOpaque(false);
     }
 
     private void createSalaryLbl(){
@@ -187,6 +248,7 @@ public class AdminAddPanel extends JPanel {
     private void createSalaryTxt() {
         salaryTxt = new JTextField();
         salaryTxt.setBounds(150, 340, fieldLength, 30);
+        salaryTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createPassLbl() {
@@ -198,6 +260,7 @@ public class AdminAddPanel extends JPanel {
     private void createPassTxt() {
         passField = new JPasswordField();
         passField.setBounds(150, 300, fieldLength, 30);
+        passField.setBorder(Auxiliary.blackBorder());
     }
 
     private void createStreetAndBuildingLbl() {
@@ -209,6 +272,7 @@ public class AdminAddPanel extends JPanel {
     private void createStreetAndBuildingTxt() {
         streetAndBuildingTxt = new JTextField();
         streetAndBuildingTxt.setBounds(150, 260, fieldLength, 30);
+        streetAndBuildingTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createCityNameLbl() {
@@ -221,6 +285,7 @@ public class AdminAddPanel extends JPanel {
         cityNameTxt = new JTextField();
         cityNameTxt.setBounds(150, 220, fieldLength, 30);
         cityNameTxt.setEditable(false);
+        cityNameTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createPostalCodeLbl() {
@@ -232,6 +297,7 @@ public class AdminAddPanel extends JPanel {
     private void createPostalCodeTxt() {
         postalCodeTxt = new JTextField();
         postalCodeTxt.setBounds(150, 180, fieldLength, 30);
+        postalCodeTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createEmailLbl() {
@@ -243,6 +309,7 @@ public class AdminAddPanel extends JPanel {
     private void createEmailTxt() {
         emailTxt = new JTextField();
         emailTxt.setBounds(150, 140, fieldLength, 30);
+        emailTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createLastnameLbl() {
@@ -254,17 +321,20 @@ public class AdminAddPanel extends JPanel {
     private void createLastNameTxt() {
         lastNameTxt = new JTextField();
         lastNameTxt.setBounds(150, 100, fieldLength, 30);
+        lastNameTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createFirstnameLbl() {
         firstNameLbl = new JLabel();
         firstNameLbl.setText("Imię");
         firstNameLbl.setBounds(20, 60, 100, 30);
+
     }
 
     private void createFirstNameTxt() {
         firstNameTxt = new JTextField();
         firstNameTxt.setBounds(150, 60, fieldLength, 30);
+        firstNameTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createCardidLbl() {
@@ -276,6 +346,7 @@ public class AdminAddPanel extends JPanel {
     private void createCardIdTxt() {
         cardIdTxt = new JTextField();
         cardIdTxt.setBounds(150, 20, fieldLength, 30);
+        cardIdTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void setCompVisibility(boolean visibility) {
@@ -312,7 +383,7 @@ public class AdminAddPanel extends JPanel {
         isFullTimeChbx.setEnabled(editability);
     }
 
-    public MyButton getReturnBtn() {
+    public CustButton getReturnBtn() {
         return returnBtn;
     }
 }

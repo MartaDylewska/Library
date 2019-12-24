@@ -3,23 +3,21 @@ package gui.admin;
 import admin.Admin;
 import admin.AdminDBServiceImpl;
 import admin.IAdminDBService;
-import card.CardDBServiceImpl;
-import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
-import gui.general.MyButton;
-import librarian.ILibrarianDBService;
-import librarian.Librarian;
-import librarian.LibrarianDBServiceImpl;
+import gui.Auxiliary;
+import gui.general.CustButton;
 import user.IUserDBService;
 import user.User;
 import user.UserDBServiceImpl;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdminUpdatePanel extends JPanel {
 
@@ -29,12 +27,16 @@ public class AdminUpdatePanel extends JPanel {
     private JTextField salaryTxt;
     private JCheckBox isFullTimeChbx;
     private JPasswordField passField;
-    private MyButton searchAdminBtn, updateAdminBtn, returnBtn;
+    private CustButton searchAdminBtn, updateAdminBtn, returnBtn;
     private int fieldLength = 200;
+    private JLabel rectLabel;
+    private List<Component> componentPlainList = new ArrayList<>();
+    private List<Component> componentBoldList = new ArrayList<>();
 
     private IUserDBService userDBService = new UserDBServiceImpl();
     private ICityDBService cityDBService = new CityDBServiceImpl();
     private IAdminDBService adminDBService = new AdminDBServiceImpl();
+
 
     public AdminUpdatePanel(){
         setLayout(null);
@@ -43,13 +45,52 @@ public class AdminUpdatePanel extends JPanel {
         setCompVisibility(false);
         createSearchBtn();
         add(searchAdminBtn);
-        actionSearchLibrarianBtn();
+        actionSearchAdminBtn();
         createReturnBtn();
         add(returnBtn);
         createUpdateBtn();
         add(updateAdminBtn);
         setPostalCodeKL();
         actionUpdateLibrarianBtn();
+        createRectLabel();
+        add(rectLabel);
+        setCompVisibility(false);
+        Auxiliary.setImageAsBackground(this);
+        setFontForAllElements();
+    }
+
+    private void setFontForAllElements(){
+        componentPlainList.add(firstNameTxt);
+        componentPlainList.add(lastNameTxt);
+        componentPlainList.add(emailTxt);
+        componentPlainList.add(cardIdTxt);
+        componentPlainList.add(postalCodeTxt);
+        componentPlainList.add(cityNameTxt);
+        componentPlainList.add(streetAndBuildingTxt);
+        componentPlainList.add(salaryTxt);
+
+        componentBoldList.add(firstNameLbl);
+        componentBoldList.add(lastNamelbl);
+        componentBoldList.add(emailLbl);
+        componentBoldList.add(cardIdLbl);
+        componentBoldList.add(postalCodeLbl);
+        componentBoldList.add(cityNameLbl);
+        componentBoldList.add(streetAndBuildingLbl);
+        componentBoldList.add(salaryLbl);
+        componentBoldList.add(isFullTimeLbl);
+        componentBoldList.add(passLbl);
+
+        for (Component c: componentPlainList) {c.setFont(Auxiliary.panelPlainFont);}
+        for (Component c: componentBoldList) {c.setFont(Auxiliary.panelFont); }
+    }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        rectLabel.setBounds(10,10,350,50);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        rectLabel.setVisible(true);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
     }
 
     private void setPostalCodeKL() {
@@ -73,6 +114,7 @@ public class AdminUpdatePanel extends JPanel {
                 JOptionPane.showMessageDialog(this, "Niepoprawny numer karty użytkownika");
             else if(firstNameTxt.getText().equals("") || lastNameTxt.getText().equals("")|| emailTxt.getText().equals("")||postalCodeTxt.getText().equals("")||streetAndBuildingTxt.getText().equals("")||salaryTxt.getText().equals(""))
                 JOptionPane.showMessageDialog(this, "Proszę wypełnić wszystkie pola");
+
             else {
                 int cardId = Integer.parseInt(cardIdTxt.getText());
                 User user = userDBService.readUserFromDB(cardId);
@@ -101,7 +143,7 @@ public class AdminUpdatePanel extends JPanel {
 
     }
 
-    private void actionSearchLibrarianBtn() {
+    private void actionSearchAdminBtn() {
         searchAdminBtn.addActionListener(e -> {
             if (Validation.checkIfInteger(cardIdTxt.getText())) {
                 //setComponentsEditability(false);
@@ -112,6 +154,7 @@ public class AdminUpdatePanel extends JPanel {
                 if (admin.getIdAdmin() != 0) {
                     updateAdminBtn.setVisible(true);
                     setCompVisibility(true);
+                    rectLabel.setBounds(10,10,350,420);
                     firstNameTxt.setText(admin.getFirstName());
                     lastNameTxt.setText(admin.getLastName());
                     emailTxt.setText(admin.getEmail());
@@ -134,19 +177,19 @@ public class AdminUpdatePanel extends JPanel {
     }
 
     private void createSearchBtn() {
-        searchAdminBtn = new MyButton(true);
+        searchAdminBtn = new CustButton();
         searchAdminBtn.setText("Wyszukaj");
         searchAdminBtn.setBounds(400, 20, 200, 30);
     }
 
     private void createReturnBtn() {
-        returnBtn = new MyButton(false);
+        returnBtn = new CustButton();
         returnBtn.setText("Powrót");
         returnBtn.setBounds(400, 300, 200, 30);
     }
 
     private void createUpdateBtn() {
-        updateAdminBtn = new MyButton(true);
+        updateAdminBtn = new CustButton();
         updateAdminBtn.setText("Aktualizuj dane");
         updateAdminBtn.setVisible(false);
         updateAdminBtn.setBounds(400, 150, 200, 30);
@@ -208,6 +251,7 @@ public class AdminUpdatePanel extends JPanel {
         isFullTimeChbx = new JCheckBox();
         isFullTimeChbx.setSelected(false);
         isFullTimeChbx.setBounds(150, 380, 30, 30);
+        isFullTimeChbx.setOpaque(false);
     }
 
     private void createSalaryLbl(){
@@ -332,7 +376,7 @@ public class AdminUpdatePanel extends JPanel {
         salaryTxt.setVisible(visibility);
     }
 
-    public MyButton getReturnBtn() {
+    public CustButton getReturnBtn() {
         return returnBtn;
     }
 

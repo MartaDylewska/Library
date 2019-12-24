@@ -5,6 +5,8 @@ import card.ICardDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
+import gui.Auxiliary;
+import gui.general.CustButton;
 import gui.general.MyButton;
 import librarian.ILibrarianDBService;
 import librarian.Librarian;
@@ -15,9 +17,12 @@ import user.User;
 import user.UserDBServiceImpl;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LibrarianUpdatePanel extends JPanel {
 
@@ -26,8 +31,11 @@ public class LibrarianUpdatePanel extends JPanel {
     private JTextField firstNameTxt, lastNameTxt, emailTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
     private JTextField salaryTxt, dateEmploymentTxt;
     private JPasswordField passField;
-    private MyButton searchLibrarianBtn, updateLibrarianBtn, returnBtn;
+    private CustButton searchLibrarianBtn, updateLibrarianBtn, returnBtn;
     private int fieldLength = 200;
+    private JLabel rectLabel;
+    private List<Component> componentPlainList = new ArrayList<>();
+    private List<Component> componentBoldList = new ArrayList<>();
 
     private IUserDBService userDBService = new UserDBServiceImpl();
 //    private ICardDBService cardDBService = new CardDBServiceImpl();
@@ -48,6 +56,59 @@ public class LibrarianUpdatePanel extends JPanel {
         add(updateLibrarianBtn);
         setPostalCodeKL();
         actionUpdateLibrarianBtn();
+        createRectLabel();
+        add(rectLabel);
+        Auxiliary.setImageAsBackground(this);
+        setFontForAllElements();
+    }
+
+    private void setFontForAllElements(){
+        componentPlainList.add(firstNameTxt);
+        componentPlainList.add(lastNameTxt);
+        componentPlainList.add(emailTxt);
+        componentPlainList.add(cardIdTxt);
+        componentPlainList.add(postalCodeTxt);
+        componentPlainList.add(cityNameTxt);
+        componentPlainList.add(streetAndBuildingTxt);
+        componentPlainList.add(salaryTxt);
+        componentPlainList.add(dateEmploymentTxt);
+
+        componentBoldList.add(firstNameLbl);
+        //firstNameLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(lastNamelbl);
+        //lastNamelbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(emailLbl);
+        //emailLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(passLbl);
+        componentBoldList.add(cardIdLbl);
+        // cardIdLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(postalCodeLbl);
+        //postalCodeLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(cityNameLbl);
+        //cityNameLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(streetAndBuildingLbl);
+        // streetAndBuildingLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(salaryLbl);
+        //salaryLbl.setFont(Auxiliary.panelFont);
+        componentBoldList.add(dateEmploymentLbl);
+        //dateEmploymentLbl.setFont(Auxiliary.panelFont);
+
+        for (Component c: componentPlainList) {
+            c.setFont(Auxiliary.panelPlainFont);
+        }
+        for (Component c: componentBoldList) {
+            c.setFont(Auxiliary.panelFont);
+        }
+
+    }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        rectLabel.setBounds(10,10,350,420);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        rectLabel.setVisible(true);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
     }
 
     private void setPostalCodeKL() {
@@ -133,19 +194,19 @@ public class LibrarianUpdatePanel extends JPanel {
     }
 
     private void createSearchBtn() {
-        searchLibrarianBtn = new MyButton(true);
+        searchLibrarianBtn = new CustButton();
         searchLibrarianBtn.setText("Wyszukaj");
         searchLibrarianBtn.setBounds(400, 20, 200, 30);
     }
 
     private void createReturnBtn() {
-        returnBtn = new MyButton(false);
+        returnBtn = new CustButton();
         returnBtn.setText("Powrót");
         returnBtn.setBounds(400, 300, 200, 30);
     }
 
     private void createUpdateBtn() {
-        updateLibrarianBtn = new MyButton(true);
+        updateLibrarianBtn = new CustButton();
         updateLibrarianBtn.setText("Aktualizuj dane");
         updateLibrarianBtn.setVisible(false);
         updateLibrarianBtn.setBounds(400, 150, 200, 30);
@@ -200,13 +261,14 @@ public class LibrarianUpdatePanel extends JPanel {
     private void createDateEmplLbl(){
         dateEmploymentLbl = new JLabel();
         dateEmploymentLbl.setText("Data zatrudnienia");
-        dateEmploymentLbl.setBounds(20, 380, 100, 30);
+        dateEmploymentLbl.setBounds(20, 380, 130, 30);
     }
 
     private void createDateEmplTxt(){
         dateEmploymentTxt = new JTextField();
         dateEmploymentTxt.setBounds(150, 380, fieldLength, 30);
         dateEmploymentTxt.setToolTipText("Data w formacie YYYY-MM-DD");
+        dateEmploymentTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createSalaryLbl(){
@@ -218,6 +280,7 @@ public class LibrarianUpdatePanel extends JPanel {
     private void createSalaryTxt() {
         salaryTxt = new JTextField();
         salaryTxt.setBounds(150, 340, fieldLength, 30);
+        salaryTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createPassLbl() {
@@ -230,6 +293,7 @@ public class LibrarianUpdatePanel extends JPanel {
         passField = new JPasswordField();
         passField.setText("------");
         passField.setBounds(150, 300, fieldLength, 30);
+        passField.setBorder(Auxiliary.blackBorder());
     }
 
     private void createStreetAndBuildingLbl() {
@@ -241,6 +305,7 @@ public class LibrarianUpdatePanel extends JPanel {
     private void createStreetAndBuildingTxt() {
         streetAndBuildingTxt = new JTextField();
         streetAndBuildingTxt.setBounds(150, 260, fieldLength, 30);
+        streetAndBuildingTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createCityNameLbl() {
@@ -253,6 +318,7 @@ public class LibrarianUpdatePanel extends JPanel {
         cityNameTxt = new JTextField();
         cityNameTxt.setBounds(150, 220, fieldLength, 30);
         cityNameTxt.setEditable(false);
+        cityNameTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createPostalCodeLbl() {
@@ -264,6 +330,7 @@ public class LibrarianUpdatePanel extends JPanel {
     private void createPostalCodeTxt() {
         postalCodeTxt = new JTextField();
         postalCodeTxt.setBounds(150, 180, fieldLength, 30);
+        postalCodeTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createEmailLbl() {
@@ -275,6 +342,7 @@ public class LibrarianUpdatePanel extends JPanel {
     private void createEmailTxt() {
         emailTxt = new JTextField();
         emailTxt.setBounds(150, 140, fieldLength, 30);
+        emailTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createLastnameLbl() {
@@ -286,6 +354,7 @@ public class LibrarianUpdatePanel extends JPanel {
     private void createLastNameTxt() {
         lastNameTxt = new JTextField();
         lastNameTxt.setBounds(150, 100, fieldLength, 30);
+        lastNameTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createFirstnameLbl() {
@@ -297,6 +366,7 @@ public class LibrarianUpdatePanel extends JPanel {
     private void createFirstNameTxt() {
         firstNameTxt = new JTextField();
         firstNameTxt.setBounds(150, 60, fieldLength, 30);
+        firstNameTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void createCardidLbl() {
@@ -308,6 +378,7 @@ public class LibrarianUpdatePanel extends JPanel {
     private void createCardIdTxt() {
         cardIdTxt = new JTextField();
         cardIdTxt.setBounds(150, 20, fieldLength, 30);
+        cardIdTxt.setBorder(Auxiliary.blackBorder());
     }
 
     private void setCompVisibility(boolean visibility) {
@@ -349,7 +420,7 @@ public class LibrarianUpdatePanel extends JPanel {
         streetAndBuildingTxt.setEnabled(editability);
     }
 
-    public MyButton getReturnBtn() {
+    public CustButton getReturnBtn() {
         return returnBtn;
     }
 

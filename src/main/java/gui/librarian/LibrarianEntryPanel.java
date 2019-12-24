@@ -43,7 +43,7 @@ public class LibrarianEntryPanel extends JPanel {
     private void addAllBtns() {
         add(addBook);
         add(findBook);
-        add(findAuthor);
+        //add(findAuthor);
         add(lendBook);
         add(addEventBtn);
         add(deleteReaderProfileBtn);
@@ -83,22 +83,22 @@ public class LibrarianEntryPanel extends JPanel {
     private void createLendBookBtn() {
         lendBook = new CustButton();
         lendBook.setText("Wypożycz / przyjmij zwrot");
-        lendBook.setBounds(250, firstBtnY + 3 * distanceY, 200, buttonHeight);
+        lendBook.setBounds(250, firstBtnY + 2 * distanceY, 200, buttonHeight);
     }
     private void createDeleteReaderProfileBtn() {
         deleteReaderProfileBtn = new CustButton();
         deleteReaderProfileBtn.setText("Usuń profil czytelnika");
-        deleteReaderProfileBtn.setBounds(250, firstBtnY + 4 * distanceY, 200, buttonHeight);
+        deleteReaderProfileBtn.setBounds(250, firstBtnY + 3 * distanceY, 200, buttonHeight);
     }
     private void createAddEventBtn() {
         addEventBtn = new CustButton();
         addEventBtn.setText("Dodaj wydarzenie");
-        addEventBtn.setBounds(250, firstBtnY + 5 * distanceY, 200, buttonHeight);
+        addEventBtn.setBounds(250, firstBtnY + 4 * distanceY, 200, buttonHeight);
     }
     private void createDeleteEventBtn() {
         deleteEventBtn = new CustButton();
         deleteEventBtn.setText("Usuń wydarzenie");
-        deleteEventBtn.setBounds(250, firstBtnY + 6 * distanceY, 200, buttonHeight);
+        deleteEventBtn.setBounds(250, firstBtnY + 5 * distanceY, 200, buttonHeight);
     }
     private void createUpdateEventBtn(){
         updateEventBtn = new CustButton();
@@ -145,9 +145,9 @@ public class LibrarianEntryPanel extends JPanel {
         return findBook;
     }
 
-    public CustButton getFindAuthor() {
-        return findAuthor;
-    }
+    //public CustButton getFindAuthor() {
+     //   return findAuthor;
+    //}
 
     public CustButton getLendBook() {
         return lendBook;

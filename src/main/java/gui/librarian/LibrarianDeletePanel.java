@@ -35,7 +35,7 @@ public class LibrarianDeletePanel extends JPanel {
     private int fieldLength = 200;
     private JLabel imageLbl;
     private JLabel rectLabel;
-    private java.util.List<Component> componentPlainList = new ArrayList<>();
+    private List<Component> componentPlainList = new ArrayList<>();
     private List<Component> componentBoldList = new ArrayList<>();
 
 

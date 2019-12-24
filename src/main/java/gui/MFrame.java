@@ -68,8 +68,8 @@ public class MFrame extends JFrame {
         loginPanel.getPassTxt().setText("aneprz123");*/
         //
         //for tests - admin
-         loginPanel.getCardNrTxt().setText("150011");
-        loginPanel.getPassTxt().setText("jerpli123");
+         loginPanel.getCardNrTxt().setText("150030");
+        loginPanel.getPassTxt().setText("mario5");
         loginPanel.getRegisterBtn().addActionListener(e -> {
             readerAddPanel = new ReaderAddPanel();
             add(readerAddPanel);
@@ -279,7 +279,7 @@ public class MFrame extends JFrame {
                                 });
                             });
 
-                            librarianEntryPanel.getFindAuthor().addActionListener(e1 -> {
+                /*            librarianEntryPanel.getFindAuthor().addActionListener(e1 -> {
                                 authorGetPanel = new AuthorGetPanel();
                                 add(authorGetPanel);
                                 remove(librarianEntryPanel);
@@ -292,7 +292,7 @@ public class MFrame extends JFrame {
                                     repaint();
                                     revalidate();
                                 });
-                            });
+                            });*/
 
                             librarianEntryPanel.getFindBook().addActionListener(e1 -> {
                                 bookGetPanel = new BookGetPanel();
@@ -425,7 +425,7 @@ public class MFrame extends JFrame {
                             });
                             //usuwanie administratora
                             adminEntryPanel.getDeleteAdminBtn().addActionListener(e1 -> {
-                                adminDeletePanel = new AdminDeletePanel();
+                                adminDeletePanel = new AdminDeletePanel(adminEntryPanel);
                                 add(adminDeletePanel);
                                 remove(adminEntryPanel);
                                 repaint();

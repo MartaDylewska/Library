@@ -6,6 +6,8 @@ import admin.IAdminDBService;
 import city.CityDBServiceImpl;
 import city.ICityDBService;
 import config.Validation;
+import gui.Auxiliary;
+import gui.general.CustButton;
 import gui.general.MyButton;
 import images.IPosterDBService;
 import images.Poster;
@@ -18,6 +20,9 @@ import user.User;
 import user.UserDBServiceImpl;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdminDeletePanel extends JPanel {
 
@@ -26,20 +31,24 @@ public class AdminDeletePanel extends JPanel {
     private JTextField firstNameTxt, lastNameTxt, emailTxt, passTxt, cardIdTxt, postalCodeTxt, cityNameTxt, streetAndBuildingTxt;
     private JTextField salaryTxt;
     private JCheckBox isFullTimeChbx;
-    private MyButton searchAdminBtn, deleteAdminBtn, returnBtn;
+    private CustButton searchAdminBtn, deleteAdminBtn, returnBtn;
     private int fieldLength = 200;
-    private JLabel imageLbl;
+    private JLabel rectLabel;
+    private List<Component> componentPlainList = new ArrayList<>();
+    private List<Component> componentBoldList = new ArrayList<>();
+    private AdminEntryPanel adminEntryPanel;
+    private int currentAdminNumber;
 
     private IUserDBService userDBService = new UserDBServiceImpl();
     private ICityDBService cityDBService = new CityDBServiceImpl();
-    private ILibrarianDBService librarianDBService = new LibrarianDBServiceImpl();
     private IAdminDBService adminDBService = new AdminDBServiceImpl();
 
-    public AdminDeletePanel(){
+    public AdminDeletePanel(AdminEntryPanel adminEntryPanel){
+        this.adminEntryPanel = adminEntryPanel;
+        currentAdminNumber = Integer.parseInt(adminEntryPanel.getCardNrLbl().getText());
         setLayout(null);
         createAllLabels();
         addAllLabels();
-        setCompVisibility(false);
         createSearchBtn();
         add(searchAdminBtn);
         actionSearchAdminBtn();
@@ -49,6 +58,44 @@ public class AdminDeletePanel extends JPanel {
         createDeleteBtn();
         add(deleteAdminBtn);
         actionDeleteAdminBtn();
+        createRectLabel();
+        add(rectLabel);
+        setCompVisibility(false);
+        Auxiliary.setImageAsBackground(this);
+        setFontForAllElements();
+    }
+
+    private void setFontForAllElements(){
+        componentPlainList.add(firstNameTxt);
+        componentPlainList.add(lastNameTxt);
+        componentPlainList.add(emailTxt);
+        componentPlainList.add(cardIdTxt);
+        componentPlainList.add(postalCodeTxt);
+        componentPlainList.add(cityNameTxt);
+        componentPlainList.add(streetAndBuildingTxt);
+        componentPlainList.add(salaryTxt);
+
+        componentBoldList.add(firstNameLbl);
+        componentBoldList.add(lastNamelbl);
+        componentBoldList.add(emailLbl);
+        componentBoldList.add(cardIdLbl);
+        componentBoldList.add(postalCodeLbl);
+        componentBoldList.add(cityNameLbl);
+        componentBoldList.add(streetAndBuildingLbl);
+        componentBoldList.add(salaryLbl);
+        componentBoldList.add(isFullTimeLbl);
+
+        for (Component c: componentPlainList) {c.setFont(Auxiliary.panelPlainFont);}
+        for (Component c: componentBoldList) {c.setFont(Auxiliary.panelFont); }
+    }
+
+    private void createRectLabel(){
+        rectLabel = new JLabel();
+        rectLabel.setBounds(10,10,350,50);
+        rectLabel.setBackground(new Color(215,204,200,200));
+        rectLabel.setVisible(true);
+        rectLabel.setBorder(Auxiliary.blackBorder());
+        rectLabel.setOpaque(true);
     }
 
     private void actionDeleteAdminBtn() {
@@ -56,6 +103,9 @@ public class AdminDeletePanel extends JPanel {
         deleteAdminBtn.addActionListener(e -> {
             int cardId = Integer.parseInt(cardIdTxt.getText());
             User user = userDBService.readUserFromDB(cardId);
+            if(currentAdminNumber == Integer.parseInt(cardIdTxt.getText()))
+                JOptionPane.showMessageDialog(this,"Nie można usunąć obecnie używanego konta");
+            else{
             adminDBService.deleteAdminFromDB(user.getIdUser());
             //userDBService.deleteUserFromDB(cardId);
             firstNameTxt.setText("");
@@ -68,7 +118,8 @@ public class AdminDeletePanel extends JPanel {
             salaryTxt.setText("");
             isFullTimeChbx.setSelected(false);
             setCompVisibility(false);
-            JOptionPane.showMessageDialog(this, "Administrator usunięty z systemu");
+            JOptionPane.showMessageDialog(this,
+                    "Administrator usunięty z systemu");}
         });
     }
 
@@ -84,6 +135,7 @@ public class AdminDeletePanel extends JPanel {
                 if (admin.getIdAdmin() != 0) {
                     deleteAdminBtn.setVisible(true);
                     setCompVisibility(true);
+                    rectLabel.setBounds(10,10,350,420);
                     firstNameTxt.setText(admin.getFirstName());
                     lastNameTxt.setText(admin.getLastName());
                     emailTxt.setText(admin.getEmail());
@@ -106,20 +158,20 @@ public class AdminDeletePanel extends JPanel {
     }
 
     private void createDeleteBtn() {
-        deleteAdminBtn = new MyButton(true);
+        deleteAdminBtn = new CustButton();
         deleteAdminBtn.setText("Usuń administratora");
         deleteAdminBtn.setVisible(false);
         deleteAdminBtn.setBounds(400, 150, 200, 30);
     }
 
     private void createSearchBtn() {
-        searchAdminBtn = new MyButton(true);
+        searchAdminBtn = new CustButton();
         searchAdminBtn.setText("Wyszukaj");
         searchAdminBtn.setBounds(400, 20, 200, 30);
     }
 
     private void createReturnBtn() {
-        returnBtn = new MyButton(false);
+        returnBtn = new CustButton();
         returnBtn.setText("Powrót");
         returnBtn.setBounds(400, 300, 200, 30);
     }
@@ -175,6 +227,7 @@ public class AdminDeletePanel extends JPanel {
     private void createIsFullTimeChbx(){
         isFullTimeChbx = new JCheckBox();
         isFullTimeChbx.setBounds(150, 340, 30, 30);
+        isFullTimeChbx.setOpaque(false);
     }
 
     private void createSalaryLbl(){
@@ -186,15 +239,6 @@ public class AdminDeletePanel extends JPanel {
     private void createSalaryTxt() {
         salaryTxt = new JTextField();
         salaryTxt.setBounds(150, 300, fieldLength, 30);
-    }
-
-    private void createImgLabel() {
-        imageLbl = new JLabel();
-        IPosterDBService posterDBService = new PosterDBServiceImpl();
-        Poster poster = posterDBService.readImage("poster2.png");
-        ImageIcon icon = new ImageIcon(poster.getImgBytes());
-        imageLbl.setIcon(icon);
-        imageLbl.setBounds(200, 150, 200, 200);
     }
 
     private void createStreetAndBuildingLbl() {
@@ -294,6 +338,7 @@ public class AdminDeletePanel extends JPanel {
         streetAndBuildingTxt.setVisible(visibility);
         salaryTxt.setVisible(visibility);
         isFullTimeChbx.setVisible(visibility);
+        //rectLabel.setVisible(visibility);
     }
 
     private void setComponentsEditability(boolean editability) {
@@ -310,7 +355,7 @@ public class AdminDeletePanel extends JPanel {
         isFullTimeChbx.setEnabled(editability);
     }
 
-    public MyButton getReturnBtn() {
+    public CustButton getReturnBtn() {
         return returnBtn;
     }
 }
