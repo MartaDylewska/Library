@@ -4,7 +4,7 @@ Library management system
  - all CRUD operations on entities
  - utilization of jdbc (postgresql) - cooperation with ElephantSQL database
  
- #TECH STACK
+ # TECH STACK
  - Java 8
  - PostgreSQL / ElephantSQL
  - pgAdmin 4
