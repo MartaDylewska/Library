@@ -1,8 +1,17 @@
-# library
+# LIBRARY
 Library management system
 - 3 access levels (reader, librarian, administrator)
  - all CRUD operations on entities
  - utilization of jdbc (postgresql) - cooperation with ElephantSQL database
+ 
+ #TECH STACK
+ - Java 8
+ - PostgreSQL / ElephantSQL
+ - pgAdmin 4
+ - Maven
+ - GUI: Swing
+ - IDE: Intellij Idea
+ - Git/Github
 
 ![entryPanel](https://github.com/MartaDylewska/Library/blob/master/src/main/resources/EntryPanel.PNG)
 
